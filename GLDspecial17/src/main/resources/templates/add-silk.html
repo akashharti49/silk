@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <meta name="theme-color" content="#7b2cbf">
+
+    <title>Add Silk | Vastra Mane Admin</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background:
+                linear-gradient(
+                    135deg,
+                    #faf7ff 0%,
+                    #ffffff 50%,
+                    #fff8fc 100%
+                );
+            color: #292929;
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .top-header {
+            height: 70px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #5b189a,
+                    #7b2cbf,
+                    #b5179e
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 28px;
+
+            position: sticky;
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 5px 20px rgba(91, 24, 154, 0.20);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+
+            border-radius: 13px;
+
+            background:
+                rgba(255,255,255,0.16);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+        .brand-name {
+            font-family: "Playfair Display", serif;
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .brand-subtitle {
+            font-size: 10px;
+            opacity: 0.75;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            background:
+                rgba(255,255,255,0.15);
+
+            padding: 9px 14px;
+
+            border-radius: 30px;
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           CONTAINER
+        ===================================================== */
+
+        .container {
+            width: min(1150px, calc(100% - 30px));
+
+            margin: 30px auto 60px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            font-family: "Playfair Display", serif;
+
+            font-size: 34px;
+
+            color: #292929;
+        }
+
+        .page-heading p {
+            margin-top: 6px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message {
+            padding: 13px 16px;
+
+            border-radius: 12px;
+
+            margin-bottom: 18px;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .success-message {
+            background: #ecfdf3;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .failure-message {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+
+        /* =====================================================
+           CARD
+        ===================================================== */
+
+        .card {
+            background: white;
+
+            border: 1px solid #ece8f2;
+
+            border-radius: 18px;
+
+            padding: 24px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 8px 30px rgba(65, 30, 90, 0.06);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding-bottom: 17px;
+
+            margin-bottom: 20px;
+
+            border-bottom:
+                1px solid #f0edf3;
+        }
+
+        .card-icon {
+            width: 43px;
+            height: 43px;
+
+            flex-shrink: 0;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7b2cbf,
+                    #b5179e
+                );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 17px;
+        }
+
+        .card-header h2 {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .card-header p {
+            font-size: 11px;
+            color: #999;
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            color: #404040;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+        .required {
+            color: #e11d48;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+
+            min-height: 46px;
+
+            border: 1px solid #ded9e5;
+
+            border-radius: 10px;
+
+            background: #fcfbfd;
+
+            padding: 11px 13px;
+
+            outline: none;
+
+            font-size: 13px;
+
+            color: #333;
+
+            transition: 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #7b2cbf;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px rgba(123,44,191,0.08);
+        }
+
+        textarea {
+            min-height: 120px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+        }
+
+        .field-error {
+            color: #dc2626;
+
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           PRICE
+        ===================================================== */
+
+        .price-summary {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 18px;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fbf7ff,
+                    #fff7fc
+                );
+
+            border: 1px dashed #d8b4fe;
+        }
+
+        .price-info small {
+            color: #999;
+
+            font-size: 10px;
+
+            display: block;
+        }
+
+        .selling-price {
+            color: #7b2cbf;
+
+            font-size: 23px;
+
+            font-weight: 800;
+
+            margin-top: 2px;
+        }
+
+        .mrp-preview {
+            color: #999;
+
+            font-size: 11px;
+
+            text-decoration: line-through;
+
+            margin-top: 2px;
+        }
+
+        .discount {
+            background: #dcfce7;
+
+            color: #15803d;
+
+            padding: 7px 11px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+        }
+
+
+        /* =====================================================
+           IMAGE SECTION
+        ===================================================== */
+
+        .image-section {
+            background:
+                linear-gradient(
+                    180deg,
+                    #ffffff,
+                    #fdfaff
+                );
+        }
+
+        .image-upload-area {
+            border: 2px dashed #d6c2eb;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+            background: #fcfaff;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .image-upload-area:hover {
+            border-color: #7b2cbf;
+
+            background: #faf5ff;
+        }
+
+        .upload-icon {
+            width: 52px;
+            height: 52px;
+
+            flex-shrink: 0;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7b2cbf,
+                    #b5179e
+                );
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+        .upload-text h3 {
+            font-size: 14px;
+
+            margin-bottom: 4px;
+        }
+
+        .upload-text p {
+            color: #999;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+        .image-input {
+            display: none;
+        }
+
+
+        /* =====================================================
+           IMAGE PREVIEW
+        ===================================================== */
+
+        .image-preview-wrapper {
+            margin-top: 18px;
+
+            display: none;
+        }
+
+        .image-preview-wrapper.show {
+            display: block;
+        }
+
+        .preview-title {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+        .preview-title strong {
+            font-size: 12px;
+        }
+
+        .image-count {
+            color: #7b2cbf;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        /* MAIN IMAGE */
+
+        .main-image-box {
+            width: 100%;
+
+            height: 420px;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            background: #f8f8f8;
+
+            border: 1px solid #e7e3ea;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            position: relative;
+        }
+
+        .main-image-box img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            display: block;
+
+            background: white;
+        }
+
+        .main-image-label {
+            position: absolute;
+
+            left: 12px;
+            top: 12px;
+
+            background:
+                rgba(123,44,191,0.93);
+
+            color: white;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            font-size: 9px;
+
+            font-weight: 800;
+
+            z-index: 5;
+        }
+
+
+        /* THUMBNAILS */
+
+        .thumbnail-container {
+            margin-top: 12px;
+
+            display: flex;
+
+            gap: 9px;
+
+            overflow-x: auto;
+
+            padding-bottom: 6px;
+        }
+
+        .thumbnail-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .thumbnail-container::-webkit-scrollbar-thumb {
+            background: #cdb4e3;
+
+            border-radius: 20px;
+        }
+
+        .thumbnail {
+            width: 78px;
+
+            height: 92px;
+
+            min-width: 78px;
+
+            border-radius: 9px;
+
+            overflow: hidden;
+
+            border: 2px solid transparent;
+
+            position: relative;
+
+            cursor: pointer;
+
+            background: #f7f7f7;
+
+            transition: 0.2s;
+        }
+
+        .thumbnail.active {
+            border-color: #7b2cbf;
+
+            box-shadow:
+                0 0 0 2px rgba(123,44,191,0.10);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+
+            background: white;
+        }
+
+        .thumbnail-number {
+            position: absolute;
+
+            top: 4px;
+            left: 4px;
+
+            min-width: 19px;
+            height: 19px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(0,0,0,0.65);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 8px;
+
+            font-weight: 700;
+        }
+
+        .remove-image {
+            position: absolute;
+
+            right: 4px;
+            top: 4px;
+
+            width: 21px;
+            height: 21px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background:
+                rgba(220,38,38,0.92);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 9px;
+
+            cursor: pointer;
+
+            z-index: 10;
+        }
+
+        .main-badge {
+            position: absolute;
+
+            bottom: 4px;
+
+            left: 4px;
+            right: 4px;
+
+            padding: 4px;
+
+            text-align: center;
+
+            border-radius: 5px;
+
+            background:
+                rgba(123,44,191,0.93);
+
+            color: white;
+
+            font-size: 7px;
+
+            font-weight: 800;
+        }
+
+        .image-note {
+            margin-top: 10px;
+
+            padding: 9px 11px;
+
+            border-radius: 8px;
+
+            background: #f8f5fc;
+
+            color: #777;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           SPECIFICATIONS
+        ===================================================== */
+
+        .details-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+
+        /* =====================================================
+           PUBLISH SECTION
+        ===================================================== */
+
+        .publish-container {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 16px;
+
+            border-radius: 12px;
+
+            background: #f6fff9;
+
+            border: 1px solid #ccefd9;
+        }
+
+        .publish-content {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+        .publish-icon {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            background: #dcfce7;
+
+            color: #15803d;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+        .publish-content strong {
+            font-size: 12px;
+
+            display: block;
+        }
+
+        .publish-content p {
+            color: #777;
+
+            font-size: 10px;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           PUBLISH TOGGLE
+        ===================================================== */
+
+        .switch {
+            position: relative;
+
+            width: 56px;
+            height: 31px;
+
+            flex-shrink: 0;
+
+            display: block;
+        }
+
+        .switch input {
+            position: absolute;
+
+            opacity: 0;
+
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+
+            cursor: pointer;
+
+            inset: 0;
+
+            background: #d1d5db;
+
+            border-radius: 30px;
+
+            transition: 0.25s;
+        }
+
+        .slider:before {
+            content: "";
+
+            position: absolute;
+
+            width: 25px;
+            height: 25px;
+
+            left: 3px;
+            top: 3px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 2px 5px rgba(0,0,0,0.2);
+
+            transition: 0.25s;
+        }
+
+        .switch input:checked + .slider {
+            background: #16a34a;
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(25px);
+        }
+
+
+        /* =====================================================
+           ACTION BUTTONS
+        ===================================================== */
+
+        .action-buttons {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 10px;
+
+            margin-top: 5px;
+        }
+
+        .btn {
+            min-height: 48px;
+
+            border-radius: 10px;
+
+            padding: 0 21px;
+
+            border: none;
+
+            cursor: pointer;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            transition: 0.2s;
+        }
+
+        .reset-btn {
+            background: white;
+
+            color: #555;
+
+            border:
+                1px solid #d8d4dc;
+        }
+
+        .submit-btn {
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7b2cbf,
+                    #b5179e
+                );
+
+            box-shadow:
+                0 7px 18px rgba(123,44,191,0.22);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.65;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+            text-align: center;
+
+            color: #aaa;
+
+            font-size: 10px;
+
+            margin-top: 25px;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .form-grid,
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .main-image-box {
+                height: 400px;
+            }
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+
+            body {
+                background:
+                    linear-gradient(
+                        180deg,
+                        #faf8ff,
+                        #ffffff
+                    );
+            }
+
+            .top-header {
+                height: 60px;
+
+                padding: 0 12px;
+            }
+
+            .brand-logo {
+                width: 37px;
+                height: 37px;
+
+                border-radius: 10px;
+
+                font-size: 17px;
+            }
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .admin-user {
+                width: 38px;
+                height: 38px;
+
+                padding: 0;
+
+                justify-content: center;
+            }
+
+            .admin-user span {
+                display: none;
+            }
+
+            .container {
+                width: calc(100% - 14px);
+
+                margin: 18px auto 35px;
+            }
+
+            .page-heading {
+                margin-bottom: 17px;
+            }
+
+            .page-heading h1 {
+                font-size: 27px;
+            }
+
+            .page-heading p {
+                font-size: 11px;
+            }
+
+            .card {
+                padding: 16px;
+
+                border-radius: 15px;
+
+                margin-bottom: 14px;
+            }
+
+            .card-header {
+                margin-bottom: 17px;
+
+                padding-bottom: 13px;
+            }
+
+            .card-icon {
+                width: 39px;
+                height: 39px;
+
+                border-radius: 10px;
+            }
+
+            .card-header h2 {
+                font-size: 15px;
+            }
+
+            .card-header p {
+                font-size: 10px;
+            }
+
+
+            /* MOBILE IMAGE UPLOAD */
+
+            .image-upload-area {
+                padding: 15px;
+
+                gap: 11px;
+            }
+
+            .upload-icon {
+                width: 45px;
+                height: 45px;
+
+                border-radius: 11px;
+
+                font-size: 17px;
+            }
+
+            .upload-text h3 {
+                font-size: 12px;
+            }
+
+            .upload-text p {
+                font-size: 9px;
+            }
+
+
+            /* MOBILE MAIN IMAGE */
+
+            .main-image-box {
+                height: 370px;
+
+                border-radius: 12px;
+            }
+
+            .thumbnail {
+                width: 70px;
+
+                min-width: 70px;
+
+                height: 84px;
+            }
+
+
+            /* PUBLISH */
+
+            .publish-container {
+                padding: 13px;
+            }
+
+            .publish-content p {
+                max-width: 190px;
+            }
+
+
+            /* STICKY BUTTONS */
+
+            .action-buttons {
+                position: sticky;
+
+                bottom: 8px;
+
+                z-index: 100;
+
+                margin-left: -5px;
+
+                margin-right: -5px;
+
+                padding: 7px;
+
+                border-radius: 13px;
+
+                background:
+                    rgba(255,255,255,0.92);
+
+                backdrop-filter: blur(10px);
+
+                box-shadow:
+                    0 4px 20px rgba(0,0,0,0.13);
+
+                display: grid;
+
+                grid-template-columns:
+                    1fr 1.6fr;
+            }
+
+            .btn {
+                min-height: 50px;
+
+                width: 100%;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 380px) {
+
+            .page-heading h1 {
+                font-size: 24px;
+            }
+
+            .main-image-box {
+                height: 330px;
+            }
+
+            .thumbnail {
+                width: 64px;
+
+                min-width: 64px;
+
+                height: 77px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="top-header">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            <i class="fa-solid fa-feather"></i>
+        </div>
+
+        <div>
+
+            <div class="brand-name">
+                Vastra Mane
+            </div>
+
+            <div class="brand-subtitle">
+                SILK ADMIN PANEL
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="admin-user">
+
+        <i class="fa-solid fa-user-shield"></i>
+
+        <span>
+            Administrator
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- PAGE HEADING -->
+
+    <div class="page-heading">
+
+        <h1>
+            Add New Silk
+        </h1>
+
+        <p>
+            Add silk details, images, pricing and specifications.
+        </p>
+
+    </div>
+
+
+
+    <!-- SUCCESS MESSAGE -->
+
+    <div th:if="${session.success != null}"
+         class="message success-message">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <span th:text="${session.success}">
+        </span>
+
+    </div>
+
+
+
+    <!-- FAILURE MESSAGE -->
+
+    <div th:if="${session.failure != null}"
+         class="message failure-message">
+
+        <i class="fa-solid fa-circle-exclamation"></i>
+
+        <span th:text="${session.failure}">
+        </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form id="silkForm"
+
+          action="/admin/add-silk"
+
+          method="post"
+
+          enctype="multipart/form-data"
+
+          th:object="${silk}">
+
+
+        <!-- =================================================
+             BASIC INFORMATION
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-shirt"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Basic Information
+                    </h2>
+
+                    <p>
+                        Enter the basic silk product information.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+
+                <!-- NAME -->
+
+                <div class="form-group full-width">
+
+                    <label>
+
+                        Silk Name
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="text"
+
+                           th:field="*{name}"
+
+                           placeholder="Example: Royal Banarasi Silk"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{name}">
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group full-width">
+
+                    <label>
+
+                        Description
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <textarea
+
+                            th:field="*{description}"
+
+                            placeholder="Enter detailed information about this silk..."
+
+                            required></textarea>
+
+
+                    <div class="field-error"
+                         th:errors="*{description}">
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PRICE AND STOCK
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Price & Stock
+                    </h2>
+
+                    <p>
+                        Set selling price, MRP and available quantity.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+
+                <!-- PRICE -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Selling Price (₹)
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="number"
+
+                           id="price"
+
+                           th:field="*{price}"
+
+                           step="0.01"
+
+                           min="0"
+
+                           placeholder="4999"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{price}">
+                    </div>
+
+                </div>
+
+
+                <!-- MRP -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        MRP (₹)
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="number"
+
+                           id="mrp"
+
+                           th:field="*{dummyprice}"
+
+                           step="0.01"
+
+                           min="0"
+
+                           placeholder="6999"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{dummyprice}">
+                    </div>
+
+                </div>
+
+
+                <!-- STOCK -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Available Stock
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="number"
+
+                           th:field="*{stock}"
+
+                           min="0"
+
+                           placeholder="20"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{stock}">
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- PRICE PREVIEW -->
+
+            <div class="price-summary">
+
+                <div class="price-info">
+
+                    <small>
+                        Selling Price
+                    </small>
+
+                    <div class="selling-price"
+                         id="sellingPricePreview">
+                        ₹0
+                    </div>
+
+                    <div class="mrp-preview"
+                         id="mrpPreview">
+                        ₹0
+                    </div>
+
+                </div>
+
+
+                <div class="discount"
+                     id="discountPreview">
+
+                    0% OFF
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             IMAGES
+        ================================================== -->
+
+        <section class="card image-section">
+
+
+            <div class="card-header">
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-image"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Silk Images
+                    </h2>
+
+                    <p>
+                        Upload clear images of your silk product.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- UPLOAD -->
+
+            <label for="imageInput"
+                   class="image-upload-area">
+
+
+                <div class="upload-icon">
+
+                    <i class="fa-solid fa-camera"></i>
+
+                </div>
+
+
+                <div class="upload-text">
+
+                    <h3>
+                        Select Silk Images
+                    </h3>
+
+                    <p>
+                        Tap here to select multiple images from your
+                        phone, tablet or computer.
+                    </p>
+
+                </div>
+
+
+            </label>
+
+
+
+            <!-- IMPORTANT BACKEND FIELD -->
+
+            <input type="file"
+
+                   id="imageInput"
+
+                   name="images"
+
+                   class="image-input"
+
+                   multiple
+
+                   accept="image/jpeg,image/png,image/webp"
+
+                   required>
+
+
+
+            <!-- PREVIEW -->
+
+            <div class="image-preview-wrapper"
+                 id="imagePreviewWrapper">
+
+
+                <div class="preview-title">
+
+                    <strong>
+                        Selected Images
+                    </strong>
+
+                    <span class="image-count"
+                          id="imageCount">
+                        0 images
+                    </span>
+
+                </div>
+
+
+
+                <!-- MAIN IMAGE -->
+
+                <div class="main-image-box">
+
+                    <div class="main-image-label">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        MAIN IMAGE
+
+                    </div>
+
+
+                    <img id="mainImage"
+                         src=""
+                         alt="Silk Preview">
+
+                </div>
+
+
+
+                <!-- THUMBNAILS -->
+
+                <div class="thumbnail-container"
+                     id="thumbnailContainer">
+                </div>
+
+
+
+                <div class="image-note">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    The first selected image is the main product image.
+                    Tap another thumbnail to preview it.
+                    Images are not cropped.
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             SILK SPECIFICATIONS
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="card-header">
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-spa"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Silk Specifications
+                    </h2>
+
+                    <p>
+                        Add detailed silk characteristics.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="details-grid">
+
+
+                <!-- SILK TYPE -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Silk Type
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <select th:field="*{silkType}"
+                            required>
+
+                        <option value=""
+                                disabled>
+
+                            Select Silk Type
+
+                        </option>
+
+                        <option value="Mulberry Silk">
+                            Mulberry Silk
+                        </option>
+
+                        <option value="Tussar Silk">
+                            Tussar Silk
+                        </option>
+
+                        <option value="Eri Silk">
+                            Eri Silk
+                        </option>
+
+                        <option value="Muga Silk">
+                            Muga Silk
+                        </option>
+
+                        <option value="Raw Silk">
+                            Raw Silk
+                        </option>
+
+                        <option value="Art Silk">
+                            Art Silk
+                        </option>
+
+                        <option value="Banarasi Silk">
+                            Banarasi Silk
+                        </option>
+
+                    </select>
+
+
+                    <div class="field-error"
+                         th:errors="*{silkType}">
+                    </div>
+
+                </div>
+
+
+
+                <!-- FABRIC -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Fabric
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <select th:field="*{fabric}"
+                            required>
+
+                        <option value=""
+                                disabled>
+
+                            Select Fabric
+
+                        </option>
+
+                        <option value="Pure Silk">
+                            Pure Silk
+                        </option>
+
+                        <option value="Mulberry Silk">
+                            Mulberry Silk
+                        </option>
+
+                        <option value="Tussar Silk">
+                            Tussar Silk
+                        </option>
+
+                        <option value="Raw Silk">
+                            Raw Silk
+                        </option>
+
+                        <option value="Silk Cotton">
+                            Silk Cotton
+                        </option>
+
+                    </select>
+
+
+                    <div class="field-error"
+                         th:errors="*{fabric}">
+                    </div>
+
+                </div>
+
+
+
+                <!-- COLOR -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Color
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="text"
+
+                           th:field="*{color}"
+
+                           placeholder="Example: Royal Blue"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{color}">
+                    </div>
+
+                </div>
+
+
+
+                <!-- WEAVING -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Weaving Type
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <select th:field="*{weavingType}"
+                            required>
+
+                        <option value=""
+                                disabled>
+
+                            Select Weaving Type
+
+                        </option>
+
+                        <option value="Handloom">
+                            Handloom
+                        </option>
+
+                        <option value="Powerloom">
+                            Powerloom
+                        </option>
+
+                    </select>
+
+
+                    <div class="field-error"
+                         th:errors="*{weavingType}">
+                    </div>
+
+                </div>
+
+
+
+                <!-- ORIGIN -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Origin
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="text"
+
+                           th:field="*{origin}"
+
+                           placeholder="Example: Karnataka"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{origin}">
+                    </div>
+
+                </div>
+
+
+
+                <!-- DESIGN -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Design
+
+                        <span class="required">*</span>
+
+                    </label>
+
+
+                    <input type="text"
+
+                           th:field="*{design}"
+
+                           placeholder="Example: Floral Zari"
+
+                           required>
+
+
+                    <div class="field-error"
+                         th:errors="*{design}">
+                    </div>
+
+                </div>
+
+
+
+                <!-- FINISH -->
+
+                <div class="form-group">
+
+                    <label>
+                        Finish
+                    </label>
+
+
+                    <select th:field="*{finish}">
+
+                        <option value="">
+                            Select Finish
+                        </option>
+
+                        <option value="Glossy">
+                            Glossy
+                        </option>
+
+                        <option value="Matte">
+                            Matte
+                        </option>
+
+                        <option value="Soft Finish">
+                            Soft Finish
+                        </option>
+
+                        <option value="Traditional Finish">
+                            Traditional Finish
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- WEIGHT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Weight
+                    </label>
+
+
+                    <input type="text"
+
+                           th:field="*{weight}"
+
+                           placeholder="Example: 80 GSM">
+
+                </div>
+
+
+
+                <!-- WIDTH -->
+
+                <div class="form-group">
+
+                    <label>
+                        Width
+                    </label>
+
+
+                    <input type="text"
+
+                           th:field="*{width}"
+
+                           placeholder="Example: 44 inches">
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             PUBLISH ON HOME PAGE
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="publish-container">
+
+
+                <div class="publish-content">
+
+
+                    <div class="publish-icon">
+
+                        <i class="fa-solid fa-house"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Publish on Home Page
+                        </strong>
+
+                        <p>
+                            Turn ON to show this silk on the website
+                            home page.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!--
+                    IMPORTANT
+
+                    Hidden input sends false when checkbox is OFF.
+
+                    Checkbox sends true when it is ON.
+
+                    Spring receives:
+
+                    OFF = false
+                    ON  = true
+                -->
+
+                <label class="switch">
+
+
+                    <input type="hidden"
+                           name="_published"
+                           value="true">
+
+
+                    <input type="checkbox"
+
+                           id="published"
+
+                           name="published"
+
+                           value="true"
+
+                           th:checked="${silk.published}">
+
+
+                    <span class="slider"></span>
+
+
+                </label>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             BUTTONS
+        ================================================== -->
+
+        <div class="action-buttons">
+
+
+            <button type="reset"
+                    class="btn reset-btn"
+                    id="resetButton">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Reset
+
+            </button>
+
+
+            <button type="submit"
+                    class="btn submit-btn"
+                    id="submitButton">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Silk
+
+            </button>
+
+
+        </div>
+
+
+    </form>
+
+
+
+    <div class="footer">
+
+        © 2026 Vastra Mane · Silk & Sarees
+
+    </div>
+
+
+</main>
+
+
+
+<script>
+
+
+    /* =========================================================
+       PRICE PREVIEW
+    ========================================================= */
+
+    const priceInput =
+        document.getElementById("price");
+
+    const mrpInput =
+        document.getElementById("mrp");
+
+    const sellingPricePreview =
+        document.getElementById(
+            "sellingPricePreview"
+        );
+
+    const mrpPreview =
+        document.getElementById(
+            "mrpPreview"
+        );
+
+    const discountPreview =
+        document.getElementById(
+            "discountPreview"
+        );
+
+
+    function updatePrice() {
+
+        const price =
+            Number(priceInput.value) || 0;
+
+        const mrp =
+            Number(mrpInput.value) || 0;
+
+
+        sellingPricePreview.textContent =
+            "₹" +
+            price.toLocaleString("en-IN");
+
+
+        mrpPreview.textContent =
+            "₹" +
+            mrp.toLocaleString("en-IN");
+
+
+        if (mrp > price && price > 0) {
+
+            const discount =
+                Math.round(
+                    ((mrp - price) / mrp) * 100
+                );
+
+
+            discountPreview.textContent =
+                discount + "% OFF";
+
+        } else {
+
+            discountPreview.textContent =
+                "0% OFF";
+
+        }
+
+    }
+
+
+    priceInput.addEventListener(
+        "input",
+        updatePrice
+    );
+
+
+    mrpInput.addEventListener(
+        "input",
+        updatePrice
+    );
+
+
+
+    /* =========================================================
+       IMAGE UPLOAD
+    ========================================================= */
+
+    const imageInput =
+        document.getElementById(
+            "imageInput"
+        );
+
+
+    const imagePreviewWrapper =
+        document.getElementById(
+            "imagePreviewWrapper"
+        );
+
+
+    const mainImage =
+        document.getElementById(
+            "mainImage"
+        );
+
+
+    const thumbnailContainer =
+        document.getElementById(
+            "thumbnailContainer"
+        );
+
+
+    const imageCount =
+        document.getElementById(
+            "imageCount"
+        );
+
+
+    let selectedFiles = [];
+
+    let activeIndex = 0;
+
+
+
+    /* =========================================================
+       SELECT IMAGES
+    ========================================================= */
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            const files =
+                Array.from(this.files);
+
+
+            selectedFiles =
+                files.filter(
+                    file =>
+                        file.type.startsWith("image/")
+                );
+
+
+            activeIndex = 0;
+
+
+            renderImages();
+
+            updateFileInput();
+
+        }
+    );
+
+
+
+    /* =========================================================
+       RENDER IMAGES
+    ========================================================= */
+
+    function renderImages() {
+
+        thumbnailContainer.innerHTML = "";
+
+
+        if (selectedFiles.length === 0) {
+
+            imagePreviewWrapper
+                .classList
+                .remove("show");
+
+            return;
+        }
+
+
+        imagePreviewWrapper
+            .classList
+            .add("show");
+
+
+        imageCount.textContent =
+            selectedFiles.length +
+            (
+                selectedFiles.length === 1
+                    ? " image"
+                    : " images"
+            );
+
+
+        showMainImage();
+
+
+
+        selectedFiles.forEach(
+            (file, index) => {
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+
+                        const thumbnail =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        thumbnail.className =
+                            "thumbnail" +
+                            (
+                                index === activeIndex
+                                    ? " active"
+                                    : ""
+                            );
+
+
+                        thumbnail.innerHTML = `
+
+                            <img
+                                src="${event.target.result}"
+                                alt="Silk image ${index + 1}"
+                            >
+
+                            <span class="thumbnail-number">
+                                ${index + 1}
+                            </span>
+
+                            <button
+                                type="button"
+                                class="remove-image"
+                                title="Remove image">
+
+                                <i class="fa-solid fa-xmark"></i>
+
+                            </button>
+
+                            ${
+                                index === activeIndex
+                                    ?
+                                    `
+                                    <div class="main-badge">
+                                        MAIN
+                                    </div>
+                                    `
+                                    :
+                                    ""
+                            }
+
+                        `;
+
+
+                        thumbnail.addEventListener(
+                            "click",
+                            function () {
+
+                                activeIndex =
+                                    index;
+
+                                renderImages();
+
+                            }
+                        );
+
+
+                        thumbnail
+                            .querySelector(
+                                ".remove-image"
+                            )
+                            .addEventListener(
+                                "click",
+                                function (event) {
+
+                                    event.stopPropagation();
+
+                                    removeImage(index);
+
+                                }
+                            );
+
+
+                        thumbnailContainer
+                            .appendChild(
+                                thumbnail
+                            );
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+            }
+        );
+
+    }
+
+
+
+    /* =========================================================
+       MAIN IMAGE
+    ========================================================= */
+
+    function showMainImage() {
+
+        if (
+            selectedFiles.length === 0
+        ) {
+            return;
+        }
+
+
+        const file =
+            selectedFiles[activeIndex];
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function (event) {
+
+                mainImage.src =
+                    event.target.result;
+
+            };
+
+
+        reader.readAsDataURL(file);
+
+    }
+
+
+
+    /* =========================================================
+       REMOVE IMAGE
+    ========================================================= */
+
+    function removeImage(index) {
+
+        selectedFiles.splice(
+            index,
+            1
+        );
+
+
+        if (
+            activeIndex >=
+            selectedFiles.length
+        ) {
+
+            activeIndex =
+                Math.max(
+                    0,
+                    selectedFiles.length - 1
+                );
+
+        }
+
+
+        renderImages();
+
+        updateFileInput();
+
+    }
+
+
+
+    /* =========================================================
+       UPDATE FILE INPUT
+    ========================================================= */
+
+    function updateFileInput() {
+
+        const dataTransfer =
+            new DataTransfer();
+
+
+        selectedFiles.forEach(
+            file => {
+
+                dataTransfer.items.add(
+                    file
+                );
+
+            }
+        );
+
+
+        imageInput.files =
+            dataTransfer.files;
+
+    }
+
+
+
+    /* =========================================================
+       FORM SUBMIT
+    ========================================================= */
+
+    document
+        .getElementById("silkForm")
+        .addEventListener(
+            "submit",
+            function (event) {
+
+
+                const price =
+                    Number(
+                        priceInput.value
+                    ) || 0;
+
+
+                const mrp =
+                    Number(
+                        mrpInput.value
+                    ) || 0;
+
+
+
+                /* MRP VALIDATION */
+
+                if (
+                    mrp > 0 &&
+                    price > mrp
+                ) {
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Selling price cannot be greater than MRP."
+                    );
+
+
+                    mrpInput.focus();
+
+                    return;
+                }
+
+
+
+                /* IMAGE VALIDATION */
+
+                if (
+                    selectedFiles.length === 0
+                ) {
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Please select at least one silk image."
+                    );
+
+
+                    return;
+                }
+
+
+
+                /* SUBMIT BUTTON */
+
+                const submitButton =
+                    document.getElementById(
+                        "submitButton"
+                    );
+
+
+                submitButton.disabled =
+                    true;
+
+
+                submitButton.innerHTML = `
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    Adding Silk...
+
+                `;
+
+            }
+        );
+
+
+
+    /* =========================================================
+       RESET
+    ========================================================= */
+
+    document
+        .getElementById("resetButton")
+        .addEventListener(
+            "click",
+            function () {
+
+                setTimeout(
+                    function () {
+
+                        selectedFiles = [];
+
+                        activeIndex = 0;
+
+                        imageInput.value = "";
+
+                        thumbnailContainer.innerHTML = "";
+
+                        imagePreviewWrapper
+                            .classList
+                            .remove("show");
+
+
+                        imageCount.textContent =
+                            "0 images";
+
+
+                        mainImage.src = "";
+
+
+                        updatePrice();
+
+                    },
+                    50
+                );
+
+            }
+        );
+
+
+
+    /* =========================================================
+       INITIALIZE
+    ========================================================= */
+
+    updatePrice();
+
+
+</script>
+
+
+</body>
+
+</html>

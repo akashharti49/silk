@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+    Reusable "track my order" timeline.
+    Include with:  <div th:replace="~{fragments/order-tracker :: tracker(${order})}"></div>
+    The CSS classes below (.ordtrack*) must be defined in the including page's <style>.
+-->
+<div th:fragment="tracker(order)">
+
+    <div class="ordtrack" th:if="${order.status != 'CANCELLED'}">
+
+        <div class="ordtrack-step" th:classappend="${order.progressStep > 1 ? 'done' : (order.progressStep == 1 ? 'current' : '')}">
+            <div class="ordtrack-dot">
+                <span th:if="${order.progressStep > 1}">✓</span>
+                <span th:unless="${order.progressStep > 1}">1</span>
+            </div>
+            <div class="ordtrack-label">Placed</div>
+            <div class="ordtrack-date" th:text="${order.orderDate != null ? #temporals.format(order.orderDate, 'dd MMM, hh:mm a') : ''}"></div>
+        </div>
+
+        <div class="ordtrack-line" th:classappend="${order.progressStep > 1 ? 'done' : ''}"></div>
+
+        <div class="ordtrack-step" th:classappend="${order.progressStep > 2 ? 'done' : (order.progressStep == 2 ? 'current' : '')}">
+            <div class="ordtrack-dot">
+                <span th:if="${order.progressStep > 2}">✓</span>
+                <span th:unless="${order.progressStep > 2}">2</span>
+            </div>
+            <div class="ordtrack-label">Confirmed</div>
+            <div class="ordtrack-date" th:text="${order.confirmedAt != null ? #temporals.format(order.confirmedAt, 'dd MMM, hh:mm a') : '—'}"></div>
+        </div>
+
+        <div class="ordtrack-line" th:classappend="${order.progressStep > 2 ? 'done' : ''}"></div>
+
+        <div class="ordtrack-step" th:classappend="${order.progressStep > 3 ? 'done' : (order.progressStep == 3 ? 'current' : '')}">
+            <div class="ordtrack-dot">
+                <span th:if="${order.progressStep > 3}">✓</span>
+                <span th:unless="${order.progressStep > 3}">3</span>
+            </div>
+            <div class="ordtrack-label">Packed</div>
+            <div class="ordtrack-date" th:text="${order.packedAt != null ? #temporals.format(order.packedAt, 'dd MMM, hh:mm a') : '—'}"></div>
+        </div>
+
+        <div class="ordtrack-line" th:classappend="${order.progressStep > 3 ? 'done' : ''}"></div>
+
+        <div class="ordtrack-step" th:classappend="${order.progressStep > 4 ? 'done' : (order.progressStep == 4 ? 'current' : '')}">
+            <div class="ordtrack-dot">
+                <span th:if="${order.progressStep > 4}">✓</span>
+                <span th:unless="${order.progressStep > 4}">4</span>
+            </div>
+            <div class="ordtrack-label">Dispatched</div>
+            <div class="ordtrack-date" th:text="${order.shippedAt != null ? #temporals.format(order.shippedAt, 'dd MMM, hh:mm a') : '—'}"></div>
+        </div>
+
+        <div class="ordtrack-line" th:classappend="${order.progressStep > 4 ? 'done' : ''}"></div>
+
+        <div class="ordtrack-step" th:classappend="${order.progressStep >= 5 ? 'done' : ''}">
+            <div class="ordtrack-dot">
+                <span th:if="${order.progressStep >= 5}">✓</span>
+                <span th:unless="${order.progressStep >= 5}">5</span>
+            </div>
+            <div class="ordtrack-label">Delivered</div>
+            <div class="ordtrack-date" th:text="${order.deliveredAt != null ? #temporals.format(order.deliveredAt, 'dd MMM, hh:mm a') : '—'}"></div>
+        </div>
+
+    </div>
+
+    <div class="ordtrack-cancelled" th:if="${order.status == 'CANCELLED'}">
+        <span class="oc-icon">✕</span>
+        <div class="oc-text">
+            <b>This order was cancelled</b>
+            <div class="oc-sub" th:text="(${order.cancelledBy} ?: 'The order') + ' cancelled it' + (${order.cancelReason} != null and ${order.cancelReason} != '' ? ' — ' + ${order.cancelReason} : '.')"></div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

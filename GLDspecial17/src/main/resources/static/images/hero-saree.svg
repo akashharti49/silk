@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#ffe8e0"/>
+      <stop offset="1" stop-color="#fff3e6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#g)"/>
+  <circle cx="960" cy="120" r="120" fill="#b24d3b" opacity="0.12"/>
+  <rect x="80" y="140" width="960" height="360" rx="20" fill="#fff" opacity="0.06"/>
+  <text x="120" y="340" font-family="Playfair Display, serif" font-size="48" fill="#9b3f2a">Handwoven Handloom Sarees</text>
+</svg>

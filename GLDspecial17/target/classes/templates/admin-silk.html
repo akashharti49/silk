@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Silks | Vastra Mane</title>
+
+    <meta name="theme-color" content="#7b1e3a">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f7f4f1;
+            color: #2d2527;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .top-header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #6d1732,
+                    #8d2346
+                );
+
+            color: white;
+
+            padding: 16px 5%;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, .15);
+        }
+
+        .header-inner {
+
+            max-width: 1400px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .brand-name {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 27px;
+
+            font-weight: 700;
+        }
+
+        .brand-subtitle {
+
+            font-size: 10px;
+
+            opacity: .85;
+
+            letter-spacing: 1.3px;
+
+            text-transform: uppercase;
+
+            margin-top: 2px;
+        }
+
+        .header-actions {
+
+            display: flex;
+
+            gap: 8px;
+
+            align-items: center;
+        }
+
+        .header-btn {
+
+            min-height: 40px;
+
+            padding: 0 14px;
+
+            border-radius: 8px;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: white;
+
+            border: 1px solid rgba(255, 255, 255, .35);
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: .2s ease;
+
+            white-space: nowrap;
+        }
+
+        .header-btn:hover {
+
+            background:
+                rgba(255, 255, 255, .12);
+        }
+
+        .add-btn {
+
+            background: white;
+
+            color: #7b1e3a;
+
+            border-color: white;
+        }
+
+        .add-btn:hover {
+
+            background: #f7e9ee;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+
+            max-width: 1400px;
+
+            margin: auto;
+
+            padding: 30px 5% 60px;
+        }
+
+        .page-heading {
+
+            margin-bottom: 22px;
+        }
+
+        .page-heading h1 {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 34px;
+
+            color: #5d162f;
+        }
+
+        .page-heading p {
+
+            color: #777;
+
+            font-size: 13px;
+
+            margin-top: 4px;
+        }
+
+
+        /* =====================================================
+           TOOLBAR
+        ===================================================== */
+
+        .toolbar {
+
+            background: white;
+
+            border: 1px solid #eee5e1;
+
+            border-radius: 15px;
+
+            padding: 15px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 5px 20px rgba(70, 35, 40, .06);
+        }
+
+        .toolbar-row {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(200px, 1fr)
+                220px
+                200px;
+
+            gap: 10px;
+        }
+
+        .search-box {
+
+            position: relative;
+        }
+
+        .search-icon {
+
+            position: absolute;
+
+            left: 14px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 17px;
+
+            pointer-events: none;
+        }
+
+        .search-input,
+        .filter-select {
+
+            width: 100%;
+
+            height: 46px;
+
+            border: 1px solid #e3d9d5;
+
+            border-radius: 9px;
+
+            background: #faf8f7;
+
+            outline: none;
+
+            font-size: 13px;
+
+            color: #333;
+
+            transition: .2s ease;
+        }
+
+        .search-input {
+
+            padding: 0 15px 0 42px;
+        }
+
+        .filter-select {
+
+            padding: 0 12px;
+
+            cursor: pointer;
+        }
+
+        .search-input:focus,
+        .filter-select:focus {
+
+            border-color: #9b4563;
+
+            background: white;
+
+            box-shadow:
+                0 0 0 3px rgba(123, 30, 58, .08);
+        }
+
+        .result-count {
+
+            margin-top: 12px;
+
+            font-size: 12px;
+
+            color: #777;
+        }
+
+        .result-count strong {
+
+            color: #7b1e3a;
+        }
+
+
+        /* =====================================================
+           SILK GRID
+        ===================================================== */
+
+        .silk-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 20px;
+        }
+
+
+        /* =====================================================
+           SILK CARD
+        ===================================================== */
+
+        .silk-card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            border: 1px solid #eee5e1;
+
+            box-shadow:
+                0 5px 20px rgba(70, 35, 40, .06);
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+        .silk-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 12px 28px rgba(70, 35, 40, .12);
+        }
+
+
+        /* =====================================================
+           IMAGE
+        ===================================================== */
+
+        .card-image {
+
+            position: relative;
+
+            height: 320px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #faf8f7,
+                    #f4eeee
+                );
+
+            overflow: hidden;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+        .card-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: contain;
+
+            display: block;
+
+            transition: transform .3s ease;
+        }
+
+        .silk-card:hover .card-image img {
+
+            transform: scale(1.03);
+        }
+
+        .no-image {
+
+            height: 100%;
+
+            width: 100%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #999;
+
+            font-size: 13px;
+        }
+
+        .no-image span {
+
+            font-size: 40px;
+
+            margin-bottom: 8px;
+        }
+
+        .image-badge {
+
+            position: absolute;
+
+            top: 10px;
+
+            right: 10px;
+
+            background:
+                rgba(0, 0, 0, .65);
+
+            color: white;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            backdrop-filter: blur(4px);
+        }
+
+        .published-badge {
+
+            position: absolute;
+
+            top: 10px;
+
+            left: 10px;
+
+            background: #287a45;
+
+            color: white;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            box-shadow: 0 3px 8px rgba(0, 0, 0, .15);
+        }
+
+        .unpublished-badge {
+
+            position: absolute;
+
+            top: 10px;
+
+            left: 10px;
+
+            background: #777;
+
+            color: white;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           CARD CONTENT
+        ===================================================== */
+
+        .card-content {
+
+            padding: 15px;
+        }
+
+        .silk-name {
+
+            font-family: "Playfair Display", serif;
+
+            color: #5d162f;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            margin-bottom: 7px;
+        }
+
+        .type-label {
+
+            color: #888;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .5px;
+        }
+
+        .silk-type {
+
+            color: #3d3033;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            margin-top: 2px;
+
+            margin-bottom: 10px;
+        }
+
+        .price-row {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 12px;
+        }
+
+        .price {
+
+            color: #7b1e3a;
+
+            font-size: 23px;
+
+            font-weight: 700;
+        }
+
+        .mrp {
+
+            color: #999;
+
+            font-size: 12px;
+
+            text-decoration: line-through;
+        }
+
+        .stock {
+
+            font-size: 12px;
+
+            color: #666;
+
+            margin-bottom: 14px;
+        }
+
+        .stock strong {
+
+            color: #5d162f;
+        }
+
+
+        /* =====================================================
+           DETAILS
+        ===================================================== */
+
+        .details-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 7px;
+
+            margin-bottom: 14px;
+        }
+
+        .detail-item {
+
+            background: #faf8f7;
+
+            border: 1px solid #eee5e1;
+
+            border-radius: 7px;
+
+            padding: 8px;
+        }
+
+        .detail-label {
+
+            display: block;
+
+            color: #999;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .4px;
+
+            margin-bottom: 2px;
+        }
+
+        .detail-value {
+
+            display: block;
+
+            color: #4b3a3f;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
+
+        /* =====================================================
+           DESCRIPTION
+        ===================================================== */
+
+        .description {
+
+            color: #777;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+
+            margin-bottom: 14px;
+
+            display: -webkit-box;
+
+            -webkit-line-clamp: 2;
+
+            -webkit-box-orient: vertical;
+
+            overflow: hidden;
+        }
+
+
+        /* =====================================================
+           HOME STATUS
+        ===================================================== */
+
+        .home-status {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 9px 11px;
+
+            border-radius: 8px;
+
+            margin-bottom: 14px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+        .home-status.published {
+
+            background: #edf8f0;
+
+            color: #287a45;
+
+            border: 1px solid #ccebd5;
+        }
+
+        .home-status.not-published {
+
+            background: #f5f5f5;
+
+            color: #777;
+
+            border: 1px solid #e4e4e4;
+        }
+
+
+        /* =====================================================
+           BUTTONS
+        ===================================================== */
+
+        .card-actions {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 8px;
+        }
+
+        .action-btn {
+
+            min-height: 43px;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: .2s ease;
+
+            border: none;
+        }
+
+        .edit-btn {
+
+            background: #7b1e3a;
+
+            color: white;
+        }
+
+        .edit-btn:hover {
+
+            background: #5d162f;
+        }
+
+        .delete-btn {
+
+            background: white;
+
+            color: #c62828;
+
+            border: 1px solid #e2b7b7;
+        }
+
+        .delete-btn:hover {
+
+            background: #fff1f1;
+        }
+
+        .view-btn {
+
+            width: 100%;
+
+            margin-top: 8px;
+
+            background: #faf8f7;
+
+            color: #5d162f;
+
+            border: 1px solid #e4d9d5;
+        }
+
+        .view-btn:hover {
+
+            background: #f4ebed;
+        }
+
+
+        /* =====================================================
+           EMPTY STATE
+        ===================================================== */
+
+        .empty-state {
+
+            display: none;
+
+            text-align: center;
+
+            background: white;
+
+            padding: 55px 20px;
+
+            border-radius: 15px;
+
+            border: 1px solid #eee5e1;
+
+            box-shadow:
+                0 5px 20px rgba(70, 35, 40, .06);
+        }
+
+        .empty-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 10px;
+        }
+
+        .empty-state h3 {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 25px;
+
+            color: #5d162f;
+
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           PAGINATION
+        ===================================================== */
+
+        .pagination {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 30px;
+
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+
+            width: 38px;
+
+            height: 38px;
+
+            border-radius: 8px;
+
+            border: 1px solid #e0d5d1;
+
+            background: white;
+
+            color: #5d162f;
+
+            cursor: pointer;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: .2s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+
+            background: #f8eef1;
+        }
+
+        .page-btn.active {
+
+            background: #7b1e3a;
+
+            color: white;
+
+            border-color: #7b1e3a;
+        }
+
+        .page-btn:disabled {
+
+            opacity: .4;
+
+            cursor: not-allowed;
+        }
+
+
+        /* =====================================================
+           IMAGE MODAL
+        ===================================================== */
+
+        .modal {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, .78);
+
+            z-index: 3000;
+
+            display: none;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .modal.show {
+
+            display: flex;
+        }
+
+        .modal-content {
+
+            width: min(900px, 100%);
+
+            max-height: 90vh;
+
+            background: white;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            position: relative;
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, .3);
+        }
+
+        .modal-header {
+
+            padding: 15px 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom: 1px solid #eee;
+
+            background: white;
+        }
+
+        .modal-title {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 21px;
+
+            color: #5d162f;
+
+            font-weight: 700;
+
+            max-width: calc(100% - 50px);
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+        }
+
+        .close-btn {
+
+            border: none;
+
+            background: #f5eeee;
+
+            width: 35px;
+
+            height: 35px;
+
+            border-radius: 50%;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            color: #5d162f;
+
+            flex-shrink: 0;
+        }
+
+        .close-btn:hover {
+
+            background: #eadadd;
+        }
+
+        .modal-gallery {
+
+            display: flex;
+
+            gap: 12px;
+
+            overflow-x: auto;
+
+            padding: 20px;
+
+            height: calc(90vh - 70px);
+
+            scroll-snap-type: x mandatory;
+        }
+
+        .modal-image {
+
+            flex: 0 0 80%;
+
+            height: 100%;
+
+            background: #faf8f7;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            scroll-snap-align: center;
+
+            overflow: hidden;
+        }
+
+        .modal-image img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: contain;
+
+            display: block;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE TABLET
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .silk-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+
+        /* =====================================================
+           RESPONSIVE MOBILE
+        ===================================================== */
+
+        @media (max-width: 768px) {
+
+            .top-header {
+
+                padding: 13px 14px;
+            }
+
+            .header-inner {
+
+                gap: 8px;
+            }
+
+            .brand-name {
+
+                font-size: 23px;
+            }
+
+            .brand-subtitle {
+
+                font-size: 8px;
+
+                letter-spacing: 1px;
+            }
+
+            .dashboard-btn {
+
+                display: none;
+            }
+
+            .header-actions {
+
+                gap: 5px;
+            }
+
+            .header-btn {
+
+                min-height: 38px;
+
+                padding: 0 10px;
+
+                font-size: 10px;
+            }
+
+            .page {
+
+                padding: 22px 12px 45px;
+            }
+
+            .page-heading h1 {
+
+                font-size: 28px;
+            }
+
+            .page-heading p {
+
+                font-size: 12px;
+            }
+
+            .toolbar {
+
+                padding: 12px;
+            }
+
+            .toolbar-row {
+
+                grid-template-columns: 1fr;
+
+                gap: 9px;
+            }
+
+            .search-input,
+            .filter-select {
+
+                height: 48px;
+
+                font-size: 13px;
+            }
+
+            .silk-grid {
+
+                grid-template-columns: 1fr;
+
+                gap: 16px;
+            }
+
+            .card-image {
+
+                height: 350px;
+            }
+
+            .silk-name {
+
+                font-size: 21px;
+            }
+
+            .price {
+
+                font-size: 25px;
+            }
+
+            .details-grid {
+
+                gap: 8px;
+            }
+
+            .modal {
+
+                padding: 10px;
+            }
+
+            .modal-content {
+
+                width: 100%;
+
+                max-height: 92vh;
+
+                border-radius: 12px;
+            }
+
+            .modal-gallery {
+
+                height: calc(92vh - 70px);
+
+                padding: 12px;
+            }
+
+            .modal-image {
+
+                flex: 0 0 92%;
+            }
+        }
+
+
+        /* =====================================================
+           SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 420px) {
+
+            .brand-name {
+
+                font-size: 20px;
+            }
+
+            .brand-subtitle {
+
+                font-size: 7px;
+            }
+
+            .add-btn {
+
+                padding: 0 9px;
+            }
+
+            .page-heading h1 {
+
+                font-size: 25px;
+            }
+
+            .page-heading p {
+
+                font-size: 11px;
+            }
+
+            .card-image {
+
+                height: 320px;
+            }
+
+            .card-content {
+
+                padding: 13px;
+            }
+
+            .silk-name {
+
+                font-size: 20px;
+            }
+
+            .details-grid {
+
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .action-btn {
+
+                min-height: 44px;
+
+                font-size: 11px;
+            }
+
+            .page-btn {
+
+                width: 36px;
+
+                height: 36px;
+            }
+        }
+
+
+        /* =====================================================
+           VERY SMALL MOBILE
+        ===================================================== */
+
+        @media (max-width: 350px) {
+
+            .header-btn {
+
+                padding: 0 7px;
+
+                font-size: 9px;
+            }
+
+            .brand-name {
+
+                font-size: 18px;
+            }
+
+            .card-image {
+
+                height: 290px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="top-header">
+
+    <div class="header-inner">
+
+        <div>
+
+            <div class="brand-name">
+                Vastra Mane
+            </div>
+
+            <div class="brand-subtitle">
+                Admin • Silk Management
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <a href="/admin/home"
+               class="header-btn dashboard-btn">
+
+                ← Dashboard
+
+            </a>
+
+
+            <a href="/admin/add-silk"
+               class="header-btn add-btn">
+
+                + Add Silk
+
+            </a>
+
+
+            <a href="/logout"
+               class="header-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="page">
+
+
+    <!-- PAGE HEADING -->
+
+    <div class="page-heading">
+
+        <h1>
+            Manage Silks
+        </h1>
+
+        <p>
+            Search, edit and manage your silk collection easily.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SEARCH / FILTER
+    ================================================== -->
+
+    <div class="toolbar">
+
+        <div class="toolbar-row">
+
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔍
+                </span>
+
+                <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Search silk name or type..."
+                        autocomplete="off">
+
+            </div>
+
+
+
+            <!-- SILK TYPE FILTER -->
+
+            <select id="typeFilter"
+                    class="filter-select">
+
+                <option value="">
+                    All Silk Types
+                </option>
+
+            </select>
+
+
+
+            <!-- SORT -->
+
+            <select id="sortSelect"
+                    class="filter-select">
+
+                <option value="default">
+                    Sort: Default
+                </option>
+
+                <option value="nameAsc">
+                    Name: A → Z
+                </option>
+
+                <option value="nameDesc">
+                    Name: Z → A
+                </option>
+
+                <option value="priceLow">
+                    Price: Low → High
+                </option>
+
+                <option value="priceHigh">
+                    Price: High → Low
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="result-count">
+
+            Showing
+
+            <strong id="resultCount">
+                0
+            </strong>
+
+            silks
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SILK GRID
+    ================================================== -->
+
+    <div id="silkGrid"
+         class="silk-grid">
+
+
+        <!-- =================================================
+             SILK CARD
+        ================================================== -->
+
+        <div class="silk-card"
+             th:each="s : ${silk}"
+             th:attr="
+                data-name=${s.name},
+                data-type=${s.silkType},
+                data-price=${s.price}
+             ">
+
+
+            <!-- ================= IMAGE ================= -->
+
+            <div class="card-image">
+
+
+                <!-- PUBLISHED STATUS -->
+
+                <div th:if="${s.published}"
+                     class="published-badge">
+
+                    ✓ Published
+
+                </div>
+
+
+                <div th:unless="${s.published}"
+                     class="unpublished-badge">
+
+                    Not Published
+
+                </div>
+
+
+                <!-- FIRST IMAGE -->
+
+                <img th:if="${s.imageLinks != null and !s.imageLinks.isEmpty()}"
+                     th:src="${s.imageLinks[0]}"
+                     th:alt="${s.name}"
+                     loading="lazy">
+
+
+                <!-- NO IMAGE -->
+
+                <div class="no-image"
+                     th:if="${s.imageLinks == null or s.imageLinks.isEmpty()}">
+
+                    <span>
+                        🖼️
+                    </span>
+
+                    No Image
+
+                </div>
+
+
+                <!-- IMAGE COUNT -->
+
+                <div class="image-badge"
+                     th:if="${s.imageLinks != null and !s.imageLinks.isEmpty()}"
+                     th:text="${s.imageLinks.size() + ' Photos'}">
+
+                    3 Photos
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================= CONTENT ================= -->
+
+            <div class="card-content">
+
+
+                <!-- NAME -->
+
+                <div class="silk-name"
+                     th:text="${s.name}">
+
+                    Silk Name
+
+                </div>
+
+
+                <!-- SILK TYPE -->
+
+                <div class="type-label">
+                    Silk Type
+                </div>
+
+                <div class="silk-type"
+                     th:text="${s.silkType}">
+
+                    Mulberry Silk
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="price-row">
+
+                    <div class="price"
+                         th:text="'₹' + ${s.price}">
+
+                        ₹0
+
+                    </div>
+
+                    <div class="mrp"
+                         th:if="${s.dummyprice != null}"
+                         th:text="'₹' + ${s.dummyprice}">
+
+                        ₹0
+
+                    </div>
+
+                </div>
+
+
+                <!-- STOCK -->
+
+                <div class="stock">
+
+                    <strong>
+                        Stock:
+                    </strong>
+
+                    <span th:text="${s.stock}">
+                        0
+                    </span>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     DETAILS
+                ================================================== -->
+
+                <div class="details-grid">
+
+
+                    <!-- FABRIC -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Fabric
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.fabric}">
+
+                            Pure Silk
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- COLOR -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Color
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.color}">
+
+                            Red
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- WEAVING -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Weaving
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.weavingType}">
+
+                            Handloom
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- ORIGIN -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Origin
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.origin}">
+
+                            Karnataka
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- DESIGN -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Design
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.design}">
+
+                            Traditional
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- FINISH -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Finish
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.finish}">
+
+                            Glossy
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- WEIGHT -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Weight
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.weight}">
+
+                            80 GSM
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- WIDTH -->
+
+                    <div class="detail-item">
+
+                        <span class="detail-label">
+                            Width
+                        </span>
+
+                        <span class="detail-value"
+                              th:text="${s.width}">
+
+                            44 inches
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="description"
+                     th:text="${s.description}">
+
+                    Silk description
+
+                </div>
+
+
+
+                <!-- HOME PAGE STATUS -->
+
+                <div th:if="${s.published}"
+                     class="home-status published">
+
+                    <span>
+                        🏠 Home Page
+                    </span>
+
+                    <span>
+                        Published ✓
+                    </span>
+
+                </div>
+
+
+                <div th:unless="${s.published}"
+                     class="home-status not-published">
+
+                    <span>
+                        🏠 Home Page
+                    </span>
+
+                    <span>
+                        Not Published
+                    </span>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     ACTIONS
+                ================================================== -->
+
+                <div class="card-actions">
+
+
+                    <!-- EDIT -->
+
+                    <a th:href="@{'/admin/edit-silk/' + ${s.id}}"
+                       class="action-btn edit-btn">
+
+                        ✏️ Edit
+
+                    </a>
+
+
+                    <!-- DELETE -->
+
+                    <a th:href="@{'/admin/delete-silk/' + ${s.id}}"
+                       class="action-btn delete-btn"
+                       onclick="return confirm('Are you sure you want to delete this silk?');">
+
+                        🗑️ Delete
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- VIEW IMAGES -->
+
+                <button type="button"
+                        class="action-btn view-btn"
+                        th:if="${s.imageLinks != null and !s.imageLinks.isEmpty()}"
+                        th:attr="data-silk-name=${s.name}"
+                        onclick="openGallery(this)">
+
+                    🖼️ View All Images
+
+                </button>
+
+
+
+                <!-- HIDDEN IMAGE DATA -->
+
+                <div class="hidden-images"
+                     style="display:none;"
+                     th:if="${s.imageLinks != null and !s.imageLinks.isEmpty()}">
+
+                    <span th:each="image : ${s.imageLinks}"
+                          th:attr="data-image=${image}">
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         EMPTY SEARCH RESULT
+    ================================================== -->
+
+    <div id="emptyState"
+         class="empty-state">
+
+        <div class="empty-icon">
+            🔍
+        </div>
+
+        <h3>
+            No Silks Found
+        </h3>
+
+        <p>
+            Try another silk name or silk type.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         PAGINATION
+    ================================================== -->
+
+    <div id="pagination"
+         class="pagination">
+    </div>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     IMAGE MODAL
+===================================================== -->
+
+<div id="imageModal"
+     class="modal"
+     onclick="closeGalleryOutside(event)">
+
+
+    <div class="modal-content">
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="modal-header">
+
+            <div id="modalTitle"
+                 class="modal-title">
+
+                Silk Images
+
+            </div>
+
+
+            <button
+                    type="button"
+                    class="close-btn"
+                    onclick="closeGallery()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <!-- IMAGE GALLERY -->
+
+        <div id="modalGallery"
+             class="modal-gallery">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+
+        const typeFilter =
+            document.getElementById("typeFilter");
+
+
+        const sortSelect =
+            document.getElementById("sortSelect");
+
+
+        const silkGrid =
+            document.getElementById("silkGrid");
+
+
+        const resultCount =
+            document.getElementById("resultCount");
+
+
+        const emptyState =
+            document.getElementById("emptyState");
+
+
+        const pagination =
+            document.getElementById("pagination");
+
+
+        let cards =
+            Array.from(
+                document.querySelectorAll(".silk-card")
+            );
+
+
+        let currentPage = 1;
+
+
+        const itemsPerPage = 9;
+
+
+
+        /* =================================================
+           CREATE SILK TYPE FILTER
+        ================================================= */
+
+        const types = new Set();
+
+
+        cards.forEach(function (card) {
+
+            const type =
+                card.dataset.type;
+
+
+            if (type && type.trim() !== "") {
+
+                types.add(type.trim());
+
+            }
+
+        });
+
+
+        Array.from(types)
+            .sort()
+            .forEach(function (type) {
+
+
+                const option =
+                    document.createElement("option");
+
+
+                option.value = type;
+
+
+                option.textContent = type;
+
+
+                typeFilter.appendChild(option);
+
+            });
+
+
+
+        /* =================================================
+           FILTER + SORT
+        ================================================= */
+
+        function filterAndSort() {
+
+
+            const search =
+                searchInput.value
+                    .toLowerCase()
+                    .trim();
+
+
+            const selectedType =
+                typeFilter.value
+                    .toLowerCase();
+
+
+            let filtered =
+                cards.filter(function (card) {
+
+
+                    const name =
+                        (card.dataset.name || "")
+                            .toLowerCase();
+
+
+                    const type =
+                        (card.dataset.type || "")
+                            .toLowerCase();
+
+
+                    const matchesSearch =
+                        name.includes(search) ||
+                        type.includes(search);
+
+
+                    const matchesType =
+                        !selectedType ||
+                        type === selectedType;
+
+
+                    return (
+                        matchesSearch &&
+                        matchesType
+                    );
+
+                });
+
+
+
+            /* =================================================
+               SORT
+            ================================================= */
+
+            const sort =
+                sortSelect.value;
+
+
+            if (sort === "nameAsc") {
+
+                filtered.sort(function (a, b) {
+
+                    return (
+                        a.dataset.name || ""
+                    ).localeCompare(
+                        b.dataset.name || ""
+                    );
+
+                });
+
+            }
+
+
+            if (sort === "nameDesc") {
+
+                filtered.sort(function (a, b) {
+
+                    return (
+                        b.dataset.name || ""
+                    ).localeCompare(
+                        a.dataset.name || ""
+                    );
+
+                });
+
+            }
+
+
+            if (sort === "priceLow") {
+
+                filtered.sort(function (a, b) {
+
+                    return (
+                        Number(a.dataset.price || 0) -
+                        Number(b.dataset.price || 0)
+                    );
+
+                });
+
+            }
+
+
+            if (sort === "priceHigh") {
+
+                filtered.sort(function (a, b) {
+
+                    return (
+                        Number(b.dataset.price || 0) -
+                        Number(a.dataset.price || 0)
+                    );
+
+                });
+
+            }
+
+
+            render(filtered);
+
+        }
+
+
+
+        /* =================================================
+           RENDER
+        ================================================= */
+
+        function render(filtered) {
+
+
+            resultCount.textContent =
+                filtered.length;
+
+
+            cards.forEach(function (card) {
+
+                card.style.display = "none";
+
+            });
+
+
+            if (filtered.length === 0) {
+
+
+                emptyState.style.display =
+                    "block";
+
+
+                pagination.innerHTML =
+                    "";
+
+
+                return;
+
+            }
+
+
+            emptyState.style.display =
+                "none";
+
+
+            const totalPages =
+                Math.ceil(
+                    filtered.length /
+                    itemsPerPage
+                );
+
+
+            if (currentPage > totalPages) {
+
+                currentPage =
+                    totalPages;
+
+            }
+
+
+            const start =
+                (currentPage - 1) *
+                itemsPerPage;
+
+
+            const end =
+                start +
+                itemsPerPage;
+
+
+            const visibleCards =
+                filtered.slice(
+                    start,
+                    end
+                );
+
+
+            visibleCards.forEach(function (card) {
+
+                card.style.display =
+                    "block";
+
+
+                silkGrid.appendChild(card);
+
+            });
+
+
+            createPagination(totalPages);
+
+        }
+
+
+
+        /* =================================================
+           PAGINATION
+        ================================================= */
+
+        function createPagination(totalPages) {
+
+
+            pagination.innerHTML =
+                "";
+
+
+            if (totalPages <= 1) {
+
+                return;
+
+            }
+
+
+
+            /* PREVIOUS */
+
+            const previous =
+                document.createElement("button");
+
+
+            previous.className =
+                "page-btn";
+
+
+            previous.textContent =
+                "‹";
+
+
+            previous.disabled =
+                currentPage === 1;
+
+
+            previous.onclick =
+                function () {
+
+
+                    if (currentPage > 1) {
+
+
+                        currentPage--;
+
+
+                        filterAndSort();
+
+
+                        window.scrollTo({
+
+                            top: 0,
+
+                            behavior: "smooth"
+
+                        });
+
+                    }
+
+                };
+
+
+            pagination.appendChild(
+                previous
+            );
+
+
+
+            /* PAGE NUMBERS */
+
+            for (
+                let i = 1;
+                i <= totalPages;
+                i++
+            ) {
+
+
+                const button =
+                    document.createElement("button");
+
+
+                button.className =
+                    "page-btn";
+
+
+                if (i === currentPage) {
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                }
+
+
+                button.textContent =
+                    i;
+
+
+                button.onclick =
+                    function () {
+
+
+                        currentPage =
+                            i;
+
+
+                        filterAndSort();
+
+
+                        window.scrollTo({
+
+                            top: 0,
+
+                            behavior: "smooth"
+
+                        });
+
+                    };
+
+
+                pagination.appendChild(
+                    button
+                );
+
+            }
+
+
+
+            /* NEXT */
+
+            const next =
+                document.createElement("button");
+
+
+            next.className =
+                "page-btn";
+
+
+            next.textContent =
+                "›";
+
+
+            next.disabled =
+                currentPage === totalPages;
+
+
+            next.onclick =
+                function () {
+
+
+                    if (
+                        currentPage <
+                        totalPages
+                    ) {
+
+
+                        currentPage++;
+
+
+                        filterAndSort();
+
+
+                        window.scrollTo({
+
+                            top: 0,
+
+                            behavior: "smooth"
+
+                        });
+
+                    }
+
+                };
+
+
+            pagination.appendChild(
+                next
+            );
+
+        }
+
+
+
+        /* =================================================
+           SEARCH EVENT
+        ================================================= */
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                currentPage = 1;
+
+                filterAndSort();
+
+            }
+        );
+
+
+
+        /* =================================================
+           TYPE FILTER EVENT
+        ================================================= */
+
+        typeFilter.addEventListener(
+            "change",
+            function () {
+
+                currentPage = 1;
+
+                filterAndSort();
+
+            }
+        );
+
+
+
+        /* =================================================
+           SORT EVENT
+        ================================================= */
+
+        sortSelect.addEventListener(
+            "change",
+            function () {
+
+                currentPage = 1;
+
+                filterAndSort();
+
+            }
+        );
+
+
+
+        /* =================================================
+           INITIAL LOAD
+        ================================================= */
+
+        filterAndSort();
+
+    });
+
+
+
+    /* =====================================================
+       OPEN IMAGE GALLERY
+    ===================================================== */
+
+    function openGallery(button) {
+
+
+        const card =
+            button.closest(".silk-card");
+
+
+        const name =
+            button.dataset.silkName;
+
+
+        const hiddenImages =
+            card.querySelectorAll(
+                ".hidden-images span"
+            );
+
+
+        const modal =
+            document.getElementById(
+                "imageModal"
+            );
+
+
+        const modalTitle =
+            document.getElementById(
+                "modalTitle"
+            );
+
+
+        const modalGallery =
+            document.getElementById(
+                "modalGallery"
+            );
+
+
+        modalTitle.textContent =
+            name;
+
+
+        modalGallery.innerHTML =
+            "";
+
+
+
+        hiddenImages.forEach(
+            function (item) {
+
+
+                const imageUrl =
+                    item.dataset.image;
+
+
+                const wrapper =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                wrapper.className =
+                    "modal-image";
+
+
+                const img =
+                    document.createElement(
+                        "img"
+                    );
+
+
+                img.src =
+                    imageUrl;
+
+
+                img.alt =
+                    name;
+
+
+                img.loading =
+                    "lazy";
+
+
+                wrapper.appendChild(
+                    img
+                );
+
+
+                modalGallery.appendChild(
+                    wrapper
+                );
+
+            }
+        );
+
+
+        modal.classList.add(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "hidden";
+
+    }
+
+
+
+    /* =====================================================
+       CLOSE GALLERY
+    ===================================================== */
+
+    function closeGallery() {
+
+
+        const modal =
+            document.getElementById(
+                "imageModal"
+            );
+
+
+        modal.classList.remove(
+            "show"
+        );
+
+
+        document.body.style.overflow =
+            "";
+
+    }
+
+
+
+    /* =====================================================
+       CLOSE WHEN CLICKING OUTSIDE
+    ===================================================== */
+
+    function closeGalleryOutside(event) {
+
+
+        if (
+            event.target.id ===
+            "imageModal"
+        ) {
+
+            closeGallery();
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       ESC KEY
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+
+            if (event.key === "Escape") {
+
+                closeGallery();
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

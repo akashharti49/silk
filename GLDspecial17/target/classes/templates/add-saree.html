@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <meta name="theme-color"
+          content="#641726">
+
+    <title>Vastra Mane | Add Saree</title>
+
+
+    <!-- =====================================================
+         GOOGLE FONT
+    ====================================================== -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ====================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: "Inter", sans-serif;
+
+            background: #f7f5f3;
+
+            color: #32151d;
+
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
+        .header {
+
+            height: 72px;
+
+            background: #641726;
+
+            padding: 0 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            box-shadow:
+                0 3px 15px rgba(70, 15, 25, .16);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+        }
+
+
+        .header-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .logo {
+
+            width: 48px;
+
+            height: 48px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            background: #641726;
+        }
+
+
+        .brand-name {
+
+            color: white;
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 21px;
+        }
+
+
+        .brand-subtitle {
+
+            color: #e2c487;
+
+            font-size: 8px;
+
+            letter-spacing: 1.6px;
+
+            margin-top: 2px;
+
+            text-transform: uppercase;
+        }
+
+
+        .back-button {
+
+            color: white;
+
+            border: 1px solid rgba(255,255,255,.3);
+
+            padding: 9px 14px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            text-decoration: none;
+
+            transition: .2s;
+        }
+
+
+        .back-button:hover {
+
+            background: white;
+
+            color: #641726;
+        }
+
+
+        /* =====================================================
+           MAIN CONTAINER
+        ====================================================== */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 900px;
+
+            margin: auto;
+
+            padding: 30px 20px 50px;
+        }
+
+
+        /* =====================================================
+           PAGE TITLE
+        ====================================================== */
+
+        .page-heading {
+
+            margin-bottom: 25px;
+        }
+
+
+        .page-heading h1 {
+
+            font-family: "Playfair Display", serif;
+
+            color: #4c1522;
+
+            font-size: 30px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .page-heading p {
+
+            color: #8a7b80;
+
+            font-size: 12px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           ALERTS
+        ====================================================== */
+
+        .alert {
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            margin-bottom: 18px;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        .success {
+
+            background: #eaf7ed;
+
+            color: #23733d;
+
+            border: 1px solid #ccebd5;
+        }
+
+
+        .failure {
+
+            background: #fff0f0;
+
+            color: #ad2929;
+
+            border: 1px solid #f0d0d0;
+        }
+
+
+        /* =====================================================
+           FORM CARD
+        ====================================================== */
+
+        .form-card {
+
+            background: white;
+
+            border: 1px solid #ebe5e2;
+
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 25px rgba(50,20,25,.06);
+        }
+
+
+        /* =====================================================
+           FORM SECTION
+        ====================================================== */
+
+        .form-section {
+
+            padding: 25px;
+
+            border-bottom: 1px solid #eee9e6;
+        }
+
+
+        .form-section:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .section-number {
+
+            width: 28px;
+
+            height: 28px;
+
+            border-radius: 8px;
+
+            background: #f5e7eb;
+
+            color: #641726;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .section-heading h2 {
+
+            font-family: "Playfair Display", serif;
+
+            color: #4d1724;
+
+            font-size: 19px;
+        }
+
+
+        .section-heading p {
+
+            color: #988a8f;
+
+            font-size: 9px;
+
+            margin-left: auto;
+        }
+
+
+        /* =====================================================
+           FORM GRID
+        ====================================================== */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 17px;
+        }
+
+
+        .form-group {
+
+            display: flex;
+
+            flex-direction: column;
+        }
+
+
+        .full {
+
+            grid-column: 1 / -1;
+        }
+
+
+        /* =====================================================
+           LABEL
+        ====================================================== */
+
+        .form-group label {
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            color: #49333a;
+
+            margin-bottom: 7px;
+        }
+
+
+        .required {
+
+            color: #b32d3b;
+
+            margin-left: 2px;
+        }
+
+
+        /* =====================================================
+           INPUTS
+        ====================================================== */
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select,
+        .form-group textarea {
+
+            width: 100%;
+
+            border: 1px solid #ded7d4;
+
+            background: #fff;
+
+            color: #36242a;
+
+            border-radius: 9px;
+
+            padding: 12px 13px;
+
+            font-family: "Inter", sans-serif;
+
+            font-size: 12px;
+
+            outline: none;
+
+            transition: .2s;
+        }
+
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+
+            border-color: #8b394f;
+
+            box-shadow:
+                0 0 0 3px rgba(100,23,38,.07);
+        }
+
+
+        .form-group textarea {
+
+            min-height: 110px;
+
+            resize: vertical;
+
+            line-height: 1.6;
+        }
+
+
+        .form-group select {
+
+            appearance: auto;
+
+            cursor: pointer;
+        }
+
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+
+            color: #b0a4a8;
+        }
+
+
+        /* =====================================================
+           VALIDATION
+        ====================================================== */
+
+        .field-error {
+
+            color: #b52c38;
+
+            font-size: 9px;
+
+            margin-top: 5px;
+        }
+
+
+        /* =====================================================
+           PRICE ROW
+        ====================================================== */
+
+        .price-box {
+
+            position: relative;
+        }
+
+
+        .price-symbol {
+
+            position: absolute;
+
+            left: 12px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #806c74;
+
+            font-size: 12px;
+
+            z-index: 2;
+        }
+
+
+        .price-box input {
+
+            padding-left: 27px !important;
+        }
+
+
+        /* =====================================================
+           IMAGE UPLOAD
+        ====================================================== */
+
+        .upload-box {
+
+            border: 1.5px dashed #cdb8bf;
+
+            background: #fcfafb;
+
+            border-radius: 13px;
+
+            padding: 25px 15px;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+
+        .upload-box:hover {
+
+            border-color: #8b394f;
+
+            background: #fffafb;
+        }
+
+
+        .upload-icon {
+
+            width: 46px;
+
+            height: 46px;
+
+            border-radius: 13px;
+
+            background: #f5e7eb;
+
+            color: #641726;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: 0 auto 10px;
+
+            font-size: 20px;
+        }
+
+
+        .upload-box h3 {
+
+            font-size: 13px;
+
+            color: #4d2833;
+
+            margin-bottom: 4px;
+        }
+
+
+        .upload-box p {
+
+            font-size: 9px;
+
+            color: #9a8b91;
+
+            line-height: 1.5;
+        }
+
+
+        .upload-box input[type="file"] {
+
+            display: none;
+        }
+
+
+        .upload-button {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            background: #641726;
+
+            color: white;
+
+            padding: 9px 15px;
+
+            border-radius: 7px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           IMAGE PREVIEW
+        ====================================================== */
+
+        .preview-wrapper {
+
+            display: none;
+
+            margin-top: 15px;
+        }
+
+
+        .preview-title {
+
+            color: #75656b;
+
+            font-size: 10px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .preview-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 8px;
+        }
+
+
+        .preview-item {
+
+            aspect-ratio: 1 / 1;
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+            border: 1px solid #e5dede;
+
+            background: #f6f3f2;
+        }
+
+
+        .preview-item img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+
+        /* =====================================================
+           CHECKBOXES
+        ====================================================== */
+
+        .options {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+
+        .checkbox-card {
+
+            border: 1px solid #e5dedd;
+
+            border-radius: 10px;
+
+            padding: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+
+        .checkbox-card:hover {
+
+            border-color: #c9a4af;
+
+            background: #fffafb;
+        }
+
+
+        .checkbox-card input {
+
+            width: 17px;
+
+            height: 17px;
+
+            accent-color: #641726;
+
+            cursor: pointer;
+        }
+
+
+        .checkbox-content strong {
+
+            display: block;
+
+            font-size: 11px;
+
+            color: #4b2933;
+        }
+
+
+        .checkbox-content span {
+
+            display: block;
+
+            color: #9b8c91;
+
+            font-size: 8px;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           SUBMIT AREA
+        ====================================================== */
+
+        .submit-section {
+
+            padding: 20px 25px;
+
+            background: #fcfaf9;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+
+        .submit-note {
+
+            color: #8d7d83;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+
+        .submit-buttons {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+        }
+
+
+        .cancel-button {
+
+            border: 1px solid #dcd4d1;
+
+            background: white;
+
+            color: #624e56;
+
+            padding: 12px 18px;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+
+        .submit-button {
+
+            border: none;
+
+            background: #641726;
+
+            color: white;
+
+            padding: 12px 22px;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 5px 12px rgba(100,23,38,.18);
+
+            transition: .2s;
+        }
+
+
+        .submit-button:hover {
+
+            background: #4f101d;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media(max-width: 700px) {
+
+
+            body {
+
+                background: #f7f5f3;
+
+                padding-bottom: 80px;
+            }
+
+
+            /* HEADER */
+
+            .header {
+
+                height: 65px;
+
+                padding: 0 13px;
+            }
+
+
+            .logo {
+
+                width: 45px;
+
+                height: 45px;
+            }
+
+
+            .brand {
+
+                gap: 9px;
+            }
+
+
+            .brand-name {
+
+                font-size: 19px;
+            }
+
+
+            .brand-subtitle {
+
+                font-size: 7px;
+
+                letter-spacing: 1px;
+            }
+
+
+            .back-button {
+
+                width: 38px;
+
+                height: 38px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                padding: 0;
+
+                font-size: 16px;
+            }
+
+
+            .back-button span {
+
+                display: none;
+            }
+
+
+            /* MAIN */
+
+            .container {
+
+                padding: 20px 11px 30px;
+            }
+
+
+            /* TITLE */
+
+            .page-heading {
+
+                margin-bottom: 20px;
+            }
+
+
+            .page-heading h1 {
+
+                font-size: 26px;
+            }
+
+
+            .page-heading p {
+
+                font-size: 10px;
+
+                line-height: 1.5;
+            }
+
+
+            /* FORM */
+
+            .form-card {
+
+                border-radius: 14px;
+            }
+
+
+            .form-section {
+
+                padding: 19px 15px;
+            }
+
+
+            .section-heading {
+
+                margin-bottom: 17px;
+            }
+
+
+            .section-heading h2 {
+
+                font-size: 18px;
+            }
+
+
+            .section-heading p {
+
+                display: none;
+            }
+
+
+            /* FORM GRID */
+
+            .form-grid {
+
+                grid-template-columns: 1fr;
+
+                gap: 14px;
+            }
+
+
+            .full {
+
+                grid-column: auto;
+            }
+
+
+            /* INPUTS */
+
+            .form-group label {
+
+                font-size: 10px;
+
+                margin-bottom: 6px;
+            }
+
+
+            .form-group input[type="text"],
+            .form-group input[type="number"],
+            .form-group select,
+            .form-group textarea {
+
+                min-height: 46px;
+
+                padding: 12px;
+
+                border-radius: 8px;
+
+                font-size: 12px;
+            }
+
+
+            .form-group textarea {
+
+                min-height: 105px;
+            }
+
+
+            /* UPLOAD */
+
+            .upload-box {
+
+                padding: 22px 10px;
+
+                border-radius: 11px;
+            }
+
+
+            .upload-icon {
+
+                width: 43px;
+
+                height: 43px;
+
+                font-size: 18px;
+            }
+
+
+            .upload-box h3 {
+
+                font-size: 12px;
+            }
+
+
+            .upload-box p {
+
+                font-size: 8px;
+            }
+
+
+            .upload-button {
+
+                padding: 10px 15px;
+
+                font-size: 9px;
+            }
+
+
+            /* PREVIEW */
+
+            .preview-grid {
+
+                grid-template-columns:
+                    repeat(4, 1fr);
+
+                gap: 6px;
+            }
+
+
+            /* OPTIONS */
+
+            .options {
+
+                grid-template-columns: 1fr;
+
+                gap: 8px;
+            }
+
+
+            .checkbox-card {
+
+                padding: 12px;
+
+                min-height: 55px;
+            }
+
+
+            /* SUBMIT */
+
+            .submit-section {
+
+                padding: 14px 15px;
+
+                display: block;
+            }
+
+
+            .submit-note {
+
+                display: none;
+            }
+
+
+            .submit-buttons {
+
+                display: grid;
+
+                grid-template-columns: 1fr 2fr;
+
+                gap: 8px;
+            }
+
+
+            .cancel-button,
+            .submit-button {
+
+                min-height: 48px;
+
+                padding: 10px;
+
+                font-size: 10px;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+            }
+
+
+            /* STICKY SAVE */
+
+            .submit-section {
+
+                position: sticky;
+
+                bottom: 0;
+
+                z-index: 500;
+
+                box-shadow:
+                    0 -5px 18px rgba(30,15,20,.07);
+            }
+
+        }
+
+
+        /* =====================================================
+           SMALL PHONES
+        ====================================================== */
+
+        @media(max-width: 360px) {
+
+
+            .container {
+
+                padding-left: 8px;
+
+                padding-right: 8px;
+            }
+
+
+            .form-section {
+
+                padding: 17px 12px;
+            }
+
+
+            .preview-grid {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+
+            .page-heading h1 {
+
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+
+    <div class="header-left">
+
+
+        <img
+            class="logo"
+            src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787580557/Products/b8ijrczvf7ep5xtjnmjt.jpg"
+            alt="Vastra Mane">
+
+
+        <div>
+
+            <div class="brand-name">
+                Vastra Mane
+            </div>
+
+            <div class="brand-subtitle">
+                Admin Panel
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <a href="/admin/home"
+       class="back-button">
+
+        <span>Back to Dashboard</span>
+
+        ←
+
+    </a>
+
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- PAGE TITLE -->
+
+    <div class="page-heading">
+
+        <h1>
+            Add New Saree
+        </h1>
+
+        <p>
+            Add saree details, images and product information
+            to your Vastra Mane collection.
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ALERTS
+    ====================================================== -->
+
+    <div th:if="${session.failure != null}"
+         class="alert failure">
+
+        <strong>⚠</strong>
+
+        <span th:text="${session.failure}"></span>
+
+    </div>
+
+
+    <div th:if="${session.success != null}"
+         class="alert success">
+
+        <strong>✓</strong>
+
+        <span th:text="${session.success}"></span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form action="/admin/add-saree"
+          method="post"
+          enctype="multipart/form-data"
+          th:object="${saree}">
+
+
+        <div class="form-card">
+
+
+            <!-- =================================================
+                 BASIC INFORMATION
+            ================================================== -->
+
+            <section class="form-section">
+
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        01
+                    </div>
+
+                    <h2>
+                        Basic Information
+                    </h2>
+
+                    <p>
+                        Product details
+                    </p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            Saree Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="text"
+                               th:field="*{name}"
+                               placeholder="Example: Guledagudda Cotton Saree"
+                               autocomplete="off">
+
+                        <div class="field-error"
+                             th:errors="*{name}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Selling Price
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="price-box">
+
+                            <span class="price-symbol">
+                                ₹
+                            </span>
+
+                            <input type="number"
+                                   step="0.01"
+                                   th:field="*{price}"
+                                   placeholder="0.00">
+
+                        </div>
+
+                        <div class="field-error"
+                             th:errors="*{price}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- MRP -->
+
+                    <div class="form-group">
+
+                        <label>
+                            MRP
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="price-box">
+
+                            <span class="price-symbol">
+                                ₹
+                            </span>
+
+                            <input type="number"
+                                   step="0.01"
+                                   th:field="*{dummyprice}"
+                                   placeholder="0.00">
+
+                        </div>
+
+                        <div class="field-error"
+                             th:errors="*{dummyprice}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- STOCK -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Stock
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="number"
+                               th:field="*{stock}"
+                               placeholder="Available quantity"
+                               min="0">
+
+                        <div class="field-error"
+                             th:errors="*{stock}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            Description
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            th:field="*{description}"
+                            placeholder="Write a short description about the saree, fabric, design, quality and special features..."></textarea>
+
+                        <div class="field-error"
+                             th:errors="*{description}">
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 IMAGES
+            ================================================== -->
+
+            <section class="form-section">
+
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        02
+                    </div>
+
+                    <h2>
+                        Saree Images
+                    </h2>
+
+                    <p>
+                        Multiple images
+                    </p>
+
+                </div>
+
+
+                <div class="form-group">
+
+
+                    <label>
+                        Product Photos
+                        <span class="required">*</span>
+                    </label>
+
+
+                    <label class="upload-box"
+                           for="imageInput">
+
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+
+                        <h3>
+                            Upload saree photos
+                        </h3>
+
+
+                        <p>
+                            Select multiple high-quality images
+                            of this saree.
+                        </p>
+
+
+                        <span class="upload-button">
+                            Choose Images
+                        </span>
+
+
+                        <input type="file"
+                               id="imageInput"
+                               name="images"
+                               multiple
+                               accept="image/*"
+                               required>
+
+
+                    </label>
+
+
+                    <!-- PREVIEW -->
+
+                    <div class="preview-wrapper"
+                         id="previewWrapper">
+
+
+                        <div class="preview-title">
+
+                            Selected images:
+
+                        </div>
+
+
+                        <div class="preview-grid"
+                             id="previewGrid">
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SAREE DETAILS
+            ================================================== -->
+
+            <section class="form-section">
+
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        03
+                    </div>
+
+                    <h2>
+                        Saree Details
+                    </h2>
+
+                    <p>
+                        Product specifications
+                    </p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- SAREE TYPE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Saree Type
+                            <span class="required">*</span>
+                        </label>
+
+                        <select th:field="*{sareeType}">
+
+                            <option value=""
+                                    disabled>
+                                Select saree type
+                            </option>
+
+                            <option value="Guledagudda Khana">
+                                Guledagudda Khana Saree
+                            </option>
+
+                            <option value="Ilkal Saree">
+                                Ilkal Saree
+                            </option>
+
+                            <option value="Mysore Silk">
+                                Mysore Silk
+                            </option>
+
+                            <option value="Molakalmuru Silk">
+                                Molakalmuru Silk
+                            </option>
+
+                            <option value="Patteda Anchu">
+                                Patteda Anchu
+                            </option>
+
+                        </select>
+
+                        <div class="field-error"
+                             th:errors="*{sareeType}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- FABRIC -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Fabric
+                            <span class="required">*</span>
+                        </label>
+
+                        <select th:field="*{fabric}">
+
+                            <option value=""
+                                    disabled>
+                                Select fabric
+                            </option>
+
+                            <option value="Silk">
+                                Silk
+                            </option>
+
+                            <option value="Cotton">
+                                Cotton
+                            </option>
+
+                            <option value="Linen">
+                                Linen
+                            </option>
+
+                            <option value="Georgette">
+                                Georgette
+                            </option>
+
+                            <option value="Chiffon">
+                                Chiffon
+                            </option>
+
+                            <option value="Crepe">
+                                Crepe
+                            </option>
+
+                            <option value="Organza">
+                                Organza
+                            </option>
+
+                        </select>
+
+                        <div class="field-error"
+                             th:errors="*{fabric}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- COLOR -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Color
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="text"
+                               th:field="*{color}"
+                               placeholder="Example: Maroon & Gold">
+
+                        <div class="field-error"
+                             th:errors="*{color}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- WEAVING -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Weaving Type
+                            <span class="required">*</span>
+                        </label>
+
+                        <select th:field="*{weavingType}">
+
+                            <option value=""
+                                    disabled>
+                                Select weaving
+                            </option>
+
+                            <option value="Handloom">
+                                Handloom
+                            </option>
+
+                            <option value="Powerloom">
+                                Powerloom
+                            </option>
+
+                        </select>
+
+                        <div class="field-error"
+                             th:errors="*{weavingType}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- OCCASION -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Occasion
+                        </label>
+
+                        <select th:field="*{occasion}">
+
+                            <option value=""
+                                    disabled>
+                                Select occasion
+                            </option>
+
+                            <option value="Wedding">
+                                Wedding
+                            </option>
+
+                            <option value="Festival">
+                                Festival
+                            </option>
+
+                            <option value="Party">
+                                Party
+                            </option>
+
+                            <option value="Casual">
+                                Casual
+                            </option>
+
+                            <option value="Traditional">
+                                Traditional
+                            </option>
+
+                        </select>
+
+                        <div class="field-error"
+                             th:errors="*{occasion}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESIGN -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Design
+                        </label>
+
+                        <input type="text"
+                               th:field="*{design}"
+                               placeholder="Example: Floral">
+
+                        <div class="field-error"
+                             th:errors="*{design}">
+                        </div>
+
+                    </div>
+
+
+                    <!-- BORDER -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            Border Type
+                        </label>
+
+                        <input type="text"
+                               th:field="*{borderType}"
+                               placeholder="Example: Traditional woven border">
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 OPTIONS
+            ================================================== -->
+
+            <section class="form-section">
+
+
+                <div class="section-heading">
+
+                    <div class="section-number">
+                        04
+                    </div>
+
+                    <h2>
+                        Product Options
+                    </h2>
+
+                    <p>
+                        Store settings
+                    </p>
+
+                </div>
+
+
+                <div class="options">
+
+
+                    <!-- BLOUSE -->
+
+                    <label class="checkbox-card">
+
+
+                        <input type="checkbox"
+                               th:field="*{blouseIncluded}">
+
+
+                        <div class="checkbox-content">
+
+                            <strong>
+                                Blouse Included
+                            </strong>
+
+                            <span>
+                                Saree includes matching blouse piece
+                            </span>
+
+                        </div>
+
+
+                    </label>
+
+
+                    <!-- PUBLISHED -->
+
+                    <label class="checkbox-card">
+
+
+                        <input type="checkbox"
+                               th:field="*{published}">
+
+
+                        <div class="checkbox-content">
+
+                            <strong>
+                                Publish on Home Page
+                            </strong>
+
+                            <span>
+                                Display this saree on your website
+                            </span>
+
+                        </div>
+
+
+                    </label>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SUBMIT
+            ================================================== -->
+
+            <section class="submit-section">
+
+
+                <div class="submit-note">
+
+                    <strong>
+                        Ready to add?
+                    </strong>
+
+                    <br>
+
+                    Check all details before saving.
+
+                </div>
+
+
+                <div class="submit-buttons">
+
+
+                    <a href="/admin/home"
+                       class="cancel-button">
+
+                        Cancel
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="submit-button">
+
+                        Add Saree
+
+                    </button>
+
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+
+    </form>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     IMAGE PREVIEW JAVASCRIPT
+========================================================= -->
+
+<script>
+
+    const imageInput =
+        document.getElementById("imageInput");
+
+    const previewWrapper =
+        document.getElementById("previewWrapper");
+
+    const previewGrid =
+        document.getElementById("previewGrid");
+
+
+    imageInput.addEventListener("change", function () {
+
+        previewGrid.innerHTML = "";
+
+
+        const files = Array.from(this.files);
+
+
+        if (files.length === 0) {
+
+            previewWrapper.style.display = "none";
+
+            return;
+        }
+
+
+        previewWrapper.style.display = "block";
+
+
+        files.forEach(function(file) {
+
+
+            if (!file.type.startsWith("image/")) {
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = function(event) {
+
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "preview-item";
+
+
+                const image =
+                    document.createElement("img");
+
+                image.src =
+                    event.target.result;
+
+                image.alt =
+                    "Saree preview";
+
+
+                item.appendChild(image);
+
+                previewGrid.appendChild(item);
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        });
+
+    });
+
+
+    /* Auto hide success/failure message */
+
+    setTimeout(function () {
+
+        const messages =
+            document.querySelectorAll(".alert");
+
+        messages.forEach(function(message) {
+
+            message.style.transition =
+                "opacity .4s ease";
+
+            message.style.opacity = "0";
+
+            setTimeout(function() {
+
+                message.remove();
+
+            }, 400);
+
+        });
+
+    }, 5000);
+
+</script>
+
+
+</body>
+
+</html>

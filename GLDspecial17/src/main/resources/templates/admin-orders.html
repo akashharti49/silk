@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#7b1e3a">
+    <title>Manage Orders | Vastra Mane</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        :root{
+            --maroon:#5c1725;
+            --maroon-2:#8d2437;
+            --gold:#c68b43;
+            --pink:#e05c8a;
+            --purple:#7c5cff;
+            --teal:#12b7a4;
+            --blue:#2f7bf7;
+            --orange:#f6982b;
+            --green:#2fa85a;
+            --red:#e0473f;
+            --bg:#f5f2ee;
+            --ink:#2c1a1c;
+            --muted:#7c6f6a;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:"Poppins",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:60px;}
+        a{text-decoration:none;color:inherit;}
+        button{font-family:inherit;cursor:pointer;border:none;}
+
+        /* ===================== HEADER ===================== */
+        .header{
+            background:linear-gradient(120deg,var(--maroon),var(--maroon-2) 60%,var(--pink));
+            color:#fff; padding:18px 5%; display:flex; align-items:center; justify-content:space-between;
+            flex-wrap:wrap; gap:14px; box-shadow:0 8px 24px rgba(92,23,37,.25);
+        }
+        .brand{display:flex;align-items:center;gap:12px;}
+        .brand-icon{
+            width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.18);
+            display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;
+            font-size:20px;font-weight:700;backdrop-filter:blur(4px);
+        }
+        .brand-text h1{font-family:"Playfair Display",serif;font-size:22px;}
+        .brand-text span{font-size:11px;letter-spacing:2px;opacity:.85;text-transform:uppercase;}
+        .head-actions{display:flex;gap:10px;flex-wrap:wrap;}
+        .head-actions a{
+            background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);
+            padding:9px 16px;border-radius:30px;font-size:13px;font-weight:600;transition:.2s;
+        }
+        .head-actions a:hover{background:rgba(255,255,255,.28);transform:translateY(-2px);}
+
+        /* ===================== MAIN ===================== */
+        main{max-width:1180px;margin:0 auto;padding:28px 4%;}
+
+        .page-title{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+        .page-title h2{font-family:"Playfair Display",serif;font-size:26px;color:var(--maroon);}
+        .page-title .count-chip{
+            background:linear-gradient(120deg,var(--gold),#e8b063); color:#4a2f0e; font-weight:700;
+            font-size:12.5px; padding:5px 14px; border-radius:20px;
+        }
+
+        .alert{padding:13px 18px;border-radius:12px;margin-bottom:18px;font-size:14px;font-weight:600;}
+        .alert-success{background:#e4f7ea;color:#20713d;border:1px solid #b7e9c6;}
+        .alert-failure{background:#fdeaea;color:#a52b28;border:1px solid #f6c3c1;}
+
+        /* ===================== FILTER PILLS ===================== */
+        .filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:22px;}
+        .filter-pill{
+            padding:8px 16px;border-radius:22px;background:#fff;border:1.5px solid #e7ddd4;
+            font-size:12.5px;font-weight:700;color:var(--muted);transition:.18s;
+        }
+        .filter-pill:hover{transform:translateY(-2px);}
+        .filter-pill.active{color:#fff;border-color:transparent;}
+        .filter-pill[data-status="ALL"].active{background:linear-gradient(120deg,var(--maroon),var(--maroon-2));}
+        .filter-pill[data-status="PLACED"].active{background:linear-gradient(120deg,var(--blue),#5c9dfb);}
+        .filter-pill[data-status="CONFIRMED"].active{background:linear-gradient(120deg,var(--orange),#ffb15c);}
+        .filter-pill[data-status="PACKED"].active{background:linear-gradient(120deg,#9c6b2e,#c68b43);}
+        .filter-pill[data-status="SHIPPED"].active{background:linear-gradient(120deg,var(--purple),#a48bff);}
+        .filter-pill[data-status="DELIVERED"].active{background:linear-gradient(120deg,var(--green),#5cd489);}
+        .filter-pill[data-status="CANCELLED"].active{background:linear-gradient(120deg,var(--red),#ff8d86);}
+
+        /* ===================== ORDER TRACKER (in modal) ===================== */
+        .ordtrack{display:flex;align-items:flex-start;justify-content:space-between;margin:2px 0 4px;overflow-x:auto;}
+        .ordtrack-step{display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;min-width:56px;}
+        .ordtrack-dot{
+            width:28px;height:28px;border-radius:50%;background:#efe6dc;color:#a08c81;
+            display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;
+            border:2px solid #efe6dc;transition:.25s;
+        }
+        .ordtrack-step.done .ordtrack-dot{background:var(--green);border-color:var(--green);color:#fff;}
+        .ordtrack-step.current .ordtrack-dot{background:var(--gold);border-color:var(--gold);color:#fff;animation:ordPulse 1.4s infinite;}
+        @keyframes ordPulse{0%{box-shadow:0 0 0 0 rgba(198,139,67,.45);}70%{box-shadow:0 0 0 8px rgba(198,139,67,0);}100%{box-shadow:0 0 0 0 rgba(198,139,67,0);}}
+        .ordtrack-label{font-size:10.5px;font-weight:700;color:var(--muted);margin-top:6px;}
+        .ordtrack-step.done .ordtrack-label,.ordtrack-step.current .ordtrack-label{color:var(--ink);}
+        .ordtrack-date{font-size:9.5px;color:var(--muted);margin-top:2px;min-height:12px;}
+        .ordtrack-line{flex:1;height:3px;background:#efe6dc;margin:13px -4px 0;border-radius:2px;min-width:10px;}
+        .ordtrack-line.done{background:var(--green);}
+        .ordtrack-cancelled{
+            display:flex;align-items:center;gap:12px;background:#fdeeed;border:1px solid #f6c3c1;color:#a52b28;
+            padding:12px 14px;border-radius:12px;
+        }
+        .oc-icon{width:32px;height:32px;border-radius:50%;background:#f6c3c1;color:#a52b28;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
+        .oc-sub{font-size:12px;font-weight:500;margin-top:2px;color:#a5615c;}
+
+        /* ===================== ORDER CARDS ===================== */
+        .orders-grid{display:flex;flex-direction:column;gap:14px;}
+
+        .order-card{
+            background:#fff;border-radius:16px;padding:18px 20px;box-shadow:0 8px 24px rgba(74,43,25,.06);
+            border:1px solid #efe6dc; display:grid; grid-template-columns:1.4fr 1fr 1fr .9fr auto;
+            gap:14px; align-items:center; transition:.2s;
+        }
+        .order-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(74,43,25,.12);}
+
+        .oc-main .oc-num{font-family:"Playfair Display",serif;font-weight:700;color:var(--maroon);font-size:16.5px;}
+        .oc-main .oc-name{font-size:13.5px;color:var(--ink);margin-top:3px;font-weight:600;}
+        .oc-main .oc-date{font-size:12px;color:var(--muted);margin-top:2px;}
+
+        .oc-items{font-size:12.5px;color:var(--muted);}
+        .oc-items b{color:var(--ink);}
+
+        .oc-total{font-family:"Playfair Display",serif;font-size:18px;color:var(--maroon-2);font-weight:700;}
+
+        .status-badge{
+            display:inline-block;padding:6px 13px;border-radius:20px;font-size:11px;font-weight:800;
+            letter-spacing:.5px;text-transform:uppercase;color:#fff;
+        }
+        .status-PLACED{background:linear-gradient(120deg,var(--blue),#5c9dfb);}
+        .status-CONFIRMED{background:linear-gradient(120deg,var(--orange),#ffb15c);}
+        .status-PACKED{background:linear-gradient(120deg,#9c6b2e,#c68b43);}
+        .status-SHIPPED{background:linear-gradient(120deg,var(--purple),#a48bff);}
+        .status-DELIVERED{background:linear-gradient(120deg,var(--green),#5cd489);}
+        .status-CANCELLED{background:linear-gradient(120deg,var(--red),#ff8d86);}
+
+        .oc-actions{display:flex;flex-direction:column;gap:8px;align-items:stretch;}
+        .btn-view{
+            background:linear-gradient(120deg,var(--maroon),var(--maroon-2));color:#fff;
+            padding:9px 16px;border-radius:10px;font-size:12.5px;font-weight:700;text-align:center;
+        }
+        .btn-view:hover{opacity:.92;}
+
+        .empty-state{
+            text-align:center;padding:60px 20px;color:var(--muted);background:#fff;border-radius:18px;
+            border:1px dashed #e7ddd4;
+        }
+        .empty-state span{font-size:44px;display:block;margin-bottom:10px;}
+
+        /* ===================== ORDER DETAILS PANEL (INLINE, NO POPUP) ===================== */
+        .order-item-wrapper{display:flex;flex-direction:column;}
+
+        .order-details-panel{
+            display:none;margin-top:12px;
+        }
+        .order-details-panel.show{display:block;animation:fadeIn .18s ease;}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+        .modal-box{
+            background:#fff;border-radius:20px;width:100%;
+            box-shadow:0 14px 34px rgba(74,43,25,.12); border:1px solid #efe6dc;
+        }
+
+        .mi-thumb{
+            width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;
+            border:1px solid #efe6dc;background:#f5f2ee;
+        }
+        .mi-top-text{flex:1;min-width:0;}
+
+        .modal-head{
+            background:linear-gradient(120deg,var(--maroon),var(--maroon-2) 60%,var(--pink));color:#fff;
+            padding:20px 24px;border-radius:20px 20px 0 0;display:flex;justify-content:space-between;align-items:flex-start;
+        }
+        .modal-head h3{font-family:"Playfair Display",serif;font-size:19px;}
+        .modal-head p{font-size:12px;opacity:.85;margin-top:4px;}
+        .modal-close{
+            width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;
+            display:flex;align-items:center;justify-content:center;font-size:18px;
+        }
+        .modal-close:hover{background:rgba(255,255,255,.35);}
+
+        .modal-body{padding:22px 24px;}
+        .modal-section{margin-bottom:20px;}
+        .modal-section h4{
+            font-size:12.5px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);
+            margin-bottom:10px;font-weight:800;
+        }
+        .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;}
+        .info-grid div{font-size:13.5px;}
+        .info-grid b{display:block;color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+        .info-grid span{color:var(--ink);font-weight:600;}
+        .info-full{grid-column:1 / -1;}
+
+        .modal-item{
+            border:1px solid #f0e6dc;border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fbf7f3;
+        }
+        .modal-item .mi-top{display:flex;align-items:center;gap:12px;}
+        .mi-top-text-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+        .modal-item .mi-name{font-weight:700;color:var(--maroon);font-size:14px;}
+        .modal-item .mi-tag{
+            background:#f0dcc4;color:#7d4930;font-size:10px;font-weight:800;border-radius:14px;padding:3px 10px;
+        }
+        .mi-desc{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5;}
+        .mi-spec-grid{
+            display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;margin-top:10px;
+        }
+        .mi-spec-grid div{font-size:12.5px;display:flex;justify-content:space-between;gap:8px;
+            border-bottom:1px dashed #f0e6dc;padding-bottom:4px;}
+        .mi-spec-grid b{color:var(--muted);font-weight:600;}
+        .mi-spec-grid span{color:var(--ink);font-weight:700;text-align:right;}
+        .modal-item .mi-meta{font-size:12px;color:var(--muted);margin-top:5px;}
+        .modal-item .mi-qty{font-size:12.5px;margin-top:6px;color:var(--ink);}
+
+        .modal-total{
+            display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:6px;
+            border-top:2px dashed #f0e6dc;font-weight:800;
+        }
+        .modal-total span:last-child{color:var(--maroon-2);font-family:"Playfair Display",serif;font-size:20px;}
+
+        .modal-footer{
+            padding:16px 24px 24px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid #f5efe8;
+        }
+        .status-form{display:flex;gap:8px;flex:1;min-width:190px;}
+        .status-select{
+            flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid #e7ddd4;font-size:13px;font-weight:600;
+            background:#fff;color:var(--ink);
+        }
+        .btn-update{
+            background:linear-gradient(120deg,var(--purple),#a48bff);color:#fff;padding:10px 16px;
+            border-radius:10px;font-size:12.5px;font-weight:700;white-space:nowrap;
+        }
+        .btn-update:hover{opacity:.9;}
+        .btn-cancel-order{
+            background:linear-gradient(120deg,var(--red),#ff8d86);color:#fff;padding:10px 18px;
+            border-radius:10px;font-size:12.5px;font-weight:700;flex:1;min-width:150px;text-align:center;
+        }
+        .btn-cancel-order:hover{opacity:.9;}
+
+        /* Inline (non-popup) confirmation shown in place of the Cancel button */
+        .cancel-confirm-row{
+            display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:1;min-width:220px;
+            background:#fdeeed;border:1px solid #f6c3c1;border-radius:10px;padding:10px 14px;
+        }
+        .cancel-confirm-row span{font-size:12.5px;font-weight:600;color:#a52b28;flex:1;min-width:160px;}
+        .btn-cancel-yes{
+            background:linear-gradient(120deg,var(--red),#ff8d86);color:#fff;padding:8px 14px;
+            border-radius:8px;font-size:12px;font-weight:700;white-space:nowrap;
+        }
+        .btn-cancel-yes:hover{opacity:.9;}
+        .btn-cancel-no{
+            background:#fff;color:var(--muted);border:1.5px solid #e7ddd4;padding:8px 14px;
+            border-radius:8px;font-size:12px;font-weight:700;white-space:nowrap;
+        }
+        .btn-cancel-no:hover{background:#f5f2ee;}
+
+        .cancel-note{
+            width:100%;font-size:12px;color:var(--muted);background:#fbeceb;border:1px solid #f6c3c1;
+            padding:10px 12px;border-radius:10px;
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (max-width:820px){
+            .order-card{grid-template-columns:1fr 1fr;grid-template-areas:"main main" "items total" "actions actions";}
+            .oc-main{grid-area:main;}
+            .oc-items{grid-area:items;}
+            .oc-total{grid-area:total;text-align:right;}
+            .oc-actions{grid-area:actions;flex-direction:row;}
+            .btn-view{flex:1;}
+        }
+        @media (max-width:520px){
+            .header{padding:16px 5%;}
+            main{padding:20px 4%;}
+            .info-grid{grid-template-columns:1fr;}
+            .mi-spec-grid{grid-template-columns:1fr;}
+            .modal-footer{flex-direction:column;}
+            .status-form{width:100%;}
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="brand">
+        <div class="brand-icon">V</div>
+        <div class="brand-text">
+            <h1>Vastra Mane · Admin</h1>
+            <span>Order Management</span>
+        </div>
+    </div>
+    <div class="head-actions">
+        <a th:href="@{/admin/home}">← Dashboard</a>
+        <a href="/logout">Logout ↗</a>
+    </div>
+</header>
+
+<main>
+
+    <div class="alert alert-success" th:if="${session.success}" th:text="${session.success}"></div>
+    <div class="alert alert-failure" th:if="${session.failure}" th:text="${session.failure}"></div>
+
+    <div class="page-title">
+        <h2>Customer Orders</h2>
+        <span class="count-chip" th:text="${#lists.size(orders)} + ' total'"></span>
+    </div>
+
+    <div class="filters" id="filters">
+        <button class="filter-pill active" data-status="ALL">All</button>
+        <button class="filter-pill" data-status="PLACED">Placed</button>
+        <button class="filter-pill" data-status="CONFIRMED">Confirmed</button>
+        <button class="filter-pill" data-status="PACKED">Packed</button>
+        <button class="filter-pill" data-status="SHIPPED">Dispatched</button>
+        <button class="filter-pill" data-status="DELIVERED">Delivered</button>
+        <button class="filter-pill" data-status="CANCELLED">Cancelled</button>
+    </div>
+
+    <div class="orders-grid" id="ordersGrid" th:if="${!#lists.isEmpty(orders)}">
+
+        <div class="order-item-wrapper" th:each="order : ${orders}" th:attr="data-status=${order.status}">
+
+            <div class="order-card">
+
+                <div class="oc-main">
+                    <div class="oc-num" th:text="'#' + ${order.orderNumber}"></div>
+                    <div class="oc-name" th:text="${order.customerName}"></div>
+                    <div class="oc-date" th:text="${order.orderDate != null ? #temporals.format(order.orderDate, 'dd MMM yyyy, hh:mm a') : '-'}"></div>
+                </div>
+
+                <div class="oc-items">
+                    <b th:text="${order.items != null ? #lists.size(order.items) : 0}"></b> item(s)<br>
+                    <span th:text="${order.email}"></span>
+                </div>
+
+                <div class="oc-total" th:text="'₹' + ${order.totalAmount}"></div>
+
+                <div>
+                    <span class="status-badge" th:classappend="'status-' + ${order.status}" th:text="${order.statusLabel}"></span>
+                </div>
+
+                <div class="oc-actions">
+                    <button type="button" class="btn-view" th:id="'view-btn-' + ${order.id}" th:onclick="'toggleDetails(' + ${order.id} + ')'">View Details</button>
+                </div>
+
+            </div>
+
+            <!-- ===================== INLINE DETAILS PANEL (NO POPUP) ===================== -->
+            <div class="order-details-panel" th:id="'details-' + ${order.id}">
+                <div class="modal-box">
+
+                    <div class="modal-head">
+                        <div>
+                            <h3 th:text="'Order #' + ${order.orderNumber}"></h3>
+                            <p th:text="${order.orderDate != null ? #temporals.format(order.orderDate, 'dd MMM yyyy, hh:mm a') : '-'} + '  ·  ' + ${order.statusLabel}"></p>
+                        </div>
+                        <button type="button" class="modal-close" th:onclick="'toggleDetails(' + ${order.id} + ')'">✕</button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="modal-section">
+                            <h4>Order Tracking</h4>
+                            <div th:replace="~{fragments/order-tracker :: tracker(${order})}"></div>
+                        </div>
+
+                        <div class="modal-section">
+                            <h4>Customer Details</h4>
+                            <div class="info-grid">
+                                <div><b>Name</b><span th:text="${order.customerName}"></span></div>
+                                <div><b>Phone</b><span th:text="${order.phone}"></span></div>
+                                <div class="info-full"><b>Email</b><span th:text="${order.email}"></span></div>
+                                <div class="info-full">
+                                    <b>Delivery Address</b>
+                                    <span th:text="${order.address} + ', ' + ${order.city} + ', ' + ${order.state} + ' - ' + ${order.pincode}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section" th:if="${order.status == 'CANCELLED'}">
+                            <h4>Cancellation Info</h4>
+                            <div class="info-grid">
+                                <div><b>Cancelled By</b><span th:text="${order.cancelledBy}"></span></div>
+                                <div><b>Cancelled At</b>
+                                    <span th:text="${order.cancelledAt != null ? #temporals.format(order.cancelledAt, 'dd MMM yyyy, hh:mm a') : '-'}"></span>
+                                </div>
+                                <div class="info-full"><b>Reason</b><span th:text="${order.cancelReason} ?: 'Not specified'"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="modal-section">
+                            <h4>Item Details</h4>
+
+                            <div class="modal-item" th:each="item : ${order.items}">
+                                <div class="mi-top">
+                                    <img class="mi-thumb"
+                                         th:src="${item.imageUrl} ?: '/images/product1.svg'"
+                                         th:alt="${item.productName}"
+                                         onerror="this.onerror=null;this.src='/images/product1.svg';">
+                                    <div class="mi-top-text">
+                                        <div class="mi-top-text-row">
+                                            <span class="mi-name" th:text="${item.productName}"></span>
+                                            <span class="mi-tag" th:text="${item.productType}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p class="mi-desc" th:if="${item.description}" th:text="${item.description}"></p>
+
+                                <div class="mi-spec-grid">
+                                    <div th:if="${!#strings.isEmpty(item.category)}"><b th:text="${item.productType == 'SAREE' ? 'Saree Type' : 'Silk Type'}"></b><span th:text="${item.category}"></span></div>
+                                    <div th:if="${!#strings.isEmpty(item.fabric)}"><b>Fabric</b><span th:text="${item.fabric}"></span></div>
+                                    <div th:if="${!#strings.isEmpty(item.color)}"><b>Color</b><span th:text="${item.color}"></span></div>
+                                    <div th:if="${!#strings.isEmpty(item.weavingType)}"><b>Weaving Type</b><span th:text="${item.weavingType}"></span></div>
+                                    <div th:if="${!#strings.isEmpty(item.design)}"><b>Design</b><span th:text="${item.design}"></span></div>
+
+                                    <!-- Saree-specific -->
+                                    <div th:if="${item.productType == 'SAREE' and !#strings.isEmpty(item.occasion)}"><b>Occasion</b><span th:text="${item.occasion}"></span></div>
+                                    <div th:if="${item.productType == 'SAREE' and !#strings.isEmpty(item.borderType)}"><b>Border Type</b><span th:text="${item.borderType}"></span></div>
+                                    <div th:if="${item.productType == 'SAREE' and item.blouseIncluded != null}"><b>Blouse</b><span th:text="${item.blouseIncluded ? 'Included' : 'Not Included'}"></span></div>
+
+                                    <!-- Silk-specific -->
+                                    <div th:if="${item.productType == 'SILK' and !#strings.isEmpty(item.origin)}"><b>Origin</b><span th:text="${item.origin}"></span></div>
+                                    <div th:if="${item.productType == 'SILK' and !#strings.isEmpty(item.finish)}"><b>Finish</b><span th:text="${item.finish}"></span></div>
+                                    <div th:if="${item.productType == 'SILK' and !#strings.isEmpty(item.weight)}"><b>Weight</b><span th:text="${item.weight}"></span></div>
+                                    <div th:if="${item.productType == 'SILK' and !#strings.isEmpty(item.width)}"><b>Width</b><span th:text="${item.width}"></span></div>
+                                </div>
+
+                                <!-- Fallback for orders placed before the structured fields above existed -->
+                                <div class="mi-meta" th:if="${#strings.isEmpty(item.category) and !#strings.isEmpty(item.extraInfo)}" th:text="${item.extraInfo}"></div>
+
+                                <div class="mi-qty">
+                                    Qty: <b th:text="${item.quantity}"></b> ×
+                                    ₹<span th:text="${item.price}"></span> =
+                                    <b>₹<span th:text="${item.subtotal}"></span></b>
+                                </div>
+                            </div>
+
+                            <div class="modal-total">
+                                <span>Total Amount</span>
+                                <span th:text="'₹' + ${order.totalAmount}"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <form class="status-form" method="post" th:action="@{'/admin/orders/' + ${order.id} + '/status'}"
+                              th:if="${order.status != 'CANCELLED' and order.status != 'DELIVERED'}">
+                            <select name="status" class="status-select">
+                                <option value="PLACED" th:selected="${order.status == 'PLACED'}">Placed</option>
+                                <option value="CONFIRMED" th:selected="${order.status == 'CONFIRMED'}">Confirmed</option>
+                                <option value="PACKED" th:selected="${order.status == 'PACKED'}">Packed</option>
+                                <option value="SHIPPED" th:selected="${order.status == 'SHIPPED'}">Dispatched</option>
+                                <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">Delivered</option>
+                            </select>
+                            <button type="submit" class="btn-update">Update</button>
+                        </form>
+
+                        <form method="post" th:action="@{'/admin/orders/' + ${order.id} + '/cancel'}"
+                              th:id="'cancel-form-' + ${order.id}"
+                              th:if="${order.status != 'CANCELLED' and order.status != 'DELIVERED'}">
+                            <input type="hidden" name="reason" value="Cancelled by admin">
+
+                            <button type="button" class="btn-cancel-order"
+                                    th:id="'cancel-ask-' + ${order.id}"
+                                    th:onclick="'askCancel(' + ${order.id} + ')'">✕ Cancel Order</button>
+
+                            <div class="cancel-confirm-row" th:id="'cancel-confirm-' + ${order.id}" style="display:none;">
+                                <span>Cancel this order? The customer will be notified by email.</span>
+                                <button type="submit" class="btn-cancel-yes">Yes, Cancel</button>
+                                <button type="button" class="btn-cancel-no" th:onclick="'dismissCancel(' + ${order.id} + ')'">No, Keep It</button>
+                            </div>
+                        </form>
+
+                        <div class="cancel-note" th:if="${order.status == 'CANCELLED'}">
+                            This order has already been cancelled — no further action needed.
+                        </div>
+                        <div class="cancel-note" th:if="${order.status == 'DELIVERED'}">
+                            This order has already been delivered and can no longer be modified.
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- ===================== END DETAILS PANEL ===================== -->
+
+        </div>
+
+    </div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(orders)}">
+        <span>🧵</span>
+        No orders have been placed yet.
+    </div>
+
+</main>
+
+<script>
+    // Expands/collapses the order details inline, right under the order card.
+    // No popup/overlay involved — the panel is a normal part of the page flow.
+    function toggleDetails(id){
+        var panel = document.getElementById('details-' + id);
+        var btn = document.getElementById('view-btn-' + id);
+        var isShowing = panel.classList.toggle('show');
+        btn.textContent = isShowing ? 'Hide Details' : 'View Details';
+        if (isShowing){
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    }
+
+    // Inline (no browser popup) cancel confirmation: clicking "Cancel Order"
+    // swaps the button for a confirm/keep row right there in the footer.
+    function askCancel(id){
+        document.getElementById('cancel-ask-' + id).style.display = 'none';
+        document.getElementById('cancel-confirm-' + id).style.display = 'flex';
+    }
+    function dismissCancel(id){
+        document.getElementById('cancel-confirm-' + id).style.display = 'none';
+        document.getElementById('cancel-ask-' + id).style.display = '';
+    }
+
+    // filter pills
+    document.querySelectorAll('.filter-pill').forEach(function(pill){
+        pill.addEventListener('click', function(){
+            document.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('active'); });
+            pill.classList.add('active');
+            var status = pill.getAttribute('data-status');
+            document.querySelectorAll('.order-item-wrapper').forEach(function(wrapper){
+                if (status === 'ALL' || wrapper.getAttribute('data-status') === status){
+                    wrapper.style.display = '';
+                } else {
+                    wrapper.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | Vastra Mane</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "DM Sans", Arial, sans-serif;
+            background: radial-gradient(circle at 10% 0%, #fdf3ea 0%, #faf8f5 45%, #f7f1ea 100%);
+            color: #29231f; min-height: 100vh;
+        }
+
+        .header {
+            background: #fff; border-bottom: 1px solid #eee4dc; min-height: 78px;
+            padding: 0 5%; display: flex; align-items: center; justify-content: space-between;
+        }
+        .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+        .brand-icon {
+            width: 43px; height: 43px; border-radius: 50%;
+            background: linear-gradient(135deg, #8d2437, #c68b43); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: "Playfair Display", serif; font-size: 20px; font-weight: 700;
+        }
+        .brand-text h1 { font-family: "Playfair Display", serif; font-size: 25px; color: #5c1725; line-height: 1; }
+        .brand-text span { display: block; font-size: 10px; letter-spacing: 2px; color: #a47b55; margin-top: 4px; text-transform: uppercase; }
+
+        .steps { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #a89184; font-weight: 700; }
+        .steps .done { color: #2e7d32; }
+        .steps .active { color: #8d2437; }
+        .steps span.sep { color: #d9c9bd; }
+
+        .page-container { max-width: 1020px; margin: 0 auto; padding: 40px 20px 90px; }
+
+        .top-banner { text-align: center; margin-bottom: 30px; }
+        .top-banner .icon {
+            width: 66px; height: 66px; margin: 0 auto 14px; border-radius: 50%;
+            background: linear-gradient(135deg, #ffe9c7, #ffd7e0); display: flex; align-items: center;
+            justify-content: center; font-size: 30px; animation: pulseGlow 2.4s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(198,139,67,.35); }
+            50% { box-shadow: 0 0 0 14px rgba(198,139,67,0); }
+        }
+        .top-banner h2 { font-family: "Playfair Display", serif; font-size: 28px; color: #351b20; margin-bottom: 6px; }
+        .top-banner p { color: #776d67; font-size: 14px; }
+        .top-banner b { color: #4b3931; }
+
+        .alert { padding: 13px 18px; border-radius: 12px; margin-bottom: 22px; font-size: 14px; font-weight: 600; max-width: 640px; margin-left: auto; margin-right: auto; }
+        .alert-failure { background: #fdeaea; color: #a52b28; border: 1px solid #f6c3c1; }
+
+        .grid {
+            display: grid; grid-template-columns: 1fr 1.35fr; gap: 26px;
+        }
+        @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+
+        .card {
+            background: #fff; border: 1px solid #eee2d9; border-radius: 20px; padding: 26px;
+            box-shadow: 0 12px 35px rgba(74,43,25,.07);
+        }
+        .card h3 { font-family: "Playfair Display", serif; font-size: 19px; color: #351b20; margin-bottom: 16px; }
+
+        /* ---------- ORDER SUMMARY ---------- */
+        .item-row { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed #eee2d9; font-size: 13.5px; color: #70645e; }
+        .item-row:last-of-type { border-bottom: none; }
+        .item-row .name { color: #351b20; font-weight: 700; }
+        .item-row .qty { color: #a89184; font-size: 12px; }
+
+        .kv-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13.5px; color: #70645e; }
+        .kv-row.total { border-top: 1px solid #eee2d9; margin-top: 10px; padding-top: 14px; font-size: 15px; }
+        .kv-row.total b { color: #8d2437; font-family: "Playfair Display", serif; font-size: 23px; }
+
+        .customer-box {
+            margin-top: 16px; background: #faf3ec; border-radius: 12px; padding: 14px 16px; font-size: 13px; color: #6b5d54;
+        }
+        .customer-box b { color: #4b3931; }
+
+        /* ---------- PAYMENT METHODS ---------- */
+        .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .method-card {
+            position: relative; border: 2px solid #eee2d9; border-radius: 14px; padding: 16px 14px;
+            cursor: pointer; text-align: center; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+            background: #fffdfb;
+        }
+        .method-card:hover { transform: translateY(-3px); box-shadow: 0 10px 22px rgba(74,43,25,.10); }
+        .method-card.selected { border-color: transparent; color: #fff; box-shadow: 0 12px 26px rgba(74,43,25,.22); }
+        .method-card .m-icon { font-size: 26px; margin-bottom: 8px; display: block; }
+        .method-card .m-label { font-weight: 700; font-size: 13.5px; }
+        .method-card .m-sub { font-size: 10.5px; margin-top: 3px; opacity: .85; }
+
+        .m-upi { }
+        .m-upi.selected { background: linear-gradient(135deg, #6a3de8, #a06bff); }
+        .m-card { }
+        .m-card.selected { background: linear-gradient(135deg, #0e7c86, #35b1ab); }
+        .m-netbanking { }
+        .m-netbanking.selected { background: linear-gradient(135deg, #1f6fd6, #4fa3f7); }
+        .m-wallet { }
+        .m-wallet.selected { background: linear-gradient(135deg, #e0693f, #ff9d5c); }
+
+        .method-card .check {
+            position: absolute; top: 8px; right: 10px; width: 18px; height: 18px; border-radius: 50%;
+            background: rgba(255,255,255,.9); color: #351b20; font-size: 11px; font-weight: 900;
+            display: none; align-items: center; justify-content: center;
+        }
+        .method-card.selected .check { display: flex; }
+
+        .secure-strip {
+            display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: #8c817a;
+            background: #f6f1eb; padding: 10px 12px; border-radius: 10px; margin-bottom: 18px;
+        }
+
+        .pay-btn {
+            width: 100%; border: none; background: linear-gradient(135deg, #5c1725, #8d2437, #c68b43);
+            background-size: 200% 200%; animation: shine 4s ease infinite;
+            color: #fff; padding: 17px; border-radius: 12px; font-size: 16px; font-weight: 800; cursor: pointer;
+            letter-spacing: .3px; box-shadow: 0 14px 28px rgba(93,23,37,.30);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .pay-btn:hover { filter: brightness(1.05); }
+        .pay-btn:active { transform: scale(0.99); }
+        @keyframes shine { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .pay-btn.loading { opacity: .75; pointer-events: none; }
+        .spinner {
+            width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,.5);
+            border-top-color: #fff; animation: spin .7s linear infinite; display: none;
+        }
+        .pay-btn.loading .spinner { display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .badge-row { display: flex; justify-content: center; gap: 18px; margin-top: 18px; flex-wrap: wrap; }
+        .badge-row .b { font-size: 11px; color: #a89184; display: flex; align-items: center; gap: 5px; }
+
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #a47b55; font-size: 13px; text-decoration: none; }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <a th:href="@{/}" class="brand">
+        <div class="brand-icon">V</div>
+        <div class="brand-text">
+            <h1>Vastra Mane</h1>
+            <span>Silk &amp; Sarees</span>
+        </div>
+    </a>
+    <div class="steps">
+        <span class="done">Details ✓</span><span class="sep">—</span>
+        <span class="done">Verified ✓</span><span class="sep">—</span>
+        <span class="active">Payment</span>
+    </div>
+</header>
+
+<main class="page-container">
+
+    <div class="top-banner">
+        <div class="icon">💳</div>
+        <h2>Complete Your Payment</h2>
+        <p>Your email is verified. Just one step away — pay securely to confirm <b th:text="'₹' + ${payment.amountInRupees}"></b> order.</p>
+    </div>
+
+    <div class="alert alert-failure" th:if="${paymentError != null}" th:text="${paymentError}"></div>
+
+    <div class="grid">
+
+        <!-- ================= ORDER SUMMARY ================= -->
+        <div class="card">
+            <h3>Order Summary</h3>
+
+            <div th:each="item : ${cart.items}" class="item-row">
+                <div>
+                    <div class="name" th:text="${item.productName}"></div>
+                    <div class="qty" th:text="'Qty: ' + ${item.quantity} + ' × ₹' + ${item.price}"></div>
+                </div>
+                <div th:text="'₹' + ${item.price * item.quantity}"></div>
+            </div>
+
+            <div class="kv-row"><span>Subtotal</span><span th:text="'₹' + ${payment.amountInRupees}"></span></div>
+            <div class="kv-row"><span>Delivery</span><span style="color:#2e7d32;font-weight:700;">FREE</span></div>
+            <div class="kv-row total"><span>Total Payable</span><b th:text="'₹' + ${payment.amountInRupees}"></b></div>
+
+            <div class="customer-box">
+                <div><b>Name:</b> <span th:text="${payment.customerName}"></span></div>
+                <div><b>Email:</b> <span th:text="${payment.customerEmail}"></span></div>
+                <div><b>Phone:</b> <span th:text="${payment.customerPhone}"></span></div>
+            </div>
+        </div>
+
+        <!-- ================= PAYMENT PANEL ================= -->
+        <div class="card">
+            <h3>Choose a Payment Method</h3>
+
+            <div class="method-grid">
+                <div class="method-card m-upi selected" data-method="upi" onclick="selectMethod(this)">
+                    <span class="check">✓</span>
+                    <span class="m-icon">📱</span>
+                    <span class="m-label">UPI</span>
+                    <span class="m-sub">GPay, PhonePe, Paytm</span>
+                </div>
+                <div class="method-card m-card" data-method="card" onclick="selectMethod(this)">
+                    <span class="check">✓</span>
+                    <span class="m-icon">💳</span>
+                    <span class="m-label">Cards</span>
+                    <span class="m-sub">Credit / Debit</span>
+                </div>
+                <div class="method-card m-netbanking" data-method="netbanking" onclick="selectMethod(this)">
+                    <span class="check">✓</span>
+                    <span class="m-icon">🏦</span>
+                    <span class="m-label">Netbanking</span>
+                    <span class="m-sub">All major banks</span>
+                </div>
+                <div class="method-card m-wallet" data-method="wallet" onclick="selectMethod(this)">
+                    <span class="check">✓</span>
+                    <span class="m-icon">👛</span>
+                    <span class="m-label">Wallets</span>
+                    <span class="m-sub">Paytm, Mobikwik &amp; more</span>
+                </div>
+            </div>
+
+            <div class="secure-strip">
+                🔒 Your payment is encrypted and processed securely by Razorpay. Vastra Mane never sees your card or bank details.
+            </div>
+
+            <button type="button" class="pay-btn" id="payBtn" onclick="startPayment()">
+                <span class="spinner"></span>
+                <span id="payBtnLabel" th:text="'Pay ₹' + ${payment.amountInRupees} + ' Securely →'"></span>
+            </button>
+
+            <div class="badge-row">
+                <span class="b">🛡️ PCI-DSS Compliant</span>
+                <span class="b">⚡ Instant Confirmation</span>
+                <span class="b">↩️ Easy Refunds</span>
+            </div>
+
+            <form id="verifyForm" method="post" th:action="@{/checkout/payment/verify}" style="display:none;">
+                <input type="hidden" name="razorpay_order_id" id="rp_order_id">
+                <input type="hidden" name="razorpay_payment_id" id="rp_payment_id">
+                <input type="hidden" name="razorpay_signature" id="rp_signature">
+            </form>
+        </div>
+
+    </div>
+
+    <a th:href="@{/checkout/verify}" class="back-link">← Back to email verification</a>
+
+</main>
+
+<script th:inline="javascript">
+    var selectedMethod = 'upi';
+
+    function selectMethod(el) {
+        document.querySelectorAll('.method-card').forEach(function (c) { c.classList.remove('selected'); });
+        el.classList.add('selected');
+        selectedMethod = el.getAttribute('data-method');
+    }
+
+    function startPayment() {
+
+        var btn = document.getElementById('payBtn');
+        btn.classList.add('loading');
+        document.getElementById('payBtnLabel').textContent = 'Opening secure checkout...';
+
+        var options = {
+            key: /*[[${payment.razorpayKeyId}]]*/ '',
+            order_id: /*[[${payment.razorpayOrderId}]]*/ '',
+            amount: /*[[${payment.amountInPaise}]]*/ 0,
+            currency: /*[[${payment.currency}]]*/ 'INR',
+            name: 'Vastra Mane',
+            description: 'Silk & Saree Order Payment',
+            prefill: {
+                name: /*[[${payment.customerName}]]*/ '',
+                email: /*[[${payment.customerEmail}]]*/ '',
+                contact: /*[[${payment.customerPhone}]]*/ '',
+                method: selectedMethod
+            },
+            theme: { color: '#8d2437' },
+            handler: function (response) {
+                document.getElementById('rp_order_id').value = response.razorpay_order_id;
+                document.getElementById('rp_payment_id').value = response.razorpay_payment_id;
+                document.getElementById('rp_signature').value = response.razorpay_signature;
+                document.getElementById('verifyForm').submit();
+            },
+            modal: {
+                ondismiss: function () {
+                    btn.classList.remove('loading');
+                    document.getElementById('payBtnLabel').textContent =
+                        'Pay ₹' + (/*[[${payment.amountInRupees}]]*/ 0) + ' Securely →';
+                }
+            }
+        };
+
+        var rzp = new Razorpay(options);
+
+        rzp.on('payment.failed', function () {
+            btn.classList.remove('loading');
+            document.getElementById('payBtnLabel').textContent =
+                'Payment failed — Tap to retry →';
+        });
+
+        rzp.open();
+    }
+</script>
+
+</body>
+</html>

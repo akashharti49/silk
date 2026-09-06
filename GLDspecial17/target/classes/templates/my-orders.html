@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#5c1725">
+    <title>My Orders | Vastra Mane</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        :root{
+            --maroon:#5c1725; --maroon-2:#8d2437; --gold:#c68b43; --pink:#e05c8a;
+            --purple:#7c5cff; --blue:#2f7bf7; --orange:#f6982b; --green:#2fa85a; --red:#e0473f;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:"DM Sans",Arial,sans-serif;background:#faf8f5;color:#29231f;}
+        a{text-decoration:none;}
+        button,input{font-family:inherit;}
+
+        .header{
+            background:#fff;border-bottom:1px solid #eee4dc;min-height:78px;padding:0 5%;
+            display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+        }
+        .brand{display:flex;align-items:center;gap:11px;text-decoration:none;}
+        .brand-icon{
+            width:43px;height:43px;border-radius:50%;background:linear-gradient(135deg,#8d2437,#c68b43);
+            color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Playfair Display",serif;
+            font-size:20px;font-weight:700;
+        }
+        .brand-text h1{font-family:"Playfair Display",serif;font-size:25px;color:#5c1725;line-height:1;}
+        .brand-text span{display:block;font-size:10px;letter-spacing:2px;color:#a47b55;margin-top:4px;text-transform:uppercase;}
+        .home-link{font-size:13.5px;font-weight:700;color:#5c1725;}
+
+        .hero{
+            background:linear-gradient(120deg,var(--maroon),var(--maroon-2) 55%,var(--pink));
+            color:#fff;padding:46px 5% 60px;text-align:center;
+        }
+        .hero h2{font-family:"Playfair Display",serif;font-size:30px;margin-bottom:8px;}
+        .hero p{font-size:14px;opacity:.9;max-width:460px;margin:0 auto;}
+
+        .page-container{max-width:760px;margin:-32px auto 80px;padding:0 22px;}
+
+        .lookup-card{
+            background:#fff;border-radius:18px;padding:22px;box-shadow:0 14px 34px rgba(74,43,25,.14);
+            display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;
+        }
+        .lookup-card input{
+            flex:1;min-width:200px;padding:13px 16px;border-radius:10px;border:1.5px solid #eadfd3;font-size:14px;
+        }
+        .lookup-card input:focus{outline:2px solid var(--gold);border-color:transparent;}
+        .lookup-btn{
+            background:linear-gradient(120deg,var(--maroon),var(--maroon-2));color:#fff;border:none;
+            padding:13px 24px;border-radius:10px;font-weight:700;font-size:14px;
+        }
+        .lookup-btn:hover{opacity:.92;}
+
+        .alert{padding:13px 18px;border-radius:12px;margin-bottom:18px;font-size:14px;font-weight:600;}
+        .alert-success{background:#e4f7ea;color:#20713d;border:1px solid #b7e9c6;}
+        .alert-failure{background:#fdeaea;color:#a52b28;border:1px solid #f6c3c1;}
+
+        .order-card{
+            background:#fff;border:1px solid #eee2d9;border-radius:18px;padding:22px;
+            box-shadow:0 9px 30px rgba(74,43,25,.07);margin-bottom:18px;
+        }
+        .order-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+        .order-top .num{font-family:"Playfair Display",serif;font-size:19px;color:#351b20;}
+        .order-top .date{font-size:12.5px;color:#a08c81;margin-top:3px;}
+
+        .status-badge{
+            display:inline-block;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:800;
+            letter-spacing:.5px;text-transform:uppercase;color:#fff;
+        }
+        .status-PLACED{background:linear-gradient(120deg,var(--blue),#5c9dfb);}
+        .status-CONFIRMED{background:linear-gradient(120deg,var(--orange),#ffb15c);}
+        .status-PACKED{background:linear-gradient(120deg,#9c6b2e,#c68b43);}
+        .status-SHIPPED{background:linear-gradient(120deg,var(--purple),#a48bff);}
+        .status-DELIVERED{background:linear-gradient(120deg,var(--green),#5cd489);}
+        .status-CANCELLED{background:linear-gradient(120deg,var(--red),#ff8d86);}
+
+        /* ===================== ORDER TRACKER ===================== */
+        .ordtrack{display:flex;align-items:flex-start;justify-content:space-between;margin:14px 0 18px;overflow-x:auto;}
+        .ordtrack-step{display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;min-width:60px;}
+        .ordtrack-dot{
+            width:30px;height:30px;border-radius:50%;background:#efe6dc;color:#a08c81;
+            display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;
+            border:2px solid #efe6dc;transition:.25s;
+        }
+        .ordtrack-step.done .ordtrack-dot{background:var(--green);border-color:var(--green);color:#fff;}
+        .ordtrack-step.current .ordtrack-dot{background:var(--gold);border-color:var(--gold);color:#fff;animation:ordPulse 1.4s infinite;}
+        @keyframes ordPulse{0%{box-shadow:0 0 0 0 rgba(198,139,67,.45);}70%{box-shadow:0 0 0 9px rgba(198,139,67,0);}100%{box-shadow:0 0 0 0 rgba(198,139,67,0);}}
+        .ordtrack-label{font-size:11.5px;font-weight:700;color:#70645e;margin-top:7px;}
+        .ordtrack-step.done .ordtrack-label,.ordtrack-step.current .ordtrack-label{color:#351b20;}
+        .ordtrack-date{font-size:10px;color:#a08c81;margin-top:2px;min-height:12px;}
+        .ordtrack-line{flex:1;height:3px;background:#efe6dc;margin:14px -4px 0;border-radius:2px;min-width:12px;}
+        .ordtrack-line.done{background:var(--green);}
+        .ordtrack-cancelled{
+            display:flex;align-items:center;gap:12px;background:#fdeeed;border:1px solid #f6c3c1;color:#a52b28;
+            padding:14px 16px;border-radius:12px;margin:14px 0 18px;
+        }
+        .oc-icon{width:34px;height:34px;border-radius:50%;background:#f6c3c1;color:#a52b28;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
+        .oc-sub{font-size:12.5px;font-weight:500;margin-top:2px;color:#a5615c;}
+        @media (max-width:520px){
+            .ordtrack-label{font-size:9.5px;}
+            .ordtrack-date{display:none;}
+            .ordtrack-dot{width:26px;height:26px;font-size:11px;}
+        }
+
+        .item-row{padding:10px 0;border-bottom:1px dashed #eee2d9;font-size:13.5px;color:#70645e;display:flex;gap:12px;align-items:flex-start;}
+        .item-row:last-child{border-bottom:none;}
+        .item-row .item-thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid #eee2d9;background:#faf8f5;}
+        .item-row .item-info{flex:1;min-width:0;}
+        .item-row .name{color:#351b20;font-weight:700;font-size:14.5px;}
+        .tag{display:inline-block;background:#f8e8dc;color:#7d4930;border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;margin-left:8px;}
+        .item-spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:8px;}
+        .item-spec-grid div{font-size:12px;display:flex;justify-content:space-between;gap:8px;}
+        .item-spec-grid b{color:#a08c81;font-weight:600;}
+        .item-spec-grid span{color:#44332e;font-weight:700;text-align:right;}
+
+        .total-row{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:8px;border-top:1px solid #eee2d9;}
+        .total-row span:first-child{font-weight:700;color:#44332e;}
+        .total-row span:last-child{color:#8d2437;font-family:"Playfair Display",serif;font-size:19px;font-weight:700;}
+
+        .order-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+        .btn{padding:11px 18px;border-radius:10px;font-size:13px;font-weight:700;border:none;text-align:center;}
+        .btn-outline{background:#fff;color:#5c1725;border:1.5px solid #dccbc0;}
+        .btn-outline:hover{background:#faf3ee;}
+        .btn-cancel{background:linear-gradient(120deg,var(--red),#ff8d86);color:#fff;}
+        .btn-cancel:hover{opacity:.9;}
+
+        .cancel-info{
+            margin-top:12px;font-size:12.5px;background:#fdeeed;border:1px solid #f6c3c1;color:#a52b28;
+            padding:10px 12px;border-radius:10px;
+        }
+
+        .empty-state{text-align:center;padding:50px 20px;color:#a08c81;background:#fff;border-radius:18px;border:1px dashed #eadfd3;}
+        .empty-state span{font-size:42px;display:block;margin-bottom:10px;}
+
+        /* ===================== CANCEL MODAL ===================== */
+        .modal-overlay{
+            position:fixed;inset:0;background:rgba(28,12,15,.55);backdrop-filter:blur(3px);
+            display:none;align-items:center;justify-content:center;padding:20px;z-index:999;
+        }
+        .modal-overlay.show{display:flex;animation:fadeIn .18s ease;}
+        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+        .modal-box{
+            background:#fff;border-radius:18px;max-width:420px;width:100%;padding:26px;
+            box-shadow:0 30px 70px rgba(0,0,0,.35);animation:popIn .2s cubic-bezier(.2,.8,.3,1.2);
+        }
+        @keyframes popIn{from{transform:scale(.92) translateY(10px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+        .modal-box h3{font-family:"Playfair Display",serif;color:var(--maroon);font-size:19px;margin-bottom:8px;}
+        .modal-box p{font-size:13px;color:#776d67;margin-bottom:14px;}
+        .modal-box textarea{
+            width:100%;border-radius:10px;border:1.5px solid #eadfd3;padding:11px 13px;font-size:13.5px;
+            resize:vertical;min-height:70px;margin-bottom:16px;
+        }
+        .modal-box textarea:focus{outline:2px solid var(--gold);border-color:transparent;}
+        .modal-btn-row{display:flex;gap:10px;}
+        .modal-btn-row button{flex:1;padding:11px;border-radius:10px;font-size:13.5px;font-weight:700;border:none;}
+        .btn-keep{background:#f3ede7;color:#5c1725;}
+        .btn-confirm-cancel{background:linear-gradient(120deg,var(--red),#ff8d86);color:#fff;}
+
+        @media (max-width:520px){
+            .hero{padding:36px 6% 50px;}
+            .hero h2{font-size:24px;}
+            .page-container{margin-top:-24px;}
+            .order-actions{flex-direction:column;}
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <a th:href="@{/}" class="brand">
+        <div class="brand-icon">V</div>
+        <div class="brand-text">
+            <h1>Vastra Mane</h1>
+            <span>Silk & Sarees</span>
+        </div>
+    </a>
+    <a th:href="@{/}" class="home-link">← Continue Shopping</a>
+</header>
+
+<section class="hero">
+    <h2>My Orders</h2>
+    <p>Enter the email address you used at checkout to view your orders and manage cancellations.</p>
+</section>
+
+<main class="page-container">
+
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert alert-failure" th:if="${error}" th:text="${error}"></div>
+
+    <form class="lookup-card" method="get" th:action="@{/my-orders}">
+        <input type="email" name="email" placeholder="you@example.com" required th:value="${email}">
+        <button type="submit" class="lookup-btn">Find My Orders</button>
+    </form>
+
+    <div th:if="${searched}">
+
+        <div th:each="order : ${orders}" class="order-card">
+
+            <div class="order-top">
+                <div>
+                    <div class="num" th:text="'#' + ${order.orderNumber}"></div>
+                    <div class="date" th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy, hh:mm a')}"></div>
+                </div>
+                <span class="status-badge" th:classappend="'status-' + ${order.status}" th:text="${order.statusLabel}"></span>
+            </div>
+
+            <div th:replace="~{fragments/order-tracker :: tracker(${order})}"></div>
+
+            <div class="item-row" th:each="item : ${order.items}">
+                <img class="item-thumb"
+                     th:src="${item.imageUrl} ?: '/images/product1.svg'"
+                     th:alt="${item.productName}"
+                     onerror="this.onerror=null;this.src='/images/product1.svg';">
+                <div class="item-info">
+                    <span class="name" th:text="${item.productName}"></span>
+                    <span class="tag" th:text="${item.productType}"></span>
+
+                    <div class="item-spec-grid">
+                        <div th:if="${!#strings.isEmpty(item.category)}"><b th:text="${item.productType == 'SAREE' ? 'Saree Type' : 'Silk Type'}"></b><span th:text="${item.category}"></span></div>
+                        <div th:if="${!#strings.isEmpty(item.fabric)}"><b>Fabric</b><span th:text="${item.fabric}"></span></div>
+                        <div th:if="${!#strings.isEmpty(item.color)}"><b>Color</b><span th:text="${item.color}"></span></div>
+                        <div th:if="${!#strings.isEmpty(item.design)}"><b>Design</b><span th:text="${item.design}"></span></div>
+                        <div th:if="${item.productType == 'SAREE' and !#strings.isEmpty(item.occasion)}"><b>Occasion</b><span th:text="${item.occasion}"></span></div>
+                        <div th:if="${item.productType == 'SAREE' and item.blouseIncluded != null}"><b>Blouse</b><span th:text="${item.blouseIncluded ? 'Included' : 'Not Included'}"></span></div>
+                        <div th:if="${item.productType == 'SILK' and !#strings.isEmpty(item.origin)}"><b>Origin</b><span th:text="${item.origin}"></span></div>
+                        <div th:if="${item.productType == 'SILK' and !#strings.isEmpty(item.weight)}"><b>Weight</b><span th:text="${item.weight}"></span></div>
+                    </div>
+                    <div style="margin-top:6px;font-size:12px;color:#a08c81;" th:if="${#strings.isEmpty(item.category) and !#strings.isEmpty(item.extraInfo)}" th:text="${item.extraInfo}"></div>
+
+                    <div style="margin-top:6px;">
+                        Qty: <b th:text="${item.quantity}"></b> ×
+                        ₹<span th:text="${item.price}"></span> =
+                        ₹<b th:text="${item.subtotal}"></b>
+                    </div>
+                </div>
+            </div>
+
+            <div class="total-row">
+                <span>Total Amount</span>
+                <span>₹<span th:text="${order.totalAmount}"></span></span>
+            </div>
+
+            <div class="order-actions">
+                <a class="btn btn-outline" th:href="@{'/checkout/invoice/' + ${order.id}}">⬇ Download Bill</a>
+                <button type="button" class="btn btn-cancel"
+                        th:if="${order.status != 'CANCELLED' and order.status != 'DELIVERED'}"
+                        th:onclick="'openCancel(' + ${order.id} + ')'">✕ Cancel Order</button>
+            </div>
+
+            <div class="cancel-info" th:if="${order.status == 'CANCELLED'}">
+                This order was cancelled<span th:if="${order.cancelReason}" th:text="' — ' + ${order.cancelReason}"></span>.
+            </div>
+
+            <!-- CANCEL CONFIRMATION POPUP -->
+            <div class="modal-overlay" th:id="'cancel-modal-' + ${order.id}">
+                <div class="modal-box">
+                    <h3>Cancel this order?</h3>
+                    <p th:text="'Order #' + ${order.orderNumber} + ' will be cancelled and you will receive a confirmation email.'"></p>
+                    <form method="post" th:action="@{'/my-orders/' + ${order.id} + '/cancel'}">
+                        <input type="hidden" name="email" th:value="${order.email}">
+                        <textarea name="reason" placeholder="Tell us why you're cancelling (optional)"></textarea>
+                        <div class="modal-btn-row">
+                            <button type="button" class="btn-keep" th:onclick="'closeCancel(' + ${order.id} + ')'">Keep Order</button>
+                            <button type="submit" class="btn-confirm-cancel">Yes, Cancel It</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(orders)}">
+            <span>🧾</span>
+            No orders found for this email address.
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    function openCancel(id){
+        document.getElementById('cancel-modal-' + id).classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeCancel(id){
+        document.getElementById('cancel-modal-' + id).classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay){
+        overlay.addEventListener('click', function(e){
+            if (e.target === overlay){
+                overlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

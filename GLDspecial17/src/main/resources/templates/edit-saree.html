@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <meta name="theme-color"
+          content="#641726">
+
+    <title>Vastra Mane | Edit Saree</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: #f7f5f3;
+            color: #3f2930;
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            height: 68px;
+            background: #641726;
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 3px 18px rgba(40, 15, 20, .15);
+        }
+
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: white;
+        }
+
+
+        .brand-name {
+            font-family: "Playfair Display", serif;
+            color: white;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+
+        .brand-subtitle {
+            color: #e6c989;
+            font-size: 8px;
+            letter-spacing: 1.4px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,.35);
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+
+        .back-btn:hover {
+            background: white;
+            color: #641726;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page {
+            max-width: 1000px;
+            margin: auto;
+            padding: 28px 18px 50px;
+        }
+
+
+        .page-heading {
+            margin-bottom: 20px;
+        }
+
+
+        .page-heading h1 {
+            font-family: "Playfair Display", serif;
+            color: #4e1724;
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+
+        .page-heading p {
+            color: #918287;
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           ALERT
+        ===================================================== */
+
+        .alert {
+            padding: 12px 14px;
+            border-radius: 9px;
+            margin-bottom: 15px;
+            font-size: 10px;
+        }
+
+
+        .success {
+            background: #eaf7ed;
+            color: #26733e;
+            border: 1px solid #cdebd5;
+        }
+
+
+        .failure {
+            background: #fff0f0;
+            color: #a72d32;
+            border: 1px solid #efd0d0;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .form-card {
+            background: white;
+            border: 1px solid #ebe5e2;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(40,20,25,.05);
+        }
+
+
+        .section {
+            padding: 22px;
+            border-bottom: 1px solid #eee9e7;
+        }
+
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+
+        .section-title {
+            margin-bottom: 17px;
+        }
+
+
+        .section-title h2 {
+            font-family: "Playfair Display", serif;
+            color: #511c29;
+            font-size: 19px;
+            margin-bottom: 3px;
+        }
+
+
+        .section-title p {
+            color: #9b8c91;
+            font-size: 9px;
+        }
+
+
+        /* =====================================================
+           GRID
+        ===================================================== */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+
+        .field label {
+            color: #563841;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+
+        .required {
+            color: #b12c34;
+        }
+
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #ded7d4;
+            background: #fff;
+            border-radius: 8px;
+            padding: 11px 12px;
+            font-family: "Inter", sans-serif;
+            font-size: 10px;
+            color: #463239;
+            outline: none;
+            transition: .2s;
+        }
+
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #8b394f;
+            box-shadow: 0 0 0 3px rgba(100,23,38,.06);
+        }
+
+
+        textarea {
+            resize: vertical;
+            min-height: 105px;
+            line-height: 1.6;
+        }
+
+
+        select {
+            cursor: pointer;
+        }
+
+
+        .error {
+            color: #b12c34;
+            font-size: 8px;
+            margin-top: 5px;
+        }
+
+
+        .hint {
+            color: #9d8f94;
+            font-size: 8px;
+            margin-top: 5px;
+        }
+
+
+        /* =====================================================
+           PRICE
+        ===================================================== */
+
+        .price-box {
+            position: relative;
+        }
+
+
+        .price-symbol {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #806c73;
+            font-size: 10px;
+            z-index: 2;
+        }
+
+
+        .price-box input {
+            padding-left: 27px;
+        }
+
+
+        /* =====================================================
+           STATUS ROW
+        ===================================================== */
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+
+        .status-card {
+            border: 1px solid #e5dedb;
+            border-radius: 10px;
+            padding: 14px;
+            background: #fcfaf9;
+        }
+
+
+        .status-card label {
+            display: block;
+            color: #55363e;
+            font-size: 10px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+
+        /* =====================================================
+           CURRENT IMAGES
+        ===================================================== */
+
+        .image-count {
+            display: inline-flex;
+            background: #f5e8ec;
+            color: #641726;
+            border-radius: 20px;
+            padding: 5px 9px;
+            font-size: 8px;
+            font-weight: 700;
+            margin-bottom: 13px;
+        }
+
+
+        .current-images {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+
+        .image-card {
+            position: relative;
+            border: 1px solid #e5dfdc;
+            border-radius: 9px;
+            overflow: hidden;
+            background: #f5f2f0;
+        }
+
+
+        .image-card img {
+            width: 100%;
+            height: 170px;
+            display: block;
+            object-fit: cover;
+        }
+
+
+        .image-card.removed {
+            opacity: .35;
+        }
+
+
+        .remove-image-btn {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(177,44,52,.94);
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .remove-image-btn:hover {
+            background: #8f2229;
+        }
+
+
+        .removed-label {
+            display: none;
+            position: absolute;
+            left: 7px;
+            bottom: 7px;
+            right: 7px;
+            background: #641726;
+            color: white;
+            padding: 6px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+
+        .image-card.removed .removed-label {
+            display: block;
+        }
+
+
+        .no-images {
+            background: #faf8f7;
+            border: 1px dashed #d9d0cd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            color: #9a8c91;
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           ADD IMAGES
+        ===================================================== */
+
+        .upload-box {
+            border: 1.5px dashed #cdbbc0;
+            background: #fcf9fa;
+            border-radius: 11px;
+            padding: 20px;
+            text-align: center;
+        }
+
+
+        .upload-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #f4e7eb;
+            color: #641726;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 18px;
+        }
+
+
+        .upload-title {
+            color: #5a3740;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+
+        .upload-description {
+            color: #9b8d92;
+            font-size: 8px;
+            margin-bottom: 12px;
+        }
+
+
+        .file-input {
+            max-width: 280px;
+            margin: auto;
+            background: white;
+            cursor: pointer;
+        }
+
+
+        /* =====================================================
+           NEW IMAGE PREVIEW
+        ===================================================== */
+
+        .preview-title {
+            color: #654650;
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 18px;
+            margin-bottom: 10px;
+        }
+
+
+        .new-preview {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+
+        .preview-card {
+            border: 1px solid #e4dcda;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f7f5f3;
+        }
+
+
+        .preview-card img {
+            width: 100%;
+            height: 150px;
+            display: block;
+            object-fit: cover;
+        }
+
+
+        /* =====================================================
+           BOTTOM ACTIONS
+        ===================================================== */
+
+        .bottom-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 9px;
+            padding: 18px 22px;
+            background: #fcfaf9;
+        }
+
+
+        .cancel-btn,
+        .update-btn {
+            min-width: 125px;
+            height: 42px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Inter", sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+
+        .cancel-btn {
+            background: #eeeae8;
+            color: #5d4b52;
+        }
+
+
+        .update-btn {
+            border: none;
+            background: #641726;
+            color: white;
+            box-shadow: 0 5px 12px rgba(100,23,38,.16);
+        }
+
+
+        .update-btn:hover {
+            background: #4d101d;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media(max-width: 700px) {
+
+
+            .header {
+                height: 62px;
+                padding: 0 11px;
+            }
+
+
+            .logo {
+                width: 42px;
+                height: 42px;
+            }
+
+
+            .brand-name {
+                font-size: 18px;
+            }
+
+
+            .brand-subtitle {
+                font-size: 7px;
+            }
+
+
+            .back-btn {
+                width: 38px;
+                height: 36px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 15px;
+            }
+
+
+            .back-text {
+                display: none;
+            }
+
+
+            .page {
+                padding: 18px 10px 30px;
+            }
+
+
+            .page-heading h1 {
+                font-size: 25px;
+            }
+
+
+            .page-heading p {
+                font-size: 9px;
+                line-height: 1.5;
+            }
+
+
+            .form-card {
+                border-radius: 12px;
+            }
+
+
+            .section {
+                padding: 17px 13px;
+            }
+
+
+            .section-title h2 {
+                font-size: 17px;
+            }
+
+
+            .section-title p {
+                font-size: 8px;
+            }
+
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+
+            .field.full {
+                grid-column: auto;
+            }
+
+
+            input,
+            select,
+            textarea {
+                min-height: 43px;
+                font-size: 11px;
+            }
+
+
+            textarea {
+                min-height: 110px;
+            }
+
+
+            .status-grid {
+                grid-template-columns: 1fr;
+                gap: 9px;
+            }
+
+
+            .current-images {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 9px;
+            }
+
+
+            .image-card img {
+                height: 190px;
+            }
+
+
+            .new-preview {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 9px;
+            }
+
+
+            .preview-card img {
+                height: 180px;
+            }
+
+
+            .upload-box {
+                padding: 17px 10px;
+            }
+
+
+            .file-input {
+                width: 100%;
+            }
+
+
+            .bottom-actions {
+                padding: 13px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+
+            .cancel-btn,
+            .update-btn {
+                width: 100%;
+                min-width: 0;
+                height: 44px;
+            }
+
+        }
+
+
+        /* =====================================================
+           VERY SMALL MOBILE
+        ===================================================== */
+
+        @media(max-width: 360px) {
+
+
+            .current-images {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+
+            .image-card img {
+                height: 165px;
+            }
+
+
+            .preview-card img {
+                height: 155px;
+            }
+
+
+            .section {
+                padding: 15px 11px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+
+    <div class="brand">
+
+
+        <img class="logo"
+             src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787580557/Products/b8ijrczvf7ep5xtjnmjt.jpg"
+             alt="Vastra Mane Logo">
+
+
+        <div>
+
+            <div class="brand-name">
+                Vastra Mane
+            </div>
+
+            <div class="brand-subtitle">
+                Admin Panel
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <a href="/admin/manage-saree"
+       class="back-btn">
+
+        <span class="back-text">
+            ← Back to Sarees
+        </span>
+
+        <span style="display:none;"
+              class="mobile-back">
+            ←
+        </span>
+
+    </a>
+
+
+</header>
+
+
+
+<!-- =========================================================
+     PAGE
+========================================================= -->
+
+<main class="page">
+
+
+    <div class="page-heading">
+
+        <h1>
+            Edit Saree
+        </h1>
+
+        <p>
+            Update product details, images, stock and visibility.
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ALERTS
+    ====================================================== -->
+
+    <div th:if="${session.failure != null}"
+         class="alert failure">
+
+        ⚠
+
+        <span th:text="${session.failure}">
+        </span>
+
+    </div>
+
+
+    <div th:if="${session.success != null}"
+         class="alert success">
+
+        ✓
+
+        <span th:text="${session.success}">
+        </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORM
+    ====================================================== -->
+
+    <form action="/admin/edit-saree"
+          method="post"
+          enctype="multipart/form-data"
+          th:object="${saree}">
+
+
+        <!-- ID -->
+
+        <input type="hidden"
+               name="id"
+               th:value="*{id}">
+
+
+
+        <div class="form-card">
+
+
+            <!-- =================================================
+                 BASIC INFORMATION
+            ================================================= -->
+
+            <section class="section">
+
+
+                <div class="section-title">
+
+                    <h2>
+                        Basic Information
+                    </h2>
+
+                    <p>
+                        Update the main details of this saree.
+                    </p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- NAME -->
+
+                    <div class="field full">
+
+                        <label>
+                            Saree Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="text"
+                               name="name"
+                               th:value="*{name}"
+                               placeholder="Example: Traditional Red Ilkal Saree">
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('name')}"
+                             th:errors="*{name}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PRICE -->
+
+                    <div class="field">
+
+                        <label>
+                            Selling Price
+                            <span class="required">*</span>
+                        </label>
+
+                        <div class="price-box">
+
+                            <span class="price-symbol">
+                                ₹
+                            </span>
+
+                            <input type="number"
+                                   name="price"
+                                   step="0.01"
+                                   min="0"
+                                   th:value="*{price}"
+                                   placeholder="2500">
+
+                        </div>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('price')}"
+                             th:errors="*{price}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- MRP -->
+
+                    <div class="field">
+
+                        <label>
+                            MRP
+                        </label>
+
+                        <div class="price-box">
+
+                            <span class="price-symbol">
+                                ₹
+                            </span>
+
+                            <input type="number"
+                                   name="dummyprice"
+                                   step="0.01"
+                                   min="0"
+                                   th:value="*{dummyprice}"
+                                   placeholder="3500">
+
+                        </div>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('dummyprice')}"
+                             th:errors="*{dummyprice}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- STOCK -->
+
+                    <div class="field">
+
+                        <label>
+                            Available Stock
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="number"
+                               name="stock"
+                               min="0"
+                               th:value="*{stock}"
+                               placeholder="10">
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('stock')}"
+                             th:errors="*{stock}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- COLOR -->
+
+                    <div class="field">
+
+                        <label>
+                            Color
+                            <span class="required">*</span>
+                        </label>
+
+                        <input type="text"
+                               name="color"
+                               th:value="*{color}"
+                               placeholder="Example: Maroon Red">
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('color')}"
+                             th:errors="*{color}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="field full">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea name="description"
+                                  placeholder="Describe the saree, fabric quality, design and special features..."
+                                  th:text="*{description}"></textarea>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('description')}"
+                             th:errors="*{description}">
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 SAREE DETAILS
+            ================================================= -->
+
+            <section class="section">
+
+
+                <div class="section-title">
+
+                    <h2>
+                        Saree Details
+                    </h2>
+
+                    <p>
+                        Specify the saree category and craftsmanship.
+                    </p>
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <!-- SAREE TYPE -->
+
+                    <div class="field">
+
+                        <label>
+                            Saree Type
+                        </label>
+
+                        <select name="sareeType"
+                                th:field="*{sareeType}">
+
+                            <option value="">
+                                Select Saree Type
+                            </option>
+
+                            <option value="Guledagudda Khana">
+                                Guledagudda Khana
+                            </option>
+
+                            <option value="Ilkal Saree">
+                                Ilkal Saree
+                            </option>
+
+                            <option value="Mysore Silk">
+                                Mysore Silk
+                            </option>
+
+                            <option value="Molakalmuru Silk">
+                                Molakalmuru Silk
+                            </option>
+
+                            <option value="Patteda Anchu">
+                                Patteda Anchu
+                            </option>
+
+                            <option value="Kanchipuram">
+                                Kanchipuram
+                            </option>
+
+                            <option value="Banarasi">
+                                Banarasi
+                            </option>
+
+                            <option value="Designer">
+                                Designer
+                            </option>
+
+                            <option value="Handloom">
+                                Handloom
+                            </option>
+
+                        </select>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('sareeType')}"
+                             th:errors="*{sareeType}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- FABRIC -->
+
+                    <div class="field">
+
+                        <label>
+                            Fabric
+                        </label>
+
+                        <select name="fabric"
+                                th:field="*{fabric}">
+
+                            <option value="">
+                                Select Fabric
+                            </option>
+
+                            <option value="Silk">
+                                Silk
+                            </option>
+
+                            <option value="Cotton">
+                                Cotton
+                            </option>
+
+                            <option value="Art Silk">
+                                Art Silk
+                            </option>
+
+                            <option value="Linen">
+                                Linen
+                            </option>
+
+                            <option value="Georgette">
+                                Georgette
+                            </option>
+
+                            <option value="Chiffon">
+                                Chiffon
+                            </option>
+
+                            <option value="Crepe">
+                                Crepe
+                            </option>
+
+                            <option value="Organza">
+                                Organza
+                            </option>
+
+                        </select>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('fabric')}"
+                             th:errors="*{fabric}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- WEAVING -->
+
+                    <div class="field">
+
+                        <label>
+                            Weaving Type
+                        </label>
+
+                        <select name="weavingType"
+                                th:field="*{weavingType}">
+
+                            <option value="">
+                                Select Weaving Type
+                            </option>
+
+                            <option value="Handloom">
+                                Handloom
+                            </option>
+
+                            <option value="Powerloom">
+                                Powerloom
+                            </option>
+
+                            <option value="Jacquard">
+                                Jacquard
+                            </option>
+
+                        </select>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('weavingType')}"
+                             th:errors="*{weavingType}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- OCCASION -->
+
+                    <div class="field">
+
+                        <label>
+                            Occasion
+                        </label>
+
+                        <select name="occasion"
+                                th:field="*{occasion}">
+
+                            <option value="">
+                                Select Occasion
+                            </option>
+
+                            <option value="Wedding">
+                                Wedding
+                            </option>
+
+                            <option value="Festival">
+                                Festival
+                            </option>
+
+                            <option value="Party">
+                                Party
+                            </option>
+
+                            <option value="Traditional">
+                                Traditional
+                            </option>
+
+                            <option value="Office">
+                                Office
+                            </option>
+
+                            <option value="Casual">
+                                Casual
+                            </option>
+
+                        </select>
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('occasion')}"
+                             th:errors="*{occasion}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DESIGN -->
+
+                    <div class="field">
+
+                        <label>
+                            Design
+                        </label>
+
+                        <input type="text"
+                               name="design"
+                               th:value="*{design}"
+                               placeholder="Example: Floral">
+
+                        <div class="error"
+                             th:if="${#fields.hasErrors('design')}"
+                             th:errors="*{design}">
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- BORDER -->
+
+                    <div class="field">
+
+                        <label>
+                            Border Type
+                        </label>
+
+                        <input type="text"
+                               name="borderType"
+                               th:value="*{borderType}"
+                               placeholder="Example: Zari Border">
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PRODUCT SETTINGS
+            ================================================= -->
+
+            <section class="section">
+
+
+                <div class="section-title">
+
+                    <h2>
+                        Product Settings
+                    </h2>
+
+                    <p>
+                        Control blouse availability and homepage visibility.
+                    </p>
+
+                </div>
+
+
+                <div class="status-grid">
+
+
+                    <!-- BLOUSE -->
+
+                    <div class="status-card">
+
+                        <label>
+                            Blouse Included
+                        </label>
+
+                        <select name="blouseIncluded"
+                                th:field="*{blouseIncluded}">
+
+                            <option th:value="true">
+                                Yes — Blouse Included
+                            </option>
+
+                            <option th:value="false">
+                                No — Saree Only
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- PUBLISHED -->
+
+                    <div class="status-card">
+
+                        <label>
+                            Homepage Visibility
+                        </label>
+
+                        <select name="published"
+                                th:field="*{published}">
+
+                            <option th:value="true">
+                                Published on Home Page
+                            </option>
+
+                            <option th:value="false">
+                                Hidden from Home Page
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 CURRENT IMAGES
+            ================================================= -->
+
+            <section class="section">
+
+
+                <div class="section-title">
+
+                    <h2>
+                        Saree Images
+                    </h2>
+
+                    <p>
+                        Remove unwanted images or add new product images.
+                    </p>
+
+                </div>
+
+
+                <div th:if="${saree.imageLinks != null
+                             and !saree.imageLinks.isEmpty()}">
+
+
+                    <div class="image-count">
+
+                        <span th:text="${#lists.size(saree.imageLinks)}">
+                            5
+                        </span>
+
+                        &nbsp;Current Images
+
+                    </div>
+
+
+                    <div class="current-images"
+                         id="currentImages">
+
+
+                        <div th:each="image : ${saree.imageLinks}"
+                             class="image-card">
+
+
+                            <img th:src="${image}"
+                                 alt="Saree Image">
+
+
+                            <button type="button"
+                                    class="remove-image-btn"
+                                    onclick="removeImage(this)">
+
+                                ×
+
+                            </button>
+
+
+                            <input type="hidden"
+                                   name="removeImages"
+                                   th:value="${image}"
+                                   disabled>
+
+
+                            <div class="removed-label">
+
+                                Marked for removal
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div th:if="${saree.imageLinks == null
+                             or saree.imageLinks.isEmpty()}"
+                     class="no-images">
+
+                    No images available for this saree.
+
+                </div>
+
+
+                <!-- =================================================
+                     ADD NEW IMAGES
+                ================================================= -->
+
+                <div style="margin-top:20px;">
+
+
+                    <div class="upload-box">
+
+
+                        <div class="upload-icon">
+                            +
+                        </div>
+
+
+                        <div class="upload-title">
+
+                            Add New Images
+
+                        </div>
+
+
+                        <div class="upload-description">
+
+                            Select one or more saree images from your device.
+
+                        </div>
+
+
+                        <input type="file"
+                               id="images"
+                               name="images"
+                               class="file-input"
+                               multiple
+                               accept="image/*">
+
+
+                        <div class="hint">
+
+                            Recommended: clear product images in HD quality.
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- NEW IMAGE PREVIEW -->
+
+                <div id="previewSection"
+                     style="display:none;">
+
+
+                    <div class="preview-title">
+
+                        New Images Preview
+
+                    </div>
+
+
+                    <div id="newImagePreview"
+                         class="new-preview">
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 BOTTOM ACTIONS
+            ================================================= -->
+
+            <div class="bottom-actions">
+
+
+                <a href="/admin/manage-saree"
+                   class="cancel-btn">
+
+                    Cancel
+
+                </a>
+
+
+                <button type="submit"
+                        class="update-btn">
+
+                    ✓ Update Saree
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </form>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+    /* =========================================================
+       REMOVE EXISTING IMAGE
+    ========================================================= */
+
+    function removeImage(button) {
+
+
+        const imageCard =
+            button.closest(".image-card");
+
+
+        const removeInput =
+            imageCard.querySelector(
+                'input[name="removeImages"]'
+            );
+
+
+        if (!removeInput) {
+            return;
+        }
+
+
+        if (removeInput.disabled) {
+
+
+            /*
+             * Mark image for removal
+             */
+
+            removeInput.disabled = false;
+
+            imageCard.classList.add("removed");
+
+
+        } else {
+
+
+            /*
+             * Undo removal
+             */
+
+            removeInput.disabled = true;
+
+            imageCard.classList.remove("removed");
+
+        }
+
+    }
+
+
+
+    /* =========================================================
+       NEW IMAGE PREVIEW
+    ========================================================= */
+
+    const imageInput =
+        document.getElementById("images");
+
+
+    const preview =
+        document.getElementById("newImagePreview");
+
+
+    const previewSection =
+        document.getElementById("previewSection");
+
+
+    imageInput.addEventListener("change", function(event) {
+
+
+        preview.innerHTML = "";
+
+
+        const files =
+            event.target.files;
+
+
+        if (!files || files.length === 0) {
+
+
+            previewSection.style.display =
+                "none";
+
+
+            return;
+
+        }
+
+
+        previewSection.style.display =
+            "block";
+
+
+        for (let i = 0; i < files.length; i++) {
+
+
+            const file =
+                files[i];
+
+
+            if (!file.type.startsWith("image/")) {
+                continue;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(e) {
+
+
+                    const card =
+                        document.createElement("div");
+
+
+                    card.className =
+                        "preview-card";
+
+
+                    const img =
+                        document.createElement("img");
+
+
+                    img.src =
+                        e.target.result;
+
+
+                    img.alt =
+                        "New Saree Image";
+
+
+                    card.appendChild(img);
+
+
+                    preview.appendChild(card);
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+
+    });
+
+
+
+    /* =========================================================
+       ALERT AUTO HIDE
+    ========================================================= */
+
+    setTimeout(function() {
+
+
+        const alerts =
+            document.querySelectorAll(".alert");
+
+
+        alerts.forEach(function(alert) {
+
+
+            alert.style.transition =
+                "opacity .4s ease";
+
+
+            alert.style.opacity =
+                "0";
+
+
+            setTimeout(function() {
+
+                alert.remove();
+
+            }, 400);
+
+        });
+
+
+    }, 5000);
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Cart | Vastra Mane</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "DM Sans", Arial, sans-serif;
+            background: #faf8f5;
+            color: #29231f;
+            min-height: 100vh;
+        }
+
+        button,
+        a {
+            font-family: inherit;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           TOP ANNOUNCEMENT BAR
+        ===================================================== */
+
+        .announcement {
+            background: #5c1725;
+            color: #fff;
+            text-align: center;
+            padding: 9px 15px;
+            font-size: 13px;
+            letter-spacing: .3px;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #eee4dc;
+            min-height: 78px;
+            padding: 0 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .brand-icon {
+            width: 43px;
+            height: 43px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #8d2437,
+                #c68b43
+            );
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Playfair Display", serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .brand-text h1 {
+            font-family: "Playfair Display", serif;
+            font-size: 25px;
+            color: #5c1725;
+            line-height: 1;
+        }
+
+        .brand-text span {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #a47b55;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .continue-shopping {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #5c1725;
+            border: 1px solid #dccbc0;
+            padding: 11px 17px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all .25s ease;
+            background: #fff;
+        }
+
+        .continue-shopping:hover {
+            background: #5c1725;
+            color: #fff;
+            border-color: #5c1725;
+            transform: translateY(-1px);
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .page-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 38px 22px 70px;
+        }
+
+
+        /* =====================================================
+           PAGE TITLE
+        ===================================================== */
+
+        .page-heading {
+            margin-bottom: 30px;
+        }
+
+        .page-heading .small-title {
+            color: #a47b55;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .page-heading h2 {
+            font-family: "Playfair Display", serif;
+            color: #351b20;
+            font-size: clamp(30px, 4vw, 43px);
+            line-height: 1.1;
+        }
+
+        .page-heading p {
+            color: #776d67;
+            margin-top: 9px;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           MESSAGE
+        ===================================================== */
+
+        .message {
+            background: #edf8ef;
+            color: #256b32;
+            border: 1px solid #cce8d0;
+            border-radius: 12px;
+            padding: 13px 17px;
+            margin-bottom: 22px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .message::before {
+            content: "✓";
+            width: 23px;
+            height: 23px;
+            background: #2e7d32;
+            color: #fff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+
+        /* =====================================================
+           EMPTY CART
+        ===================================================== */
+
+        .empty-cart {
+            background: #fff;
+            border: 1px solid #eee2d9;
+            border-radius: 20px;
+            padding: 75px 25px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(74, 43, 25, .06);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #f8eee8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+        }
+
+        .empty-cart h2 {
+            font-family: "Playfair Display", serif;
+            color: #351b20;
+            font-size: 29px;
+            margin-bottom: 10px;
+        }
+
+        .empty-cart p {
+            color: #81766e;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .shop-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #5c1725;
+            color: #fff;
+            padding: 13px 25px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all .25s ease;
+        }
+
+        .shop-btn:hover {
+            background: #7d2435;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(92, 23, 37, .2);
+        }
+
+
+        /* =====================================================
+           CART LAYOUT
+        ===================================================== */
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 340px;
+            gap: 28px;
+            align-items: start;
+        }
+
+
+        /* =====================================================
+           CART HEADER
+        ===================================================== */
+
+        .cart-list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 13px;
+        }
+
+        .cart-list-header h3 {
+            font-family: "Playfair Display", serif;
+            color: #351b20;
+            font-size: 23px;
+        }
+
+        .cart-count {
+            color: #8d7768;
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           CART ITEM
+        ===================================================== */
+
+        .cart-item {
+            background: #fff;
+            border: 1px solid #eee2d9;
+            border-radius: 17px;
+            padding: 18px;
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: 145px minmax(0, 1fr) 150px;
+            gap: 20px;
+            align-items: center;
+            box-shadow: 0 7px 25px rgba(74, 43, 25, .055);
+            transition: transform .2s ease,
+                        box-shadow .2s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(74, 43, 25, .09);
+        }
+
+
+        /* =====================================================
+           PRODUCT IMAGE
+        ===================================================== */
+
+        .image-wrapper {
+            width: 145px;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #f5efea;
+            position: relative;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            object-position: center;
+            background: #f8f5f1;
+            transition: transform .4s ease;
+        }
+
+        .cart-item:hover .product-image {
+            transform: scale(1.04);
+        }
+
+        .no-image {
+            width: 100%;
+            height: 100%;
+            background: #f3eee9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9b8e84;
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           PRODUCT DETAILS
+        ===================================================== */
+
+        .product-details {
+            min-width: 0;
+        }
+
+        .product-type {
+            display: inline-flex;
+            align-items: center;
+            background: #f8e8dc;
+            color: #7d4930;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 9px;
+        }
+
+        .product-name {
+            font-family: "Playfair Display", serif;
+            font-size: 24px;
+            color: #321e21;
+            line-height: 1.25;
+            margin-bottom: 13px;
+            word-break: break-word;
+        }
+
+        .product-info {
+            color: #746963;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .product-price {
+            color: #302625;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .quantity-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 37px;
+            height: 30px;
+            background: #f7f3ef;
+            border: 1px solid #e6d9cf;
+            border-radius: 7px;
+            color: #4b3931;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .subtotal {
+            margin-top: 13px;
+            padding-top: 12px;
+            border-top: 1px dashed #e2d7cf;
+            color: #8d2437;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           BUTTON SECTION
+        ===================================================== */
+
+        .button-section {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .action-form {
+            width: 100%;
+        }
+
+        .increase-btn,
+        .remove-btn {
+            width: 100%;
+            min-height: 42px;
+            border-radius: 9px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all .2s ease;
+        }
+
+        .increase-btn {
+            background: #f0f7ef;
+            color: #28632e;
+            border: 1px solid #cce2cc;
+        }
+
+        .increase-btn:hover {
+            background: #2e7d32;
+            color: #fff;
+            border-color: #2e7d32;
+        }
+
+        .remove-btn {
+            background: #fff2f1;
+            color: #b52c2c;
+            border: 1px solid #f0cccc;
+        }
+
+        .remove-btn:hover {
+            background: #d32f2f;
+            color: #fff;
+            border-color: #d32f2f;
+        }
+
+
+        /* =====================================================
+           SUMMARY CARD
+        ===================================================== */
+
+        .summary-card {
+            background: #fff;
+            border: 1px solid #eee2d9;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 9px 30px rgba(74, 43, 25, .07);
+            position: sticky;
+            top: 105px;
+        }
+
+        .summary-card h3 {
+            font-family: "Playfair Display", serif;
+            font-size: 25px;
+            color: #351b20;
+            margin-bottom: 21px;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            color: #70645e;
+            font-size: 14px;
+            padding: 11px 0;
+        }
+
+        .summary-line strong {
+            color: #332725;
+        }
+
+        .summary-divider {
+            border: none;
+            border-top: 1px dashed #ddd1c7;
+            margin: 7px 0;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 16px 0 18px;
+        }
+
+        .summary-total span:first-child {
+            font-size: 16px;
+            font-weight: 600;
+            color: #44332e;
+        }
+
+        .summary-total span:last-child {
+            color: #8d2437;
+            font-family: "Playfair Display", serif;
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            border: none;
+            background: linear-gradient(
+                135deg,
+                #5c1725,
+                #8d2437
+            );
+            color: #fff;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 3px;
+            transition: all .25s ease;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(92, 23, 37, .22);
+        }
+
+        .secure-note {
+            text-align: center;
+            color: #8c817a;
+            font-size: 11px;
+            margin-top: 14px;
+        }
+
+        .benefits {
+            border-top: 1px solid #eee5df;
+            margin-top: 20px;
+            padding-top: 16px;
+        }
+
+        .benefit {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #675c56;
+            font-size: 12px;
+            margin: 11px 0;
+        }
+
+        .benefit-icon {
+            width: 29px;
+            height: 29px;
+            border-radius: 50%;
+            background: #f8eee8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+
+        /* =====================================================
+           MOBILE BOTTOM SUMMARY
+        ===================================================== */
+
+        .mobile-summary {
+            display: none;
+        }
+
+
+        /* =====================================================
+           TABLET
+        ===================================================== */
+
+        @media (max-width: 950px) {
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+
+            .cart-item {
+                grid-template-columns: 130px minmax(0, 1fr) 130px;
+            }
+
+            .image-wrapper {
+                width: 130px;
+                height: 165px;
+            }
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 650px) {
+
+            body {
+                padding-bottom: 82px;
+            }
+
+            .announcement {
+                font-size: 11px;
+                padding: 8px 10px;
+            }
+
+            .header {
+                min-height: 65px;
+                padding: 0 15px;
+            }
+
+            .brand-icon {
+                width: 37px;
+                height: 37px;
+                font-size: 17px;
+            }
+
+            .brand-text h1 {
+                font-size: 20px;
+            }
+
+            .brand-text span {
+                font-size: 8px;
+                letter-spacing: 1.5px;
+            }
+
+            .continue-shopping {
+                padding: 9px 12px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            .page-container {
+                padding: 25px 13px 30px;
+            }
+
+            .page-heading {
+                margin-bottom: 22px;
+            }
+
+            .page-heading h2 {
+                font-size: 31px;
+            }
+
+            .page-heading p {
+                font-size: 13px;
+            }
+
+            .cart-list-header h3 {
+                font-size: 20px;
+            }
+
+            .cart-item {
+                display: grid;
+                grid-template-columns: 92px minmax(0, 1fr);
+                gap: 13px;
+                padding: 12px;
+                border-radius: 14px;
+                margin-bottom: 13px;
+            }
+
+            .image-wrapper {
+                width: 92px;
+                height: 125px;
+                border-radius: 9px;
+            }
+
+            .product-details {
+                align-self: center;
+            }
+
+            .product-type {
+                padding: 4px 8px;
+                font-size: 8px;
+                margin-bottom: 6px;
+            }
+
+            .product-name {
+                font-size: 18px;
+                margin-bottom: 8px;
+                line-height: 1.2;
+            }
+
+            .product-info {
+                font-size: 12px;
+                margin: 5px 0;
+            }
+
+            .quantity {
+                min-width: 30px;
+                height: 26px;
+                font-size: 12px;
+            }
+
+            .subtotal {
+                font-size: 14px;
+                margin-top: 8px;
+                padding-top: 8px;
+            }
+
+            .button-section {
+                grid-column: 1 / -1;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                padding-top: 2px;
+            }
+
+            .increase-btn,
+            .remove-btn {
+                min-height: 40px;
+                font-size: 12px;
+            }
+
+            .summary-card {
+                display: none;
+            }
+
+            .mobile-summary {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 200;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                background: rgba(255,255,255,.97);
+                backdrop-filter: blur(12px);
+                border-top: 1px solid #e5d9d0;
+                padding: 11px 14px;
+                box-shadow: 0 -7px 25px rgba(50,30,20,.12);
+            }
+
+            .mobile-total small {
+                display: block;
+                color: #81746c;
+                font-size: 10px;
+                margin-bottom: 2px;
+            }
+
+            .mobile-total strong {
+                display: block;
+                color: #8d2437;
+                font-family: "Playfair Display", serif;
+                font-size: 20px;
+            }
+
+            .mobile-checkout {
+                border: none;
+                background: #5c1725;
+                color: white;
+                border-radius: 9px;
+                padding: 12px 17px;
+                font-size: 12px;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+            .empty-cart {
+                padding: 55px 18px;
+                border-radius: 16px;
+            }
+
+            .empty-icon {
+                width: 65px;
+                height: 65px;
+                font-size: 28px;
+            }
+
+            .empty-cart h2 {
+                font-size: 25px;
+            }
+
+        }
+
+
+        /* =====================================================
+           VERY SMALL DEVICES
+        ===================================================== */
+
+        @media (max-width: 380px) {
+
+            .brand-text span {
+                display: none;
+            }
+
+            .continue-shopping {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .cart-item {
+                grid-template-columns: 82px minmax(0, 1fr);
+            }
+
+            .image-wrapper {
+                width: 82px;
+                height: 112px;
+            }
+
+            .product-name {
+                font-size: 16px;
+            }
+
+            .button-section {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-checkout {
+                padding: 11px 13px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     ANNOUNCEMENT
+========================================================= -->
+
+<div class="announcement">
+
+    ✨ Discover timeless silk & sarees • Crafted with tradition
+
+</div>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <a th:href="@{/}" class="brand">
+
+        <div class="brand-icon">
+            V
+        </div>
+
+        <div class="brand-text">
+
+            <h1>Vastra Mane</h1>
+
+            <span>Silk & Sarees</span>
+
+        </div>
+
+    </a>
+
+
+    <a th:href="@{/}" class="continue-shopping">
+
+        ← Continue Shopping
+
+    </a>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="page-container">
+
+
+    <!-- =====================================================
+         PAGE TITLE
+    ====================================================== -->
+
+    <div class="page-heading">
+
+        <div class="small-title">
+            Your Collection
+        </div>
+
+        <h2>
+            My Cart
+        </h2>
+
+        <p>
+            Review your beautiful selections before continuing.
+        </p>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MESSAGE
+    ====================================================== -->
+
+    <div class="message"
+         th:if="${message != null}"
+         th:text="${message}">
+
+        Cart message
+
+    </div>
+
+
+
+    <!-- =====================================================
+         EMPTY CART
+    ====================================================== -->
+
+    <div class="empty-cart"
+         th:if="${cart == null
+                 || cart.items == null
+                 || cart.items.isEmpty()}">
+
+        <div class="empty-icon">
+            🛍️
+        </div>
+
+        <h2>
+            Your Cart is Empty
+        </h2>
+
+        <p>
+            Your favourite sarees and silks are waiting for you.
+        </p>
+
+        <a th:href="@{/}"
+           class="shop-btn">
+
+            Explore Collection →
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CART WITH PRODUCTS
+    ====================================================== -->
+
+    <div th:if="${cart != null
+                 && cart.items != null
+                 && !cart.items.isEmpty()}">
+
+
+        <div class="cart-layout">
+
+
+            <!-- =================================================
+                 LEFT SIDE
+            ================================================= -->
+
+            <section>
+
+
+                <div class="cart-list-header">
+
+                    <h3>
+                        Selected Items
+                    </h3>
+
+                    <span class="cart-count">
+
+                        <span th:text="${cart.items.size()}">
+                            0
+                        </span>
+
+                        item(s)
+
+                    </span>
+
+                </div>
+
+
+
+                <!-- =============================================
+                     CART ITEM
+                ============================================== -->
+
+                <div class="cart-item"
+                     th:each="item : ${cart.items}">
+
+
+                    <!-- =========================================
+                         IMAGE
+                    ========================================== -->
+
+                    <div class="image-wrapper">
+
+                        <img th:if="${item.image != null
+                                    && !item.image.isEmpty()}"
+
+                             th:src="${item.image}"
+
+                             th:alt="${item.productName}"
+
+                             class="product-image">
+
+
+                        <div class="no-image"
+                             th:if="${item.image == null
+                                     || item.image.isEmpty()}">
+
+                            No Image
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =========================================
+                         DETAILS
+                    ========================================== -->
+
+                    <div class="product-details">
+
+
+                        <!-- TYPE -->
+
+                        <span class="product-type"
+                              th:text="${item.productType}">
+
+                            SAREE
+
+                        </span>
+
+
+
+                        <!-- NAME -->
+
+                        <h2 class="product-name"
+                            th:text="${item.productName}">
+
+                            Product Name
+
+                        </h2>
+
+
+
+                        <!-- PRICE -->
+
+                        <p class="product-info">
+
+                            Price:
+
+                            <span class="product-price">
+
+                                ₹<span th:text="${item.price}">
+                                    0
+                                </span>
+
+                            </span>
+
+                        </p>
+
+
+
+                        <!-- QUANTITY -->
+
+                        <p class="product-info quantity-row">
+
+                            Quantity:
+
+                            <span class="quantity"
+                                  th:text="${item.quantity}">
+
+                                1
+
+                            </span>
+
+                        </p>
+
+
+
+                        <!-- SUBTOTAL -->
+
+                        <p class="subtotal">
+
+                            Subtotal:
+
+                            ₹<span th:text="${item.price * item.quantity}">
+                                0
+                            </span>
+
+                        </p>
+
+
+                    </div>
+
+
+
+                    <!-- =========================================
+                         ACTIONS
+                    ========================================== -->
+
+                    <div class="button-section">
+
+
+                        <!-- ADD SAREE -->
+
+                        <form class="action-form"
+                              th:if="${item.productType == 'SAREE'}"
+                              th:action="@{'/cart/add/saree/' + ${item.productId}}"
+                              method="post">
+
+                            <button type="submit"
+                                    class="increase-btn">
+
+                                + Add One More
+
+                            </button>
+
+                        </form>
+
+
+
+                        <!-- ADD SILK -->
+
+                        <form class="action-form"
+                              th:if="${item.productType == 'SILK'}"
+                              th:action="@{'/cart/add/silk/' + ${item.productId}}"
+                              method="post">
+
+                            <button type="submit"
+                                    class="increase-btn">
+
+                                + Add One More
+
+                            </button>
+
+                        </form>
+
+
+
+                        <!-- REMOVE SAREE -->
+
+                        <form class="action-form"
+                              th:if="${item.productType == 'SAREE'}"
+                              th:action="@{'/cart/remove/saree/' + ${item.productId}}"
+                              method="post">
+
+                            <button type="submit"
+                                    class="remove-btn">
+
+                                − Remove One
+
+                            </button>
+
+                        </form>
+
+
+
+                        <!-- REMOVE SILK -->
+
+                        <form class="action-form"
+                              th:if="${item.productType == 'SILK'}"
+                              th:action="@{'/cart/remove/silk/' + ${item.productId}}"
+                              method="post">
+
+                            <button type="submit"
+                                    class="remove-btn">
+
+                                − Remove One
+
+                            </button>
+
+                        </form>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ORDER SUMMARY
+            ================================================== -->
+
+            <aside class="summary-card">
+
+
+                <h3>
+                    Order Summary
+                </h3>
+
+
+                <div class="summary-line">
+
+                    <span>
+                        Items
+                    </span>
+
+                    <strong th:text="${cart.items.size()}">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-line">
+
+                    <span>
+                        Product Total
+                    </span>
+
+                    <strong>
+                        ₹<span th:text="${totalAmount}">
+                            0
+                        </span>
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-line">
+
+                    <span>
+                        Delivery
+                    </span>
+
+                    <strong>
+                        Free
+                    </strong>
+
+                </div>
+
+
+                <hr class="summary-divider">
+
+
+                <div class="summary-total">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <span>
+
+                        ₹<span th:text="${totalAmount}">
+                            0
+                        </span>
+
+                    </span>
+
+                </div>
+
+
+                <!--
+                     Connect this button to your checkout controller
+                     when checkout is implemented.
+                -->
+
+                <a th:href="@{/checkout}"
+                   class="checkout-btn"
+                   style="display:flex;align-items:center;justify-content:center;">
+
+                    Proceed to Checkout →
+
+                </a>
+
+
+                <div class="secure-note">
+
+                    🔒 Secure & safe shopping experience
+
+                </div>
+
+
+                <div class="benefits">
+
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            🚚
+                        </div>
+
+                        <span>
+                            Reliable delivery
+                        </span>
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            ✨
+                        </div>
+
+                        <span>
+                            Authentic silk & sarees
+                        </span>
+
+                    </div>
+
+
+                    <div class="benefit">
+
+                        <div class="benefit-icon">
+                            ❤️
+                        </div>
+
+                        <span>
+                            Carefully selected for you
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+            </aside>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             MOBILE SUMMARY
+        ====================================================== -->
+
+        <div class="mobile-summary">
+
+
+            <div class="mobile-total">
+
+                <small>
+                    Total Amount
+                </small>
+
+                <strong>
+
+                    ₹<span th:text="${totalAmount}">
+                        0
+                    </span>
+
+                </strong>
+
+            </div>
+
+
+            <a th:href="@{/checkout}"
+               class="mobile-checkout"
+               style="display:inline-flex;align-items:center;justify-content:center;text-align:center;">
+
+                Checkout →
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</main>
+
+
+</body>
+
+</html>

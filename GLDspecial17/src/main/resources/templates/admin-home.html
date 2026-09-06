@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#5b101c">
+
+    <title>Vastra Mane | Admin Home</title>
+
+
+    <!-- =====================================================
+         FONT
+    ====================================================== -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ====================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: "Inter", sans-serif;
+
+            background: #f7f5f3;
+
+            color: #32151d;
+
+            min-height: 100vh;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
+        .header {
+
+            background: #5b101c;
+
+            min-height: 88px;
+
+            padding: 12px 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            box-shadow:
+                0 4px 18px rgba(70, 10, 20, 0.18);
+        }
+
+
+        /* LOGO */
+
+        .logo {
+
+            height: 64px;
+
+            width: 64px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+
+            background: #5b101c;
+        }
+
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .brand-text h1 {
+
+            color: #ffffff;
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 25px;
+
+            font-weight: 600;
+        }
+
+
+        .brand-text p {
+
+            color: #e7c98d;
+
+            font-size: 10px;
+
+            letter-spacing: 2px;
+
+            margin-top: 3px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* LOGOUT */
+
+        .logout {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: white;
+
+            border: 1px solid rgba(255,255,255,.3);
+
+            padding: 9px 14px;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+
+            transition: .2s;
+        }
+
+
+        .logout:hover {
+
+            background: white;
+
+            color: #5b101c;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ====================================================== */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 1050px;
+
+            margin: auto;
+
+            padding: 32px 25px 50px;
+        }
+
+
+        /* =====================================================
+           WELCOME
+        ====================================================== */
+
+        .welcome {
+
+            margin-bottom: 28px;
+        }
+
+
+        .welcome h2 {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 30px;
+
+            color: #4d1622;
+
+            margin-bottom: 6px;
+        }
+
+
+        .welcome p {
+
+            color: #807176;
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           ALERT
+        ====================================================== */
+
+        .message {
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            margin-bottom: 20px;
+
+            font-size: 12px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .success {
+
+            background: #eaf7ed;
+
+            color: #23723b;
+
+            border: 1px solid #ccebd4;
+        }
+
+
+        .failure {
+
+            background: #fff0f0;
+
+            color: #ad2929;
+
+            border: 1px solid #f1d1d1;
+        }
+
+
+        /* =====================================================
+           SECTION TITLE
+        ====================================================== */
+
+        .section-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .section-title h3 {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 22px;
+
+            color: #4d1622;
+        }
+
+
+        .gold-line {
+
+            width: 35px;
+
+            height: 2px;
+
+            background: #c49a54;
+        }
+
+
+        /* =====================================================
+           MAIN CARDS
+        ====================================================== */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .card {
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            border: 1px solid #ece6e3;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 20px rgba(50,20,25,.06);
+
+            transition: .25s;
+        }
+
+
+        .card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 10px 28px rgba(50,20,25,.10);
+        }
+
+
+        /* CARD TOP */
+
+        .card-top {
+
+            padding: 25px 23px 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+        }
+
+
+        .icon {
+
+            width: 58px;
+
+            height: 58px;
+
+            min-width: 58px;
+
+            border-radius: 14px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+
+        .saree-icon {
+
+            background: #f5e4e9;
+
+            color: #681625;
+        }
+
+
+        .silk-icon {
+
+            background: #f7edda;
+
+            color: #9a6c29;
+        }
+
+
+        .card-top h4 {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 23px;
+
+            color: #421723;
+
+            margin-bottom: 5px;
+        }
+
+
+        .card-top p {
+
+            font-size: 11px;
+
+            color: #8a7b80;
+
+            line-height: 1.5;
+        }
+
+
+        /* CARD BUTTONS */
+
+        .card-buttons {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 9px;
+
+            padding: 0 15px 15px;
+        }
+
+
+        .button {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            min-height: 44px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            transition: .2s;
+        }
+
+
+        .button:hover {
+
+            opacity: .85;
+        }
+
+
+        .add-saree {
+
+            background: #641727;
+
+            color: white;
+        }
+
+
+        .manage-saree {
+
+            background: #f5eaed;
+
+            color: #641727;
+        }
+
+
+        .add-silk {
+
+            background: #a27432;
+
+            color: white;
+        }
+
+
+        .manage-silk {
+
+            background: #f8f0e2;
+
+            color: #876020;
+        }
+
+
+        /* =====================================================
+           QUICK ACTIONS
+        ====================================================== */
+
+        .quick-section {
+
+            margin-top: 5px;
+        }
+
+
+        .quick-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .quick-card {
+
+            background: white;
+
+            border: 1px solid #ece6e3;
+
+            border-radius: 12px;
+
+            min-height: 100px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            color: #4d1825;
+
+            transition: .2s;
+        }
+
+
+        .quick-card:hover {
+
+            border-color: #c9a064;
+
+            background: #fffdf9;
+        }
+
+
+        .quick-card-icon {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 10px;
+
+            background: #f5e8eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #641727;
+
+            font-size: 14px;
+        }
+
+
+        .quick-card span {
+
+            font-size: 10px;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           STORE BANNER
+        ====================================================== */
+
+        .store-banner {
+
+            margin-top: 35px;
+
+            background: #5b101c;
+
+            border-radius: 15px;
+
+            padding: 22px 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: white;
+        }
+
+
+        .store-banner h3 {
+
+            font-family: "Playfair Display", serif;
+
+            font-size: 20px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .store-banner p {
+
+            color: #d9c1c8;
+
+            font-size: 10px;
+        }
+
+
+        .view-store {
+
+            background: #c49a54;
+
+            color: #35121b;
+
+            padding: 11px 17px;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 35px;
+
+            color: #9a8d92;
+
+            font-size: 10px;
+        }
+
+
+        .footer strong {
+
+            color: #641727;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media(max-width: 700px) {
+
+
+            body {
+
+                background: #f7f5f3;
+            }
+
+
+            /* HEADER */
+
+            .header {
+
+                min-height: 76px;
+
+                padding: 9px 14px;
+            }
+
+
+            .logo {
+
+                width: 55px;
+
+                height: 55px;
+            }
+
+
+            .brand {
+
+                gap: 9px;
+            }
+
+
+            .brand-text h1 {
+
+                font-size: 20px;
+            }
+
+
+            .brand-text p {
+
+                font-size: 7px;
+
+                letter-spacing: 1.5px;
+            }
+
+
+            .logout {
+
+                width: 38px;
+
+                height: 38px;
+
+                padding: 0;
+
+                justify-content: center;
+
+                border-radius: 9px;
+            }
+
+
+            .logout span {
+
+                display: none;
+            }
+
+
+            /* MAIN */
+
+            .container {
+
+                padding: 23px 13px 30px;
+            }
+
+
+            /* WELCOME */
+
+            .welcome {
+
+                margin-bottom: 22px;
+            }
+
+
+            .welcome h2 {
+
+                font-size: 26px;
+            }
+
+
+            .welcome p {
+
+                font-size: 11px;
+            }
+
+
+            /* SECTION */
+
+            .section-title {
+
+                margin-bottom: 12px;
+            }
+
+
+            .section-title h3 {
+
+                font-size: 20px;
+            }
+
+
+            /* CARDS */
+
+            .cards {
+
+                grid-template-columns: 1fr;
+
+                gap: 13px;
+
+                margin-bottom: 27px;
+            }
+
+
+            .card {
+
+                border-radius: 14px;
+            }
+
+
+            .card-top {
+
+                padding: 18px;
+
+                gap: 13px;
+            }
+
+
+            .icon {
+
+                width: 50px;
+
+                height: 50px;
+
+                min-width: 50px;
+
+                border-radius: 12px;
+
+                font-size: 21px;
+            }
+
+
+            .card-top h4 {
+
+                font-size: 21px;
+            }
+
+
+            .card-top p {
+
+                font-size: 9px;
+            }
+
+
+            .card-buttons {
+
+                padding: 0 12px 12px;
+
+                gap: 7px;
+            }
+
+
+            .button {
+
+                min-height: 43px;
+
+                font-size: 10px;
+            }
+
+
+            /* QUICK */
+
+            .quick-grid {
+
+                grid-template-columns: 1fr 1fr;
+
+                gap: 9px;
+            }
+
+
+            .quick-card {
+
+                min-height: 88px;
+
+                border-radius: 11px;
+            }
+
+
+            .quick-card span {
+
+                font-size: 9px;
+            }
+
+
+            /* STORE */
+
+            .store-banner {
+
+                margin-top: 27px;
+
+                padding: 18px;
+
+                border-radius: 13px;
+
+                display: block;
+            }
+
+
+            .store-banner h3 {
+
+                font-size: 19px;
+            }
+
+
+            .store-banner p {
+
+                font-size: 9px;
+
+                line-height: 1.5;
+
+                margin-bottom: 15px;
+            }
+
+
+            .view-store {
+
+                display: inline-flex;
+
+                align-items: center;
+
+                gap: 6px;
+
+                padding: 10px 14px;
+
+                font-size: 9px;
+            }
+
+
+            .footer {
+
+                margin-top: 25px;
+
+                font-size: 9px;
+            }
+
+        }
+
+
+        /* =====================================================
+           VERY SMALL MOBILE
+        ====================================================== */
+
+        @media(max-width: 360px) {
+
+
+            .brand-text h1 {
+
+                font-size: 18px;
+            }
+
+
+            .logo {
+
+                width: 50px;
+
+                height: 50px;
+            }
+
+
+            .welcome h2 {
+
+                font-size: 23px;
+            }
+
+
+            .card-top h4 {
+
+                font-size: 19px;
+            }
+
+
+            .quick-card {
+
+                min-height: 82px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+
+    <div class="brand">
+
+
+        <!-- YOUR VASTRA MANE LOGO -->
+
+        <img
+            class="logo"
+            src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787580557/Products/b8ijrczvf7ep5xtjnmjt.jpg"
+            alt="Vastra Mane Logo">
+
+
+        <div class="brand-text">
+
+            <h1>Vastra Mane</h1>
+
+            <p>Silk & Saree · Guledgudda</p>
+
+        </div>
+
+
+    </div>
+
+
+    <a href="/logout"
+       class="logout">
+
+        <span>Logout</span>
+
+        <span>↗</span>
+
+    </a>
+
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- =====================================================
+         ALERTS
+    ====================================================== -->
+
+    <div th:if="${session.failure != null}"
+         class="message failure">
+
+        <span>⚠</span>
+
+        <span th:text="${session.failure}"></span>
+
+    </div>
+
+
+    <div th:if="${session.success != null}"
+         class="message success">
+
+        <span>✓</span>
+
+        <span th:text="${session.success}"></span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         WELCOME
+    ====================================================== -->
+
+    <section class="welcome">
+
+        <h2>
+            Welcome, Admin
+        </h2>
+
+        <p>
+            Manage your Vastra Mane collection from here.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PRODUCT MANAGEMENT
+    ====================================================== -->
+
+    <div class="section-title">
+
+        <div class="gold-line"></div>
+
+        <h3>
+            Products
+        </h3>
+
+    </div>
+
+
+
+    <section class="cards">
+
+
+        <!-- =================================================
+             SAREE
+        ================================================== -->
+
+        <div class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="icon saree-icon">
+
+                    <span>👗</span>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Sarees
+                    </h4>
+
+                    <p>
+                        Add and manage your saree collection.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card-buttons">
+
+
+                <a href="/admin/add-saree"
+                   class="button add-saree">
+
+                    <span>＋</span>
+
+                    Add Saree
+
+                </a>
+
+
+                <a href="/admin/manage-saree"
+                   class="button manage-saree">
+
+                    <span>☰</span>
+
+                    Manage
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             SILK
+        ================================================== -->
+
+        <div class="card">
+
+
+            <div class="card-top">
+
+
+                <div class="icon silk-icon">
+
+                    <span>✦</span>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Silk
+                    </h4>
+
+                    <p>
+                        Add and manage your premium silk collection.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="card-buttons">
+
+
+                <a href="/admin/add-silk"
+                   class="button add-silk">
+
+                    <span>＋</span>
+
+                    Add Silk
+
+                </a>
+
+
+                <a href="/admin/manage-silk"
+                   class="button manage-silk">
+
+                    <span>☰</span>
+
+                    Manage
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             ORDERS
+        ================================================== -->
+
+        <div class="card">
+
+            <div class="card-top">
+
+                <div class="icon saree-icon">
+
+                    <span>📦</span>
+
+                </div>
+
+                <div>
+
+                    <h4>
+                        Orders
+                    </h4>
+
+                    <p>
+                        View customer &amp; item details and manage cancellations.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="card-buttons">
+
+                <a href="/admin/orders"
+                   class="button manage-saree">
+
+                    <span>☰</span>
+
+                    View Orders
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ====================================================== -->
+
+    <div class="quick-section">
+
+
+        <div class="section-title">
+
+            <div class="gold-line"></div>
+
+            <h3>
+                Quick Access
+            </h3>
+
+        </div>
+
+
+        <div class="quick-grid">
+
+
+            <a href="/admin/add-saree"
+               class="quick-card">
+
+                <div class="quick-card-icon">
+                    ＋
+                </div>
+
+                <span>
+                    Add Saree
+                </span>
+
+            </a>
+
+
+            <a href="/admin/manage-saree"
+               class="quick-card">
+
+                <div class="quick-card-icon">
+                    ☰
+                </div>
+
+                <span>
+                    Saree List
+                </span>
+
+            </a>
+
+
+            <a href="/admin/add-silk"
+               class="quick-card">
+
+                <div class="quick-card-icon">
+                    ＋
+                </div>
+
+                <span>
+                    Add Silk
+                </span>
+
+            </a>
+
+
+            <a href="/admin/manage-silk"
+               class="quick-card">
+
+                <div class="quick-card-icon">
+                    ☰
+                </div>
+
+                <span>
+                    Silk List
+                </span>
+
+            </a>
+
+
+            <a href="/admin/orders"
+               class="quick-card">
+
+                <div class="quick-card-icon">
+                    📦
+                </div>
+
+                <span>
+                    Orders
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STORE BANNER
+    ====================================================== -->
+
+    <section class="store-banner">
+
+
+        <div>
+
+            <h3>
+                Vastra Mane
+            </h3>
+
+            <p>
+                Traditional silk & sarees from Guledgudda.
+            </p>
+
+        </div>
+
+
+        <a href="/"
+           class="view-store">
+
+            View Store →
+
+        </a>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        © 2026
+        <strong>Vastra Mane</strong>
+        · Admin Panel
+
+    </footer>
+
+
+</main>
+
+
+<!-- =========================================================
+     AUTO HIDE ALERTS
+========================================================= -->
+
+<script>
+
+    setTimeout(function () {
+
+        const messages =
+            document.querySelectorAll(".message");
+
+        messages.forEach(function (message) {
+
+            message.style.transition =
+                "opacity .4s ease";
+
+            message.style.opacity = "0";
+
+            setTimeout(function () {
+
+                message.remove();
+
+            }, 400);
+
+        });
+
+    }, 5000);
+
+</script>
+
+
+</body>
+
+</html>
+

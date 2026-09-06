@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="theme-color" content="#7b1e1e">
+
+    <title>Vastra Mane | Silk & Sarees</title>
+
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                linear-gradient(
+                    180deg,
+                    #fffaf6 0%,
+                    #faf5ef 45%,
+                    #fffaf6 100%
+                );
+            color: #30221d;
+            overflow-x: hidden;
+        }
+
+        body,
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+            height: 72px;
+            width: 100%;
+            background: rgba(255,255,255,0.97);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            border-bottom: 1px solid #eadbd1;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(73,35,25,0.07);
+        }
+
+
+        /* =========================================================
+           BRAND
+        ========================================================= */
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            min-width: 0;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #c99a45;
+            box-shadow: 0 3px 10px rgba(123,30,30,0.15);
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #7b1e1e;
+            white-space: nowrap;
+        }
+
+        .brand-name::after {
+            content: "";
+            display: block;
+            width: 45px;
+            height: 2px;
+            margin-top: 3px;
+            background: linear-gradient(
+                90deg,
+                #c99a45,
+                #e5c27b
+            );
+        }
+
+
+        /* =========================================================
+           LOGIN BUTTON
+        ========================================================= */
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: linear-gradient(
+                135deg,
+                #7b1e1e,
+                #a52b2b
+            );
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(123,30,30,0.22);
+            transition: 0.25s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(123,30,30,0.30);
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero-section {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: #2d1815;
+        }
+
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .hero-slide.active {
+            display: block;
+            animation: heroFade 0.7s ease;
+        }
+
+        @keyframes heroFade {
+
+            from {
+                opacity: 0.2;
+                transform: scale(1.02);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+
+        .hero-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(35,10,8,0.78) 0%,
+                    rgba(35,10,8,0.50) 38%,
+                    rgba(35,10,8,0.10) 75%
+                );
+            pointer-events: none;
+        }
+
+
+        /* =========================================================
+           HERO CONTENT
+        ========================================================= */
+
+        .hero-content {
+            position: absolute;
+            left: 8%;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 550px;
+            color: white;
+            z-index: 5;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 7px 13px;
+            margin-bottom: 15px;
+            border-radius: 20px;
+            background: rgba(201,154,69,0.95);
+            color: #351714;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-content h1 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 52px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-width: 480px;
+            color: #fff7ef;
+        }
+
+        .shop-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 26px;
+            border-radius: 30px;
+            background: linear-gradient(
+                135deg,
+                #ffffff,
+                #fff4dc
+            );
+            color: #7b1e1e;
+            font-weight: 800;
+            box-shadow: 0 7px 20px rgba(0,0,0,0.20);
+            transition: 0.25s ease;
+        }
+
+        .shop-btn:hover {
+            transform: translateY(-3px);
+            background: #c99a45;
+            color: white;
+        }
+
+
+        /* =========================================================
+           HERO ARROWS
+        ========================================================= */
+
+        .hero-prev,
+        .hero-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 46px;
+            height: 46px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(5px);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.25s ease;
+        }
+
+        .hero-prev {
+            left: 22px;
+        }
+
+        .hero-next {
+            right: 22px;
+        }
+
+        .hero-prev:hover,
+        .hero-next:hover {
+            background: #7b1e1e;
+            border-color: #c99a45;
+        }
+
+
+        /* =========================================================
+           HERO DOTS
+        ========================================================= */
+
+        .hero-dots {
+            position: absolute;
+            bottom: 18px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 20;
+        }
+
+        .hero-dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.55;
+            margin: 4px;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .hero-dot.active {
+            width: 25px;
+            border-radius: 10px;
+            background: #d5aa58;
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            width: 92%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+
+        /* =========================================================
+           COLLECTION SECTION
+        ========================================================= */
+
+        .category-section {
+            margin-top: 42px;
+            margin-bottom: 50px;
+        }
+
+
+        /* =========================================================
+           SECTION HEADER
+        ========================================================= */
+
+        .section-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .section-title-wrapper {
+            position: relative;
+        }
+
+        .section-kicker {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #c28d36;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .section-header h2 {
+            font-family: Georgia, "Times New Roman", serif;
+            color: #7b1e1e;
+            font-size: 29px;
+            line-height: 1.2;
+        }
+
+        .section-header p {
+            color: #806f67;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .view-text {
+            color: #7b1e1e;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           DECORATIVE LINE
+        ========================================================= */
+
+        .gold-line {
+            width: 70px;
+            height: 3px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background: linear-gradient(
+                90deg,
+                #7b1e1e,
+                #c99a45
+            );
+        }
+
+
+        /* =========================================================
+           CATEGORY WRAPPER
+        ========================================================= */
+
+        .category-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+
+        /* =========================================================
+           PRODUCT TRACK
+        ========================================================= */
+
+        .product-track {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            padding: 5px 4px 18px;
+            width: 100%;
+
+            /* Mobile touch scrolling */
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+            overscroll-behavior-x: contain;
+        }
+
+        .product-track::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        /* =========================================================
+           PRODUCT CARD
+        ========================================================= */
+
+        .product-card {
+            flex: 0 0 220px;
+            background: #ffffff;
+            border: 1px solid #eadbd1;
+            border-radius: 13px;
+            overflow: hidden;
+            box-shadow:
+                0 5px 18px rgba(73,35,25,0.09);
+            transition: transform 0.25s ease,
+                        box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 12px 25px rgba(73,35,25,0.16);
+        }
+
+
+        /* =========================================================
+           PRODUCT IMAGE WRAPPER
+        ========================================================= */
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            background: #f6eee7;
+        }
+
+
+        /* =========================================================
+           PRODUCT IMAGE
+        ========================================================= */
+
+        .product-image {
+            width: 100%;
+            height: 275px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #f7eee7,
+                    #ead8cb
+                );
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .product-image img.active {
+            display: block;
+            animation: imageFade 0.3s ease;
+        }
+
+        @keyframes imageFade {
+
+            from {
+                opacity: 0.4;
+            }
+
+            to {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* =========================================================
+           PRODUCT BADGE
+        ========================================================= */
+
+        .product-badge {
+            position: absolute;
+            top: 9px;
+            left: 9px;
+            z-index: 10;
+            padding: 5px 9px;
+            border-radius: 15px;
+            background: linear-gradient(
+                135deg,
+                #7b1e1e,
+                #a92e2e
+            );
+            color: white;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+        }
+
+
+        /* =========================================================
+           IMAGE ARROWS
+        ========================================================= */
+
+        .image-prev,
+        .image-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(40,20,15,0.58);
+            backdrop-filter: blur(4px);
+            color: white;
+            cursor: pointer;
+            z-index: 15;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s ease;
+        }
+
+        .image-prev {
+            left: 7px;
+        }
+
+        .image-next {
+            right: 7px;
+        }
+
+        .image-prev:hover,
+        .image-next:hover {
+            background: #7b1e1e;
+        }
+
+
+        /* =========================================================
+           IMAGE DOTS
+        ========================================================= */
+
+        .image-dots {
+            position: absolute;
+            bottom: 7px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 15;
+        }
+
+        .image-dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: white;
+            margin: 2px;
+            opacity: 0.75;
+        }
+
+        .image-dot.active {
+            width: 14px;
+            border-radius: 5px;
+            background: #c99a45;
+            opacity: 1;
+        }
+
+
+        /* =========================================================
+           PRODUCT INFO
+        ========================================================= */
+
+        .product-info {
+            padding: 12px 10px 14px;
+            text-align: center;
+            background: white;
+        }
+
+        .product-name {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #332622;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .product-type {
+            color: #88776e;
+            font-size: 11px;
+            margin-bottom: 7px;
+        }
+
+        .product-type span {
+            color: #7b1e1e;
+            font-weight: 700;
+        }
+
+        .price {
+            font-size: 17px;
+            font-weight: 800;
+            color: #7b1e1e;
+        }
+
+        .price-symbol {
+            color: #c28d36;
+        }
+
+
+        /* =========================================================
+           CATEGORY ARROWS
+        ========================================================= */
+
+        .category-prev,
+        .category-next {
+            position: absolute;
+            top: 43%;
+            transform: translateY(-50%);
+            width: 38px;
+            height: 38px;
+            border: 2px solid white;
+            border-radius: 50%;
+            background: #7b1e1e;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            z-index: 30;
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s ease;
+        }
+
+        .category-prev {
+            left: -18px;
+        }
+
+        .category-next {
+            right: -18px;
+        }
+
+        .category-prev:hover,
+        .category-next:hover {
+            background: #531313;
+            transform: translateY(-50%) scale(1.08);
+        }
+
+
+        /* =========================================================
+           NO PRODUCTS
+        ========================================================= */
+
+        .no-products {
+            width: 100%;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border: 1px dashed #d8c3b6;
+            border-radius: 13px;
+            color: #8b7770;
+            flex: 1;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            margin-top: 60px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #2b1815,
+                    #42211c
+                );
+            color: #ddd;
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 3px solid #c99a45;
+        }
+
+        .footer-brand {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 25px;
+            color: white;
+            letter-spacing: 2px;
+            margin-bottom: 9px;
+        }
+
+        .footer-gold {
+            color: #d6aa60;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: #cbbcb6;
+            margin-top: 6px;
+        }
+
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (min-width: 601px)
+               and (max-width: 1000px) {
+
+            .header {
+                padding: 0 25px;
+            }
+
+            .hero-slider {
+                height: 430px;
+            }
+
+            .hero-content h1 {
+                font-size: 42px;
+            }
+
+            .product-card {
+                flex: 0 0 200px;
+            }
+
+            .product-image {
+                height: 250px;
+            }
+
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 600px) {
+
+            body {
+                background: #fffaf6;
+            }
+
+
+            /* HEADER */
+
+            .header {
+                height: 62px;
+                padding: 0 13px;
+            }
+
+            .brand {
+                gap: 7px;
+            }
+
+            .brand-logo {
+                width: 40px;
+                height: 40px;
+                border-width: 1.5px;
+            }
+
+            .brand-name {
+                font-size: 17px;
+                letter-spacing: 1.3px;
+            }
+
+            .brand-name::after {
+                width: 32px;
+                height: 1.5px;
+                margin-top: 2px;
+            }
+
+            .login-btn {
+                min-width: 65px;
+                padding: 8px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+            }
+
+
+            /* HERO */
+
+            .hero-slider {
+                height: 390px;
+            }
+
+            .hero-slide img {
+                object-position: center;
+            }
+
+            .hero-slide::after {
+                background:
+                    linear-gradient(
+                        180deg,
+                        rgba(25,8,5,0.10) 0%,
+                        rgba(25,8,5,0.25) 30%,
+                        rgba(25,8,5,0.80) 100%
+                    );
+            }
+
+            .hero-content {
+                left: 6%;
+                right: 6%;
+                top: auto;
+                bottom: 48px;
+                transform: none;
+                max-width: none;
+            }
+
+            .hero-tag {
+                font-size: 9px;
+                padding: 6px 10px;
+                margin-bottom: 8px;
+            }
+
+            .hero-content h1 {
+                font-size: 30px;
+                line-height: 1.12;
+                margin-bottom: 9px;
+            }
+
+            .hero-content p {
+                font-size: 13px;
+                line-height: 1.45;
+                margin-bottom: 14px;
+                max-width: 310px;
+            }
+
+            .shop-btn {
+                padding: 10px 18px;
+                font-size: 12px;
+            }
+
+
+            /* HERO BUTTONS */
+
+            .hero-prev,
+            .hero-next {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+                top: 45%;
+            }
+
+            .hero-prev {
+                left: 8px;
+            }
+
+            .hero-next {
+                right: 8px;
+            }
+
+            .hero-dots {
+                bottom: 12px;
+            }
+
+            .hero-dot {
+                width: 7px;
+                height: 7px;
+                margin: 3px;
+            }
+
+            .hero-dot.active {
+                width: 19px;
+            }
+
+
+            /* MAIN */
+
+            .main {
+                width: 94%;
+            }
+
+
+            /* SECTION */
+
+            .category-section {
+                margin-top: 28px;
+                margin-bottom: 32px;
+            }
+
+            .section-header {
+                margin-bottom: 13px;
+            }
+
+            .section-kicker {
+                font-size: 9px;
+                letter-spacing: 1.5px;
+            }
+
+            .section-header h2 {
+                font-size: 21px;
+            }
+
+            .section-header p {
+                font-size: 10px;
+                margin-top: 4px;
+            }
+
+            .view-text {
+                font-size: 10px;
+            }
+
+            .gold-line {
+                width: 48px;
+                height: 2px;
+                margin-top: 7px;
+            }
+
+
+            /* PRODUCTS */
+
+            .product-track {
+                gap: 9px;
+                padding:
+                    3px
+                    3px
+                    14px;
+            }
+
+            /*
+                Two products fit comfortably on
+                360px - 430px Android screens.
+            */
+
+            .product-card {
+                flex: 0 0 calc(
+                    50vw - 23px
+                );
+                min-width: 148px;
+                max-width: 190px;
+                border-radius: 10px;
+                box-shadow:
+                    0 3px 12px rgba(73,35,25,0.10);
+            }
+
+            .product-image {
+                height: 205px;
+            }
+
+            .product-info {
+                padding: 9px 6px 11px;
+            }
+
+            .product-name {
+                font-size: 13px;
+                margin-bottom: 4px;
+            }
+
+            .product-type {
+                font-size: 9px;
+                margin-bottom: 5px;
+            }
+
+            .price {
+                font-size: 14px;
+            }
+
+
+            /* BADGE */
+
+            .product-badge {
+                top: 6px;
+                left: 6px;
+                padding: 4px 7px;
+                font-size: 7px;
+            }
+
+
+            /* IMAGE BUTTONS */
+
+            .image-prev,
+            .image-next {
+                width: 27px;
+                height: 27px;
+                font-size: 10px;
+            }
+
+            .image-prev {
+                left: 5px;
+            }
+
+            .image-next {
+                right: 5px;
+            }
+
+            .image-dot {
+                width: 4px;
+                height: 4px;
+                margin: 2px;
+            }
+
+            .image-dot.active {
+                width: 11px;
+            }
+
+
+            /* CATEGORY ARROWS */
+
+            .category-prev,
+            .category-next {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+                border-width: 1.5px;
+            }
+
+            .category-prev {
+                left: -7px;
+            }
+
+            .category-next {
+                right: -7px;
+            }
+
+
+            /* FOOTER */
+
+            .footer {
+                margin-top: 35px;
+                padding: 30px 15px;
+            }
+
+            .footer-brand {
+                font-size: 21px;
+            }
+
+            .footer-gold {
+                font-size: 9px;
+            }
+
+            .footer p {
+                font-size: 10px;
+            }
+
+        }
+
+
+        /* =========================================================
+           VERY SMALL ANDROID DEVICES
+        ========================================================= */
+
+        @media (max-width: 360px) {
+
+            .brand-name {
+                font-size: 15px;
+            }
+
+            .hero-slider {
+                height: 370px;
+            }
+
+            .hero-content h1 {
+                font-size: 27px;
+            }
+
+            .hero-content p {
+                font-size: 12px;
+            }
+
+            .product-card {
+                flex: 0 0 145px;
+            }
+
+            .product-image {
+                height: 190px;
+            }
+
+            .section-header h2 {
+                font-size: 20px;
+            }
+
+        }
+
+
+        /* =========================================================
+           LARGE MOBILE DEVICES
+        ========================================================= */
+
+        @media (min-width: 390px)
+               and (max-width: 600px) {
+
+            .product-card {
+                flex: 0 0 175px;
+            }
+
+            .product-image {
+                height: 220px;
+            }
+
+        }
+
+
+        /* =========================================================
+           TOUCH DEVICES
+        ========================================================= */
+
+        @media (hover: none) {
+
+            .product-card:hover {
+                transform: none;
+            }
+
+            .login-btn:hover,
+            .shop-btn:hover,
+            .category-prev:hover,
+            .category-next:hover {
+                transform: none;
+            }
+
+            .product-card:active {
+                transform: scale(0.985);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <a href="/" class="brand">
+
+        <img
+            src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787580557/Products/b8ijrczvf7ep5xtjnmjt.jpg"
+            alt="Vastra Mane Logo"
+            class="brand-logo"
+        >
+
+        <span class="brand-name">
+            VASTRA MANE
+        </span>
+
+    </a>
+
+
+    <div style="display:flex;align-items:center;gap:16px;">
+
+        <a th:href="@{/my-orders}"
+           style="font-size:13.5px;font-weight:700;color:#5c1725;">
+
+            My Orders
+
+        </a>
+
+        <a th:href="@{/login}"
+           class="login-btn">
+
+            Login
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     HERO SECTION
+========================================================= -->
+
+<section class="hero-section">
+
+    <div class="hero-slider">
+
+
+        <!-- =====================================================
+             HERO SLIDE 1
+        ====================================================== -->
+
+        <div class="hero-slide active">
+
+            <img
+                src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787632408/Products/ka5s8oslpwudgc3em2yj.jpg"
+                alt="Vastra Mane Saree Collection"
+            >
+
+
+            <div class="hero-content">
+
+                <span class="hero-tag">
+                    Handpicked Collection
+                </span>
+
+                <h1>
+                    Timeless Elegance
+                </h1>
+
+                <p>
+                    Discover beautiful traditional silk
+                    and handloom sarees crafted with
+                    elegance and tradition.
+                </p>
+
+                <a href="#sarees"
+                   class="shop-btn">
+
+                    Shop Sarees →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =====================================================
+             HERO SLIDE 2
+        ====================================================== -->
+
+        <div class="hero-slide">
+
+            <img
+                src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787632291/Products/aiwtdpsmxhxummqfclhq.jpg"
+                alt="Vastra Mane Silk Collection"
+            >
+
+
+            <div class="hero-content">
+
+                <span class="hero-tag">
+                    Premium Silk
+                </span>
+
+                <h1>
+                    Tradition Woven With Love
+                </h1>
+
+                <p>
+                    Explore our exclusive collection
+                    of elegant sarees and premium silks.
+                </p>
+
+                <a href="#silks"
+                   class="shop-btn">
+
+                    Explore Silks →
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- HERO PREVIOUS -->
+
+        <button type="button"
+                class="hero-prev"
+                aria-label="Previous slide">
+
+            ❮
+
+        </button>
+
+
+
+        <!-- HERO NEXT -->
+
+        <button type="button"
+                class="hero-next"
+                aria-label="Next slide">
+
+            ❯
+
+        </button>
+
+
+
+        <!-- HERO DOTS -->
+
+        <div class="hero-dots">
+
+            <span class="hero-dot active"></span>
+
+            <span class="hero-dot"></span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+    <!-- =====================================================
+         SAREE SECTION
+    ====================================================== -->
+
+    <section id="sarees"
+             class="category-section">
+
+
+        <div class="section-header">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-kicker">
+                    Our Collection
+                </div>
+
+                <h2>
+                    Saree Collection
+                </h2>
+
+                <div class="gold-line"></div>
+
+                <p>
+                    Discover our handpicked saree collection
+                </p>
+
+            </div>
+
+            <span class="view-text">
+                Swipe →
+            </span>
+
+        </div>
+
+
+
+        <div class="category-wrapper">
+
+
+            <!-- LEFT -->
+
+            <button type="button"
+                    class="category-prev saree-prev"
+                    aria-label="Previous sarees">
+
+                ❮
+
+            </button>
+
+
+
+            <!-- SAREE TRACK -->
+
+            <div class="product-track"
+                 id="sareeTrack">
+
+
+                <!-- SAREE PRODUCT -->
+
+                <div class="product-card"
+                     th:each="saree, sareeIndex : ${sarees}"
+                     th:if="${saree.published}">
+
+
+                    <div class="image-wrapper">
+
+
+                        <!-- PRODUCT LINK -->
+
+                        <a th:href="@{/sarees/type/{type}(type=${saree.sareeType})}">
+
+
+                            <div class="product-image">
+
+                                <img
+                                    th:each="image, imageIndex : ${saree.imageLinks}"
+                                    th:src="${image}"
+                                    th:class="${imageIndex.index == 0 ? 'active' : ''}"
+                                    alt="Saree Image"
+                                >
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- BADGE -->
+
+                        <span class="product-badge">
+                            Handloom
+                        </span>
+
+
+                        <!-- IMAGE PREVIOUS -->
+
+                        <button type="button"
+                                class="image-prev"
+                                aria-label="Previous image">
+
+                            ❮
+
+                        </button>
+
+
+                        <!-- IMAGE NEXT -->
+
+                        <button type="button"
+                                class="image-next"
+                                aria-label="Next image">
+
+                            ❯
+
+                        </button>
+
+
+                        <!-- IMAGE DOTS -->
+
+                        <div class="image-dots">
+
+                            <span
+                                class="image-dot"
+                                th:each="image, imageIndex : ${saree.imageLinks}"
+                                th:classappend="${imageIndex.index == 0 ? ' active' : ''}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRODUCT INFO -->
+
+                    <a th:href="@{/sarees/type/{type}(type=${saree.sareeType})}">
+
+                        <div class="product-info">
+
+                            <h3 class="product-name"
+                                th:text="${saree.name}">
+
+                                Saree Name
+
+                            </h3>
+
+
+                            <p class="product-type">
+
+                                Saree Type:
+
+                                <span th:text="${saree.sareeType}">
+                                    Saree
+                                </span>
+
+                            </p>
+
+
+                            <p class="price">
+
+                                <span class="price-symbol">
+                                    ₹
+                                </span>
+
+                                <span th:text="${saree.price}">
+                                    0
+                                </span>
+
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- NO SAREES -->
+
+                <div class="no-products"
+                     th:if="${sarees == null or #lists.isEmpty(sarees)}">
+
+                    No sarees available at the moment.
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT -->
+
+            <button type="button"
+                    class="category-next saree-next"
+                    aria-label="Next sarees">
+
+                ❯
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SILK SECTION
+    ====================================================== -->
+
+    <section id="silks"
+             class="category-section">
+
+
+        <div class="section-header">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-kicker">
+                    Premium Collection
+                </div>
+
+                <h2>
+                    Silk Collection
+                </h2>
+
+                <div class="gold-line"></div>
+
+                <p>
+                    Explore our premium silk collection
+                </p>
+
+            </div>
+
+            <span class="view-text">
+                Swipe →
+            </span>
+
+        </div>
+
+
+
+        <div class="category-wrapper">
+
+
+            <!-- LEFT -->
+
+            <button type="button"
+                    class="category-prev silk-prev"
+                    aria-label="Previous silks">
+
+                ❮
+
+            </button>
+
+
+
+            <!-- SILK TRACK -->
+
+            <div class="product-track"
+                 id="silkTrack">
+
+
+                <!-- SILK PRODUCT -->
+
+                <div class="product-card"
+                     th:each="silkProduct, silkIndex : ${silk}"
+                     th:if="${silkProduct.published}">
+
+
+                    <div class="image-wrapper">
+
+
+                        <!-- PRODUCT LINK -->
+
+                        <a th:href="@{/silks/type/{type}(type=${silkProduct.silkType})}">
+
+
+                            <div class="product-image">
+
+                                <img
+                                    th:each="image, imageIndex : ${silkProduct.imageLinks}"
+                                    th:src="${image}"
+                                    th:class="${imageIndex.index == 0 ? 'active' : ''}"
+                                    alt="Silk Image"
+                                >
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- BADGE -->
+
+                        <span class="product-badge">
+                            Premium Silk
+                        </span>
+
+
+                        <!-- IMAGE PREVIOUS -->
+
+                        <button type="button"
+                                class="image-prev"
+                                aria-label="Previous image">
+
+                            ❮
+
+                        </button>
+
+
+                        <!-- IMAGE NEXT -->
+
+                        <button type="button"
+                                class="image-next"
+                                aria-label="Next image">
+
+                            ❯
+
+                        </button>
+
+
+                        <!-- IMAGE DOTS -->
+
+                        <div class="image-dots">
+
+                            <span
+                                class="image-dot"
+                                th:each="image, imageIndex : ${silkProduct.imageLinks}"
+                                th:classappend="${imageIndex.index == 0 ? ' active' : ''}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRODUCT INFO -->
+
+                    <a th:href="@{/silks/type/{type}(type=${silkProduct.silkType})}">
+
+                        <div class="product-info">
+
+                            <h3 class="product-name"
+                                th:text="${silkProduct.name}">
+
+                                Silk Name
+
+                            </h3>
+
+
+                            <p class="product-type">
+
+                                Silk Type:
+
+                                <span th:text="${silkProduct.silkType}">
+                                    Silk
+                                </span>
+
+                            </p>
+
+
+                            <p class="price">
+
+                                <span class="price-symbol">
+                                    ₹
+                                </span>
+
+                                <span th:text="${silkProduct.price}">
+                                    0
+                                </span>
+
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- NO SILKS -->
+
+                <div class="no-products"
+                     th:if="${silk == null or #lists.isEmpty(silk)}">
+
+                    No silks available at the moment.
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT -->
+
+            <button type="button"
+                    class="category-next silk-next"
+                    aria-label="Next silks">
+
+                ❯
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-brand">
+        VASTRA MANE
+    </div>
+
+    <div class="footer-gold">
+        TRADITION • ELEGANCE • HERITAGE
+    </div>
+
+    <p>
+        Traditional Silk & Sarees — Woven With Tradition
+    </p>
+
+    <p>
+        © 2026 Vastra Mane. All Rights Reserved.
+    </p>
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =========================================================
+       HERO SLIDER
+    ========================================================= */
+
+    const heroSlides =
+        document.querySelectorAll(".hero-slide");
+
+    const heroPrev =
+        document.querySelector(".hero-prev");
+
+    const heroNext =
+        document.querySelector(".hero-next");
+
+    const heroDots =
+        document.querySelectorAll(".hero-dot");
+
+    let heroIndex = 0;
+
+
+    function showHero(index) {
+
+        if (heroSlides.length === 0) {
+            return;
+        }
+
+        if (index >= heroSlides.length) {
+            index = 0;
+        }
+
+        if (index < 0) {
+            index = heroSlides.length - 1;
+        }
+
+
+        heroSlides.forEach(function (slide) {
+
+            slide.classList.remove("active");
+
+        });
+
+
+        heroDots.forEach(function (dot) {
+
+            dot.classList.remove("active");
+
+        });
+
+
+        heroSlides[index].classList.add("active");
+
+
+        if (heroDots[index]) {
+
+            heroDots[index].classList.add("active");
+
+        }
+
+
+        heroIndex = index;
+
+    }
+
+
+    if (heroNext) {
+
+        heroNext.addEventListener("click", function () {
+
+            showHero(heroIndex + 1);
+
+        });
+
+    }
+
+
+    if (heroPrev) {
+
+        heroPrev.addEventListener("click", function () {
+
+            showHero(heroIndex - 1);
+
+        });
+
+    }
+
+
+    heroDots.forEach(function (dot, index) {
+
+        dot.addEventListener("click", function () {
+
+            showHero(index);
+
+        });
+
+    });
+
+
+
+    /* =========================================================
+       SAREE CAROUSEL
+    ========================================================= */
+
+    const sareeTrack =
+        document.getElementById("sareeTrack");
+
+    const sareeNext =
+        document.querySelector(".saree-next");
+
+    const sareePrev =
+        document.querySelector(".saree-prev");
+
+
+    if (sareeTrack && sareeNext) {
+
+        sareeNext.addEventListener("click", function () {
+
+            const card =
+                sareeTrack.querySelector(".product-card");
+
+            const amount =
+                card ? card.offsetWidth + 16 : 300;
+
+            sareeTrack.scrollBy({
+
+                left: amount * 2,
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    }
+
+
+    if (sareeTrack && sareePrev) {
+
+        sareePrev.addEventListener("click", function () {
+
+            const card =
+                sareeTrack.querySelector(".product-card");
+
+            const amount =
+                card ? card.offsetWidth + 16 : 300;
+
+            sareeTrack.scrollBy({
+
+                left: -(amount * 2),
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    }
+
+
+
+    /* =========================================================
+       SILK CAROUSEL
+    ========================================================= */
+
+    const silkTrack =
+        document.getElementById("silkTrack");
+
+    const silkNext =
+        document.querySelector(".silk-next");
+
+    const silkPrev =
+        document.querySelector(".silk-prev");
+
+
+    if (silkTrack && silkNext) {
+
+        silkNext.addEventListener("click", function () {
+
+            const card =
+                silkTrack.querySelector(".product-card");
+
+            const amount =
+                card ? card.offsetWidth + 16 : 300;
+
+            silkTrack.scrollBy({
+
+                left: amount * 2,
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    }
+
+
+    if (silkTrack && silkPrev) {
+
+        silkPrev.addEventListener("click", function () {
+
+            const card =
+                silkTrack.querySelector(".product-card");
+
+            const amount =
+                card ? card.offsetWidth + 16 : 300;
+
+            silkTrack.scrollBy({
+
+                left: -(amount * 2),
+
+                behavior: "smooth"
+
+            });
+
+        });
+
+    }
+
+
+
+    /* =========================================================
+       PRODUCT IMAGE SLIDER
+    ========================================================= */
+
+    const imageWrappers =
+        document.querySelectorAll(".image-wrapper");
+
+
+    imageWrappers.forEach(function (wrapper) {
+
+
+        const images =
+            wrapper.querySelectorAll(".product-image img");
+
+
+        const dots =
+            wrapper.querySelectorAll(".image-dot");
+
+
+        const next =
+            wrapper.querySelector(".image-next");
+
+
+        const prev =
+            wrapper.querySelector(".image-prev");
+
+
+        let currentIndex = 0;
+
+
+        /* NO IMAGE */
+
+        if (images.length === 0) {
+
+            if (next) {
+                next.style.display = "none";
+            }
+
+            if (prev) {
+                prev.style.display = "none";
+            }
+
+            return;
+
+        }
+
+
+        /* ONE IMAGE */
+
+        if (images.length === 1) {
+
+            if (next) {
+                next.style.display = "none";
+            }
+
+            if (prev) {
+                prev.style.display = "none";
+            }
+
+            dots.forEach(function (dot) {
+
+                dot.style.display = "none";
+
+            });
+
+        }
+
+
+        /* SHOW IMAGE */
+
+        function showImage(index) {
+
+
+            if (index >= images.length) {
+
+                index = 0;
+
+            }
+
+
+            if (index < 0) {
+
+                index = images.length - 1;
+
+            }
+
+
+            images.forEach(function (image) {
+
+                image.classList.remove("active");
+
+            });
+
+
+            dots.forEach(function (dot) {
+
+                dot.classList.remove("active");
+
+            });
+
+
+            images[index].classList.add("active");
+
+
+            if (dots[index]) {
+
+                dots[index].classList.add("active");
+
+            }
+
+
+            currentIndex = index;
+
+        }
+
+
+        /* NEXT IMAGE */
+
+        if (next) {
+
+            next.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                showImage(currentIndex + 1);
+
+            });
+
+        }
+
+
+        /* PREVIOUS IMAGE */
+
+        if (prev) {
+
+            prev.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                showImage(currentIndex - 1);
+
+            });
+
+        }
+
+
+        /* DOT CLICK */
+
+        dots.forEach(function (dot, index) {
+
+            dot.addEventListener("click", function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                showImage(index);
+
+            });
+
+        });
+
+
+        /* =====================================================
+           MOBILE SWIPE FOR PRODUCT IMAGES
+        ===================================================== */
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+
+        wrapper.addEventListener(
+            "touchstart",
+            function (event) {
+
+                touchStartX =
+                    event.changedTouches[0].screenX;
+
+            },
+            { passive: true }
+        );
+
+
+        wrapper.addEventListener(
+            "touchend",
+            function (event) {
+
+                touchEndX =
+                    event.changedTouches[0].screenX;
+
+                const difference =
+                    touchStartX - touchEndX;
+
+
+                if (Math.abs(difference) < 40) {
+                    return;
+                }
+
+
+                if (difference > 0) {
+
+                    showImage(currentIndex + 1);
+
+                } else {
+
+                    showImage(currentIndex - 1);
+
+                }
+
+            },
+            { passive: true }
+        );
+
+    });
+
+
+
+    /* =========================================================
+       HIDE CATEGORY ARROWS IF NOT ENOUGH PRODUCTS
+    ========================================================= */
+
+    function updateCategoryArrows(
+        track,
+        previous,
+        next
+    ) {
+
+        if (!track) {
+            return;
+        }
+
+        const cards =
+            track.querySelectorAll(".product-card");
+
+
+        if (cards.length <= 2) {
+
+            if (previous) {
+                previous.style.display = "none";
+            }
+
+            if (next) {
+                next.style.display = "none";
+            }
+
+        }
+
+    }
+
+
+    updateCategoryArrows(
+        sareeTrack,
+        sareePrev,
+        sareeNext
+    );
+
+
+    updateCategoryArrows(
+        silkTrack,
+        silkPrev,
+        silkNext
+    );
+
+
+});
+
+</script>
+
+
+</body>
+
+</html>

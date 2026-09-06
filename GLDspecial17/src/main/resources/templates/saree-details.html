@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title th:text="${saree.name + ' - Saree Details'}">
+        Saree Details
+    </title>
+
+    <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family:
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fffaf5,
+                    #fff1f5,
+                    #f8f3ff
+                );
+
+            color: #2d2525;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+
+            height: 70px;
+
+            background:
+                rgba(255,255,255,0.96);
+
+            backdrop-filter: blur(12px);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 40px;
+
+            border-bottom:
+                1px solid #ead9d5;
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            box-shadow:
+                0 3px 15px rgba(80,30,30,0.08);
+        }
+
+
+        /* =========================================================
+           LOGO
+        ========================================================= */
+
+        .logo {
+
+            font-size: 27px;
+
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #8b0000,
+                    #c2185b,
+                    #b8860b
+                );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+        }
+
+
+        /* =========================================================
+           HEADER RIGHT
+        ========================================================= */
+
+        .header-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        .home-btn {
+
+            text-decoration: none;
+
+            color: #4a3636;
+
+            font-weight: 600;
+
+            padding: 9px 12px;
+
+            border-radius: 20px;
+
+            transition: 0.2s;
+        }
+
+
+        .home-btn:hover {
+
+            color: #8b0000;
+
+            background: #fff0f0;
+        }
+
+
+        .cart-btn {
+
+            text-decoration: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b0000,
+                    #b5124f
+                );
+
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 25px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 5px 15px rgba(139,0,0,0.20);
+
+            transition: 0.25s;
+        }
+
+
+        .cart-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(139,0,0,0.28);
+        }
+
+
+        /* =========================================================
+           MAIN PRODUCT CONTAINER
+        ========================================================= */
+
+        .details-container {
+
+            width: 92%;
+
+            max-width: 1250px;
+
+            margin: 35px auto;
+
+            background:
+                rgba(255,255,255,0.96);
+
+            border-radius: 24px;
+
+            padding: 30px;
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(0, 1fr);
+
+            gap: 45px;
+
+            box-shadow:
+                0 12px 40px rgba(80,30,30,0.10);
+
+            border:
+                1px solid #f0dddd;
+        }
+
+
+        /* =========================================================
+           IMAGE SECTION
+        ========================================================= */
+
+        .image-section {
+
+            width: 100%;
+
+            min-width: 0;
+        }
+
+
+        /* =========================================================
+           MAIN IMAGE
+        ========================================================= */
+
+        .main-image {
+
+            width: 100%;
+
+            height: 560px;
+
+            display: block;
+
+            object-fit: contain;
+
+            object-position: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fffaf5,
+                    #fff4ee
+                );
+
+            border-radius: 20px;
+
+            padding: 8px;
+
+            border:
+                1px solid #f0dfd7;
+
+            box-shadow:
+                0 8px 25px rgba(80,30,30,0.08);
+
+            transition:
+                transform 0.3s ease;
+        }
+
+
+        .main-image:hover {
+
+            transform: scale(1.01);
+        }
+
+
+        /* =========================================================
+           THUMBNAILS
+        ========================================================= */
+
+        .thumbnail-container {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 15px;
+
+            overflow-x: auto;
+
+            padding:
+                4px 3px 10px;
+
+            scrollbar-width: thin;
+
+            -webkit-overflow-scrolling: touch;
+        }
+
+
+        .thumbnail-container::-webkit-scrollbar {
+
+            height: 5px;
+        }
+
+
+        .thumbnail-container::-webkit-scrollbar-thumb {
+
+            background: #d9b5b5;
+
+            border-radius: 20px;
+        }
+
+
+        .thumbnail {
+
+            width: 78px;
+
+            height: 88px;
+
+            flex-shrink: 0;
+
+            object-fit: contain;
+
+            object-position: center;
+
+            background: #fff8f4;
+
+            border-radius: 12px;
+
+            padding: 3px;
+
+            border:
+                2px solid transparent;
+
+            cursor: pointer;
+
+            transition:
+                0.2s ease;
+        }
+
+
+        .thumbnail:hover {
+
+            border-color: #c2185b;
+
+            transform: translateY(-2px);
+        }
+
+
+        .thumbnail.active {
+
+            border-color: #8b0000;
+
+            box-shadow:
+                0 4px 12px rgba(139,0,0,0.18);
+        }
+
+
+        /* =========================================================
+           IMAGE COUNT
+        ========================================================= */
+
+        .image-note {
+
+            text-align: center;
+
+            font-size: 12px;
+
+            color: #9a7777;
+
+            margin-top: 6px;
+        }
+
+
+        /* =========================================================
+           INFORMATION SECTION
+        ========================================================= */
+
+        .info-section {
+
+            min-width: 0;
+
+            padding-top: 5px;
+        }
+
+
+        /* =========================================================
+           PRODUCT NAME
+        ========================================================= */
+
+        .info-section h1 {
+
+            font-size: 34px;
+
+            line-height: 1.2;
+
+            margin-bottom: 12px;
+
+            color: #302222;
+        }
+
+
+        .filter-link {
+
+            color: #8b0000;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            transition: 0.2s;
+        }
+
+
+        .filter-link:hover {
+
+            color: #c2185b;
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================================================
+           SAREE TYPE
+        ========================================================= */
+
+        .saree-type {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff0f4,
+                    #fff8ec
+                );
+
+            padding: 8px 13px;
+
+            border-radius: 25px;
+
+            font-size: 14px;
+
+            color: #6c5555;
+
+            margin-bottom: 12px;
+        }
+
+
+        /* =========================================================
+           PRICE
+        ========================================================= */
+
+        .price-box {
+
+            margin:
+                12px 0 20px;
+
+            padding:
+                16px 18px;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff5f5,
+                    #fff9ef
+                );
+
+            border:
+                1px solid #f1dddd;
+        }
+
+
+        .price {
+
+            font-size: 31px;
+
+            font-weight: 800;
+
+            color: #8b0000;
+        }
+
+
+        .dummy-price {
+
+            font-size: 17px;
+
+            color: #999;
+
+            text-decoration: line-through;
+
+            margin-left: 10px;
+        }
+
+
+        .price-label {
+
+            font-size: 12px;
+
+            color: #927474;
+
+            margin-top: 4px;
+        }
+
+
+        /* =========================================================
+           DESCRIPTION
+        ========================================================= */
+
+        .description {
+
+            margin:
+                20px 0;
+
+            color: #5f5151;
+
+            line-height: 1.7;
+
+            font-size: 15px;
+        }
+
+
+        .description h3 {
+
+            color: #302222;
+
+            margin-bottom: 8px;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================================================
+           PRODUCT DETAILS BOX
+        ========================================================= */
+
+        .product-details {
+
+            margin-top: 20px;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            border:
+                1px solid #eadede;
+
+            background: #fff;
+        }
+
+
+        .details-title {
+
+            padding:
+                14px 16px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff1f1,
+                    #fff8ee
+                );
+
+            color: #5a2b2b;
+
+            font-weight: 800;
+
+            font-size: 17px;
+        }
+
+
+        .detail-row {
+
+            display: flex;
+
+            align-items: center;
+
+            min-height: 48px;
+
+            padding:
+                10px 16px;
+
+            border-top:
+                1px solid #f1e8e8;
+        }
+
+
+        .detail-row:nth-child(even) {
+
+            background: #fffafa;
+        }
+
+
+        .detail-label {
+
+            width: 150px;
+
+            flex-shrink: 0;
+
+            font-weight: 700;
+
+            color: #4c3d3d;
+
+            font-size: 14px;
+        }
+
+
+        .detail-value {
+
+            color: #665858;
+
+            font-size: 14px;
+
+            word-break: break-word;
+        }
+
+
+        /* =========================================================
+           STOCK
+        ========================================================= */
+
+        .stock-available {
+
+            display: inline-block;
+
+            padding:
+                6px 11px;
+
+            border-radius: 20px;
+
+            background: #eaf8ed;
+
+            color: #16813b;
+
+            font-weight: 700;
+
+            font-size: 13px;
+        }
+
+
+        .stock-out {
+
+            display: inline-block;
+
+            padding:
+                6px 11px;
+
+            border-radius: 20px;
+
+            background: #fff0f0;
+
+            color: #d00000;
+
+            font-weight: 700;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           CART
+        ========================================================= */
+
+        .cart-button {
+
+            width: 100%;
+
+            min-height: 55px;
+
+            margin-top: 22px;
+
+            padding: 14px 20px;
+
+            border: none;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b0000,
+                    #b5124f
+                );
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px rgba(139,0,0,0.20);
+
+            transition:
+                0.25s ease;
+        }
+
+
+        .cart-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px rgba(139,0,0,0.28);
+        }
+
+
+        .cart-button:disabled {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #aaa,
+                    #888
+                );
+
+            cursor: not-allowed;
+
+            box-shadow: none;
+
+            transform: none;
+        }
+
+
+        /* =========================================================
+           BACK BUTTON
+        ========================================================= */
+
+        .back-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            margin-top: 18px;
+
+            color: #8b0000;
+
+            text-decoration: none;
+
+            font-weight: 700;
+
+            padding: 8px 0;
+        }
+
+
+        .back-btn:hover {
+
+            color: #c2185b;
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+
+            margin-top: 40px;
+
+            padding: 28px 20px;
+
+            background: #fff;
+
+            text-align: center;
+
+            color: #8a7777;
+
+            border-top:
+                1px solid #eadede;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .details-container {
+
+                width: 94%;
+
+                padding: 22px;
+
+                gap: 25px;
+            }
+
+
+            .main-image {
+
+                height: 480px;
+            }
+
+
+            .info-section h1 {
+
+                font-size: 28px;
+            }
+
+
+            .price {
+
+                font-size: 27px;
+            }
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 768px) {
+
+            body {
+
+                background:
+                    linear-gradient(
+                        180deg,
+                        #fff8f5 0%,
+                        #fff4f7 50%,
+                        #f9f5ff 100%
+                    );
+            }
+
+
+            /* HEADER */
+
+            .header {
+
+                height: 62px;
+
+                padding:
+                    0 12px;
+            }
+
+
+            .logo {
+
+                font-size: 20px;
+
+                letter-spacing: 0;
+            }
+
+
+            .header-right {
+
+                gap: 5px;
+            }
+
+
+            .home-btn {
+
+                font-size: 12px;
+
+                padding:
+                    8px 7px;
+            }
+
+
+            .cart-btn {
+
+                font-size: 12px;
+
+                padding:
+                    8px 11px;
+
+                border-radius: 20px;
+            }
+
+
+            /* MAIN */
+
+            .details-container {
+
+                width: 96%;
+
+                margin:
+                    12px auto 25px;
+
+                padding: 10px;
+
+                display: block;
+
+                border-radius: 18px;
+
+                box-shadow:
+                    0 7px 25px rgba(80,30,30,0.08);
+            }
+
+
+            /* IMAGE */
+
+            .image-section {
+
+                width: 100%;
+            }
+
+
+            .main-image {
+
+                width: 100%;
+
+                height: auto;
+
+                min-height: 390px;
+
+                max-height: 600px;
+
+                object-fit: contain;
+
+                object-position: center;
+
+                padding: 5px;
+
+                border-radius: 15px;
+
+                background:
+                    linear-gradient(
+                        135deg,
+                        #fffaf5,
+                        #fff1f1
+                    );
+            }
+
+
+            /* THUMBNAILS */
+
+            .thumbnail-container {
+
+                margin-top: 10px;
+
+                gap: 8px;
+
+                padding-bottom: 7px;
+            }
+
+
+            .thumbnail {
+
+                width: 62px;
+
+                height: 74px;
+
+                border-radius: 9px;
+
+                padding: 2px;
+            }
+
+
+            .image-note {
+
+                font-size: 11px;
+
+                margin-top: 4px;
+            }
+
+
+            /* INFORMATION */
+
+            .info-section {
+
+                padding:
+                    18px 5px 5px;
+            }
+
+
+            .info-section h1 {
+
+                font-size: 25px;
+
+                line-height: 1.25;
+
+                margin-bottom: 10px;
+            }
+
+
+            .saree-type {
+
+                font-size: 13px;
+
+                padding:
+                    7px 11px;
+            }
+
+
+            /* PRICE */
+
+            .price-box {
+
+                padding:
+                    14px;
+
+                margin:
+                    12px 0 18px;
+
+                border-radius: 14px;
+            }
+
+
+            .price {
+
+                font-size: 27px;
+            }
+
+
+            .dummy-price {
+
+                font-size: 15px;
+            }
+
+
+            /* DESCRIPTION */
+
+            .description {
+
+                font-size: 14px;
+
+                line-height: 1.65;
+
+                margin:
+                    17px 0;
+            }
+
+
+            .description h3 {
+
+                font-size: 17px;
+            }
+
+
+            /* DETAILS */
+
+            .details-title {
+
+                font-size: 16px;
+
+                padding:
+                    13px 14px;
+            }
+
+
+            .detail-row {
+
+                min-height: 50px;
+
+                padding:
+                    10px 13px;
+            }
+
+
+            .detail-label {
+
+                width: 115px;
+
+                font-size: 13px;
+            }
+
+
+            .detail-value {
+
+                font-size: 13px;
+
+                flex: 1;
+            }
+
+
+            /* CART */
+
+            .cart-button {
+
+                min-height: 53px;
+
+                font-size: 16px;
+
+                border-radius: 13px;
+
+                margin-top: 18px;
+            }
+
+
+            .back-btn {
+
+                font-size: 14px;
+
+                margin-top: 12px;
+            }
+
+
+            .footer {
+
+                margin-top: 20px;
+
+                padding:
+                    22px 15px;
+
+                font-size: 12px;
+            }
+        }
+
+
+        /* =========================================================
+           SMALL ANDROID PHONES
+        ========================================================= */
+
+        @media (max-width: 480px) {
+
+            .header {
+
+                padding:
+                    0 9px;
+            }
+
+
+            .logo {
+
+                font-size: 18px;
+            }
+
+
+            .home-btn {
+
+                font-size: 11px;
+            }
+
+
+            .cart-btn {
+
+                font-size: 11px;
+
+                padding:
+                    7px 9px;
+            }
+
+
+            .details-container {
+
+                width: 97%;
+
+                padding: 8px;
+
+                margin-top: 9px;
+            }
+
+
+            /*
+             * IMPORTANT:
+             * contain keeps the COMPLETE saree photo visible.
+             */
+
+            .main-image {
+
+                height: 430px;
+
+                min-height: 0;
+
+                object-fit: contain;
+
+                padding: 3px;
+
+                border-radius: 13px;
+            }
+
+
+            .thumbnail {
+
+                width: 58px;
+
+                height: 70px;
+            }
+
+
+            .info-section {
+
+                padding-top: 15px;
+            }
+
+
+            .info-section h1 {
+
+                font-size: 22px;
+            }
+
+
+            .price {
+
+                font-size: 25px;
+            }
+
+
+            .detail-row {
+
+                align-items: flex-start;
+            }
+
+
+            .detail-label {
+
+                width: 105px;
+
+                font-size: 12px;
+            }
+
+
+            .detail-value {
+
+                font-size: 12px;
+            }
+
+
+            .cart-button {
+
+                min-height: 52px;
+
+                font-size: 15px;
+            }
+        }
+
+
+        /* =========================================================
+           VERY SMALL DEVICES
+        ========================================================= */
+
+        @media (max-width: 360px) {
+
+            .logo {
+
+                font-size: 16px;
+            }
+
+
+            .home-btn {
+
+                display: none;
+            }
+
+
+            .main-image {
+
+                height: 390px;
+            }
+
+
+            .detail-label {
+
+                width: 95px;
+            }
+
+
+            .info-section h1 {
+
+                font-size: 20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+    <div class="logo">
+        Vastra Mane
+    </div>
+
+
+    <div class="header-right">
+
+        <a th:href="@{/}"
+           class="home-btn">
+            ← Home
+        </a>
+
+
+        <a th:href="@{/cart}"
+           class="cart-btn">
+            🛒 Cart
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     PRODUCT DETAILS
+========================================================= -->
+
+<div class="details-container">
+
+
+    <!-- =====================================================
+         IMAGE SECTION
+    ====================================================== -->
+
+    <div class="image-section">
+
+
+        <!-- MAIN IMAGE -->
+
+        <img id="mainImage"
+             class="main-image"
+
+             th:src="${saree.imageLinks != null
+                     and !saree.imageLinks.isEmpty()
+                     ? saree.imageLinks[0]
+                     : '/images/no-image.jpg'}"
+
+             alt="Saree Image">
+
+
+        <!-- THUMBNAILS -->
+
+        <div class="thumbnail-container">
+
+            <img th:each="image, imageIndex : ${saree.imageLinks}"
+
+                 th:src="${image}"
+
+                 th:class="${imageIndex.index == 0
+                            ? 'thumbnail active'
+                            : 'thumbnail'}"
+
+                 onclick="changeImage(this)"
+
+                 alt="Saree Image">
+
+        </div>
+
+
+        <div class="image-note">
+
+            Swipe thumbnails to view more photos
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         INFORMATION
+    ====================================================== -->
+
+    <div class="info-section">
+
+
+        <!-- PRODUCT NAME -->
+
+        <h1>
+
+            <a th:href="@{/sarees(name=${saree.name})}"
+
+               class="filter-link"
+
+               th:text="${saree.name}">
+
+                Saree Name
+
+            </a>
+
+        </h1>
+
+
+
+        <!-- SAREE TYPE -->
+
+        <p class="saree-type">
+
+            ✨
+
+            <strong>
+                Saree Type:
+            </strong>
+
+            <a th:href="@{/sarees(sareeType=${saree.sareeType})}"
+
+               class="filter-link"
+
+               th:text="${saree.sareeType}">
+
+                Silk Saree
+
+            </a>
+
+        </p>
+
+
+
+        <!-- =================================================
+             PRICE
+        ================================================== -->
+
+        <div class="price-box">
+
+            <div class="price">
+
+                ₹<span th:text="${saree.price}">
+                    0
+                </span>
+
+
+                <span class="dummy-price"
+
+                      th:if="${saree.dummyprice != null}">
+
+                    ₹<span th:text="${saree.dummyprice}">
+                        0
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <div class="price-label">
+
+                Inclusive of all applicable taxes
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             DESCRIPTION
+        ================================================== -->
+
+        <div class="description">
+
+            <h3>
+                About this Saree
+            </h3>
+
+
+            <p th:text="${saree.description}">
+
+                Saree description
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PRODUCT DETAILS
+        ================================================== -->
+
+        <div class="product-details">
+
+
+            <div class="details-title">
+
+                ✨ Saree Details
+
+            </div>
+
+
+
+            <!-- FABRIC -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.fabric != null
+                        and !saree.fabric.isEmpty()}">
+
+                <div class="detail-label">
+                    Fabric
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(fabric=${saree.fabric})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.fabric}">
+
+                        Silk
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- COLOR -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.color != null
+                        and !saree.color.isEmpty()}">
+
+                <div class="detail-label">
+                    Color
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(color=${saree.color})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.color}">
+
+                        Red
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- WEAVING -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.weavingType != null
+                        and !saree.weavingType.isEmpty()}">
+
+                <div class="detail-label">
+                    Weaving
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(weavingType=${saree.weavingType})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.weavingType}">
+
+                        Handloom
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- OCCASION -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.occasion != null
+                        and !saree.occasion.isEmpty()}">
+
+                <div class="detail-label">
+                    Occasion
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(occasion=${saree.occasion})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.occasion}">
+
+                        Wedding
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DESIGN -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.design != null
+                        and !saree.design.isEmpty()}">
+
+                <div class="detail-label">
+                    Design
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(design=${saree.design})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.design}">
+
+                        Traditional
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BORDER -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.borderType != null
+                        and !saree.borderType.isEmpty()}">
+
+                <div class="detail-label">
+                    Border
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(borderType=${saree.borderType})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.borderType}">
+
+                        Zari
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BLOUSE -->
+
+            <div class="detail-row"
+
+                 th:if="${saree.blouseIncluded != null}">
+
+                <div class="detail-label">
+                    Blouse
+                </div>
+
+                <div class="detail-value">
+
+                    <a th:href="@{/sarees(blouseIncluded=${saree.blouseIncluded})}"
+
+                       class="filter-link"
+
+                       th:text="${saree.blouseIncluded ? 'Included' : 'Not Included'}">
+
+                        Included
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- STOCK -->
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Availability
+                </div>
+
+                <div class="detail-value">
+
+
+                    <span
+
+                        th:if="${saree.stock != null
+                               and saree.stock > 0}"
+
+                        class="stock-available"
+
+                        th:text="${saree.stock + ' Available'}">
+
+                        Available
+
+                    </span>
+
+
+                    <span
+
+                        th:if="${saree.stock == null
+                               or saree.stock <= 0}"
+
+                        class="stock-out">
+
+                        Out of Stock
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ADD TO CART
+        ================================================== -->
+
+        <form
+
+            th:action="@{/cart/add/saree/{id}(id=${saree.id})}"
+
+            method="post">
+
+
+            <button
+
+                type="submit"
+
+                class="cart-button"
+
+                th:disabled="${saree.stock == null
+                              or saree.stock <= 0}">
+
+
+                <span
+
+                    th:if="${saree.stock != null
+                           and saree.stock > 0}">
+
+                    🛒 Add to Cart
+
+                </span>
+
+
+                <span
+
+                    th:if="${saree.stock == null
+                           or saree.stock <= 0}">
+
+                    Out of Stock
+
+                </span>
+
+            </button>
+
+        </form>
+
+
+
+        <!-- BACK -->
+
+        <a th:href="@{/sarees}"
+           class="back-btn">
+
+            ← Back to Sarees
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    © 2026 Vastra Mane.
+    All Rights Reserved.
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   CHANGE MAIN IMAGE
+========================================================= */
+
+function changeImage(element) {
+
+
+    const mainImage =
+        document.getElementById("mainImage");
+
+
+    /*
+     * Change image
+     */
+
+    mainImage.src =
+        element.src;
+
+
+    /*
+     * Remove active
+     * from all thumbnails
+     */
+
+    const thumbnails =
+        document.querySelectorAll(".thumbnail");
+
+
+    thumbnails.forEach(function(thumbnail) {
+
+        thumbnail.classList.remove("active");
+
+    });
+
+
+    /*
+     * Add active
+     * to selected thumbnail
+     */
+
+    element.classList.add("active");
+
+}
+
+
+
+/* =========================================================
+   MOBILE THUMBNAIL SWIPE
+========================================================= */
+
+let thumbnailContainer =
+    document.querySelector(".thumbnail-container");
+
+
+let startX = 0;
+
+
+if (thumbnailContainer) {
+
+
+    thumbnailContainer.addEventListener(
+        "touchstart",
+        function(event) {
+
+            startX =
+                event.touches[0].clientX;
+
+        },
+        { passive: true }
+    );
+
+
+    thumbnailContainer.addEventListener(
+        "touchmove",
+        function(event) {
+
+            const currentX =
+                event.touches[0].clientX;
+
+            const difference =
+                startX - currentX;
+
+
+            thumbnailContainer.scrollLeft +=
+                difference;
+
+            startX = currentX;
+
+        },
+        { passive: true }
+    );
+
+}
+
+
+
+/* =========================================================
+   MAIN IMAGE SWIPE
+========================================================= */
+
+const mainImage =
+    document.getElementById("mainImage");
+
+
+const thumbnails =
+    document.querySelectorAll(".thumbnail");
+
+
+let imageStartX = 0;
+
+
+if (mainImage && thumbnails.length > 1) {
+
+
+    mainImage.addEventListener(
+        "touchstart",
+        function(event) {
+
+            imageStartX =
+                event.touches[0].clientX;
+
+        },
+        { passive: true }
+    );
+
+
+    mainImage.addEventListener(
+        "touchend",
+        function(event) {
+
+
+            const imageEndX =
+                event.changedTouches[0].clientX;
+
+
+            const difference =
+                imageStartX - imageEndX;
+
+
+            let currentIndex = 0;
+
+
+            thumbnails.forEach(
+                function(thumbnail, index) {
+
+                    if (
+                        thumbnail.classList.contains("active")
+                    ) {
+
+                        currentIndex = index;
+
+                    }
+
+                }
+            );
+
+
+            /*
+             * Swipe left
+             */
+
+            if (difference > 50) {
+
+                currentIndex++;
+
+                if (
+                    currentIndex >=
+                    thumbnails.length
+                ) {
+
+                    currentIndex = 0;
+
+                }
+
+                changeImage(
+                    thumbnails[currentIndex]
+                );
+
+            }
+
+
+            /*
+             * Swipe right
+             */
+
+            else if (difference < -50) {
+
+                currentIndex--;
+
+                if (currentIndex < 0) {
+
+                    currentIndex =
+                        thumbnails.length - 1;
+
+                }
+
+                changeImage(
+                    thumbnails[currentIndex]
+                );
+
+            }
+
+        },
+        { passive: true }
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

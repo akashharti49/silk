@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | Vastra Mane</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "DM Sans", Arial, sans-serif; background: #faf8f5; color: #29231f; }
+
+        .header {
+            background: #fff; border-bottom: 1px solid #eee4dc; min-height: 78px;
+            padding: 0 5%; display: flex; align-items: center; justify-content: space-between;
+        }
+        .brand { display: flex; align-items: center; gap: 11px; text-decoration:none; }
+        .brand-icon {
+            width: 43px; height: 43px; border-radius: 50%;
+            background: linear-gradient(135deg, #8d2437, #c68b43); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-family: "Playfair Display", serif; font-size: 20px; font-weight: 700;
+        }
+        .brand-text h1 { font-family: "Playfair Display", serif; font-size: 25px; color: #5c1725; line-height: 1; }
+        .brand-text span { display: block; font-size: 10px; letter-spacing: 2px; color: #a47b55; margin-top: 4px; text-transform: uppercase; }
+
+        .page-container { max-width: 780px; margin: 0 auto; padding: 45px 22px 80px; }
+
+        .success-banner { text-align: center; margin-bottom: 30px; }
+        .success-icon {
+            width: 76px; height: 76px; margin: 0 auto 16px; border-radius: 50%;
+            background: #edf8ef; color: #2e7d32; display: flex; align-items: center; justify-content: center; font-size: 34px;
+        }
+        .success-banner h2 { font-family: "Playfair Display", serif; font-size: 30px; color: #351b20; margin-bottom: 8px; }
+        .success-banner p { color: #776d67; font-size: 14.5px; }
+
+        .card {
+            background: #fff; border: 1px solid #eee2d9; border-radius: 18px; padding: 26px;
+            box-shadow: 0 9px 30px rgba(74, 43, 25, .07); margin-bottom: 22px;
+        }
+        .card h3 { font-family: "Playfair Display", serif; font-size: 19px; color: #351b20; margin-bottom: 14px; }
+
+        .kv-row { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0; font-size: 14px; color: #70645e; border-bottom: 1px dashed #eee2d9;}
+        .kv-row:last-child { border-bottom: none; }
+        .kv-row b { color: #332725; }
+
+        .item-row { padding: 12px 0; border-bottom: 1px dashed #eee2d9; font-size: 13.5px; color: #70645e; }
+        .item-row:last-child { border-bottom: none; }
+        .item-row .name { color: #351b20; font-weight: 700; font-size: 15px; }
+        .tag { display:inline-block; background:#f8e8dc; color:#7d4930; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:700; letter-spacing:0.5px; margin-left:8px;}
+
+        .total-row {
+            display: flex; justify-content: space-between; align-items: center; padding-top: 14px; margin-top: 6px;
+            border-top: 1px solid #eee2d9;
+        }
+        .total-row span:first-child { font-weight: 700; color: #44332e; }
+        .total-row span:last-child { color: #8d2437; font-family: "Playfair Display", serif; font-size: 22px; font-weight: 700; }
+
+        .action-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn {
+            flex: 1; text-align: center; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700;
+        }
+        .btn-primary { background: linear-gradient(135deg, #5c1725, #8d2437); color: #fff; }
+        .btn-secondary { background: #fff; color: #5c1725; border: 1px solid #dccbc0; }
+        .btn-cancel { background: linear-gradient(135deg, #e0473f, #ff8d86); color: #fff; }
+        .btn-cancel:hover { opacity: .92; }
+
+        /* ===================== ORDER TRACKER ===================== */
+        .ordtrack{display:flex;align-items:flex-start;justify-content:space-between;margin:4px 0 6px;overflow-x:auto;}
+        .ordtrack-step{display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;min-width:60px;}
+        .ordtrack-dot{
+            width:32px;height:32px;border-radius:50%;background:#efe6dc;color:#a08c81;
+            display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;
+            border:2px solid #efe6dc;transition:.25s;
+        }
+        .ordtrack-step.done .ordtrack-dot{background:#2fa85a;border-color:#2fa85a;color:#fff;}
+        .ordtrack-step.current .ordtrack-dot{background:#c68b43;border-color:#c68b43;color:#fff;animation:ordPulse 1.4s infinite;}
+        @keyframes ordPulse{0%{box-shadow:0 0 0 0 rgba(198,139,67,.45);}70%{box-shadow:0 0 0 9px rgba(198,139,67,0);}100%{box-shadow:0 0 0 0 rgba(198,139,67,0);}}
+        .ordtrack-label{font-size:11.5px;font-weight:700;color:#70645e;margin-top:8px;}
+        .ordtrack-step.done .ordtrack-label,.ordtrack-step.current .ordtrack-label{color:#351b20;}
+        .ordtrack-date{font-size:10px;color:#a08c81;margin-top:2px;min-height:12px;}
+        .ordtrack-line{flex:1;height:3px;background:#efe6dc;margin:15px -4px 0;border-radius:2px;min-width:12px;}
+        .ordtrack-line.done{background:#2fa85a;}
+        .ordtrack-cancelled{
+            display:flex;align-items:center;gap:12px;background:#fdeeed;border:1px solid #f6c3c1;color:#a52b28;
+            padding:14px 16px;border-radius:12px;
+        }
+        .oc-icon{width:34px;height:34px;border-radius:50%;background:#f6c3c1;color:#a52b28;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;}
+        .oc-sub{font-size:12.5px;font-weight:500;margin-top:2px;color:#a5615c;}
+        @media (max-width:520px){
+            .ordtrack-label{font-size:9.5px;}
+            .ordtrack-date{display:none;}
+            .ordtrack-dot{width:27px;height:27px;font-size:11px;}
+        }
+
+        .status-badge {
+            display:inline-block; padding:6px 14px; border-radius:20px; font-size:11px; font-weight:800;
+            letter-spacing:.5px; text-transform:uppercase; color:#fff; margin-left:10px; vertical-align:middle;
+        }
+        .status-PLACED{background:linear-gradient(120deg,#2f7bf7,#5c9dfb);}
+        .status-CONFIRMED{background:linear-gradient(120deg,#f6982b,#ffb15c);}
+        .status-PACKED{background:linear-gradient(120deg,#9c6b2e,#c68b43);}
+        .status-SHIPPED{background:linear-gradient(120deg,#7c5cff,#a48bff);}
+        .status-DELIVERED{background:linear-gradient(120deg,#2fa85a,#5cd489);}
+        .status-CANCELLED{background:linear-gradient(120deg,#e0473f,#ff8d86);}
+
+        .alert { padding: 13px 18px; border-radius: 12px; margin-bottom: 18px; font-size: 14px; font-weight: 600; }
+        .alert-success { background: #e4f7ea; color: #20713d; border: 1px solid #b7e9c6; }
+        .alert-failure { background: #fdeaea; color: #a52b28; border: 1px solid #f6c3c1; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(28,12,15,.55); backdrop-filter: blur(3px);
+            display: none; align-items: center; justify-content: center; padding: 20px; z-index: 999;
+        }
+        .modal-overlay.show { display: flex; animation: fadeIn .18s ease; }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        .modal-box {
+            background: #fff; border-radius: 18px; max-width: 420px; width: 100%; padding: 26px;
+            box-shadow: 0 30px 70px rgba(0,0,0,.35); animation: popIn .2s cubic-bezier(.2,.8,.3,1.2);
+        }
+        @keyframes popIn { from{transform:scale(.92) translateY(10px);opacity:0;} to{transform:scale(1) translateY(0);opacity:1;} }
+        .modal-box h3 { font-family:"Playfair Display",serif; color:#5c1725; font-size:19px; margin-bottom:8px; }
+        .modal-box p { font-size: 13px; color: #776d67; margin-bottom: 14px; }
+        .modal-box textarea {
+            width: 100%; border-radius: 10px; border: 1.5px solid #eadfd3; padding: 11px 13px; font-size: 13.5px;
+            resize: vertical; min-height: 70px; margin-bottom: 16px; font-family: inherit;
+        }
+        .modal-btn-row { display: flex; gap: 10px; }
+        .modal-btn-row button { flex: 1; padding: 11px; border-radius: 10px; font-size: 13.5px; font-weight: 700; border: none; }
+        .btn-keep { background: #f3ede7; color: #5c1725; }
+        .btn-confirm-cancel { background: linear-gradient(120deg, #e0473f, #ff8d86); color: #fff; }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <a th:href="@{/}" class="brand">
+        <div class="brand-icon">V</div>
+        <div class="brand-text">
+            <h1>Vastra Mane</h1>
+            <span>Silk & Sarees</span>
+        </div>
+    </a>
+    <a th:href="@{/my-orders}" style="font-size:13.5px;font-weight:700;color:#5c1725;">My Orders →</a>
+</header>
+
+<main class="page-container">
+
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert alert-failure" th:if="${error}" th:text="${error}"></div>
+
+    <div class="success-banner">
+        <div class="success-icon">✓</div>
+        <h2 th:text="${order.status == 'CANCELLED'} ? 'Order Cancelled' : 'Order Placed Successfully!'"></h2>
+        <p th:if="${order.status != 'CANCELLED'}">A confirmation email with your bill (PDF) has been sent to <b th:text="${order.email}"></b></p>
+        <p th:if="${order.status == 'CANCELLED'}">This order has been cancelled. A confirmation email has been sent to <b th:text="${order.email}"></b></p>
+    </div>
+
+    <div class="card">
+        <h3>Track Your Order</h3>
+        <div th:replace="~{fragments/order-tracker :: tracker(${order})}"></div>
+    </div>
+
+    <div class="card">
+        <h3>Order Details</h3>
+        <div class="kv-row"><span>Order Number</span><b th:text="${order.orderNumber}"></b></div>
+        <div class="kv-row"><span>Status</span>
+            <span class="status-badge" th:classappend="'status-' + ${order.status}" th:text="${order.statusLabel}"></span>
+        </div>
+        <div class="kv-row"><span>Order Date</span><b th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy, hh:mm a')}"></b></div>
+        <div class="kv-row"><span>Delivery Address</span>
+            <b th:text="${order.address + ', ' + order.city + ', ' + order.state + ' - ' + order.pincode}"></b>
+        </div>
+        <div class="kv-row"><span>Phone</span><b th:text="${order.phone}"></b></div>
+    </div>
+
+    <div class="card" th:if="${order.status != 'CANCELLED'}">
+        <h3>Payment Details</h3>
+        <div class="kv-row"><span>Payment Method</span><b th:text="${order.paymentMethod}"></b></div>
+        <div class="kv-row"><span>Payment ID</span><b th:text="${order.razorpayPaymentId}"></b></div>
+        <div class="kv-row">
+            <span>Payment Status</span>
+            <span class="status-badge" style="background:linear-gradient(120deg,#2fa85a,#5cd489);" th:text="${order.paymentStatus}"></span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Items Ordered</h3>
+
+        <div class="item-row" th:each="item : ${order.items}">
+            <span class="name" th:text="${item.productName}"></span>
+            <span class="tag" th:text="${item.productType}"></span>
+            <div style="margin-top:6px;">
+                <span th:if="${item.category}" th:text="'Type: ' + ${item.category} + '  '"></span>
+                <span th:if="${item.fabric}" th:text="'Fabric: ' + ${item.fabric} + '  '"></span>
+                <span th:if="${item.color}" th:text="'Color: ' + ${item.color} + '  '"></span>
+                <span th:if="${item.design}" th:text="'Design: ' + ${item.design}"></span>
+            </div>
+            <div style="margin-top:4px;">
+                Qty: <b th:text="${item.quantity}"></b> ×
+                ₹<span th:text="${item.price}"></span> =
+                ₹<b th:text="${item.subtotal}"></b>
+            </div>
+        </div>
+
+        <div class="total-row">
+            <span>Total Amount</span>
+            <span>₹<span th:text="${order.totalAmount}"></span></span>
+        </div>
+    </div>
+
+    <div class="action-row">
+        <a class="btn btn-primary" th:href="@{'/checkout/invoice/' + ${order.id}}">⬇ Download Bill (PDF)</a>
+        <a class="btn btn-secondary" th:href="@{/}">Continue Shopping</a>
+        <button type="button" class="btn btn-cancel" style="border:none;"
+                th:if="${order.status != 'CANCELLED' and order.status != 'DELIVERED'}"
+                onclick="openCancel()">✕ Cancel Order</button>
+    </div>
+
+</main>
+
+<!-- CANCEL CONFIRMATION POPUP -->
+<div class="modal-overlay" id="cancel-modal">
+    <div class="modal-box">
+        <h3>Cancel this order?</h3>
+        <p th:text="'Order #' + ${order.orderNumber} + ' will be cancelled and you will receive a confirmation email.'"></p>
+        <form method="post" th:action="@{'/my-orders/' + ${order.id} + '/cancel'}">
+            <input type="hidden" name="email" th:value="${order.email}">
+            <input type="hidden" name="redirectTo" value="success-page">
+            <textarea name="reason" placeholder="Tell us why you're cancelling (optional)"></textarea>
+            <div class="modal-btn-row">
+                <button type="button" class="btn-keep" onclick="closeCancel()">Keep Order</button>
+                <button type="submit" class="btn-confirm-cancel">Yes, Cancel It</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openCancel(){
+        document.getElementById('cancel-modal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeCancel(){
+        document.getElementById('cancel-modal').classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    document.getElementById('cancel-modal').addEventListener('click', function(e){
+        if (e.target === this){ closeCancel(); }
+    });
+</script>
+
+</body>
+</html>

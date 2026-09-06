@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${saree.name + ' - Saree Details'}">
+        Saree Details
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #333;
+        }
+
+        /* HEADER */
+
+        .header {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            color: #8b0000;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .home-btn,
+        .cart-btn {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .home-btn {
+            color: #333;
+        }
+
+        .cart-btn {
+            background: #8b0000;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 6px;
+        }
+
+        /* MAIN */
+
+        .details-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        /* IMAGE */
+
+        .image-section {
+            width: 100%;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 550px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #eee;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail:hover {
+            border-color: #8b0000;
+        }
+
+        /* INFORMATION */
+
+        .info-section h1 {
+            font-size: 32px;
+            margin-top: 0;
+            color: #333;
+        }
+
+        .saree-type {
+            color: #777;
+            font-size: 17px;
+        }
+
+        .price {
+            font-size: 30px;
+            font-weight: bold;
+            color: #8b0000;
+            margin: 20px 0;
+        }
+
+        .dummy-price {
+            font-size: 18px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+
+        .description {
+            line-height: 1.7;
+            color: #555;
+            margin: 20px 0;
+        }
+
+        /* DETAILS */
+
+        .product-details {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            padding-top: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-label {
+            width: 150px;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #555;
+        }
+
+        /* STOCK */
+
+        .stock-available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .stock-out {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* CART */
+
+        .cart-button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 7px;
+            background: #8b0000;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .cart-button:hover {
+            background: #650000;
+        }
+
+        .cart-button:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* BACK */
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #8b0000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 768px) {
+
+            .header {
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .details-container {
+                width: 94%;
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .main-image {
+                height: 450px;
+            }
+
+            .info-section h1 {
+                font-size: 26px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="logo">
+        Saree Store
+    </div>
+
+    <div class="header-right">
+
+        <a th:href="@{/home}"
+           class="home-btn">
+            ← Home
+        </a>
+
+        <a th:href="@{/cart}"
+           class="cart-btn">
+            🛒 Cart
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- DETAILS -->
+
+<div class="details-container">
+
+    <!-- IMAGE SECTION -->
+
+    <div class="image-section">
+
+        <!-- MAIN IMAGE -->
+
+        <img id="mainImage"
+             class="main-image"
+             th:src="${saree.imageLinks != null and !saree.imageLinks.isEmpty()
+                     ? saree.imageLinks[0]
+                     : '/images/no-image.jpg'}"
+             alt="Saree Image">
+
+
+        <!-- THUMBNAILS -->
+
+        <div class="thumbnail-container">
+
+            <img th:each="image : ${saree.imageLinks}"
+                 th:src="${image}"
+                 class="thumbnail"
+                 onclick="changeImage(this.src)"
+                 alt="Saree">
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATION SECTION -->
+
+    <div class="info-section">
+
+        <h1 th:text="${saree.name}">
+            Saree Name
+        </h1>
+
+
+        <!-- TYPE -->
+
+        <p class="saree-type">
+
+            <strong>Saree Type:</strong>
+
+            <span th:text="${saree.sareeType}">
+                Silk Saree
+            </span>
+
+        </p>
+
+
+        <!-- PRICE -->
+
+        <div class="price">
+
+            ₹<span th:text="${saree.price}">
+                0
+            </span>
+
+            <span class="dummy-price"
+                  th:if="${saree.dummyprice != null}">
+
+                ₹<span th:text="${saree.dummyprice}">
+                    0
+                </span>
+
+            </span>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="description">
+
+            <h3>Description</h3>
+
+            <p th:text="${saree.description}">
+                Saree description
+            </p>
+
+        </div>
+
+
+        <!-- PRODUCT DETAILS -->
+
+        <div class="product-details">
+
+            <!-- COLOR -->
+
+            <div class="detail-row"
+                 th:if="${saree.color != null and !saree.color.isEmpty()}">
+
+                <div class="detail-label">
+                    Color
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.color}">
+                    Red
+                </div>
+
+            </div>
+
+
+            <!-- FABRIC -->
+
+            <div class="detail-row"
+                 th:if="${saree.fabric != null and !saree.fabric.isEmpty()}">
+
+                <div class="detail-label">
+                    Fabric
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.fabric}">
+                    Silk
+                </div>
+
+            </div>
+
+
+            <!-- WEAVING -->
+
+            <div class="detail-row"
+                 th:if="${saree.weavingType != null and !saree.weavingType.isEmpty()}">
+
+                <div class="detail-label">
+                    Weaving Type
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.weavingType}">
+                    Handloom
+                </div>
+
+            </div>
+
+
+            <!-- OCCASION -->
+
+            <div class="detail-row"
+                 th:if="${saree.occasion != null and !saree.occasion.isEmpty()}">
+
+                <div class="detail-label">
+                    Occasion
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.occasion}">
+                    Wedding
+                </div>
+
+            </div>
+
+
+            <!-- DESIGN -->
+
+            <div class="detail-row"
+                 th:if="${saree.design != null and !saree.design.isEmpty()}">
+
+                <div class="detail-label">
+                    Design
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.design}">
+                    Traditional
+                </div>
+
+            </div>
+
+
+            <!-- BORDER -->
+
+            <div class="detail-row"
+                 th:if="${saree.borderType != null and !saree.borderType.isEmpty()}">
+
+                <div class="detail-label">
+                    Border Type
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.borderType}">
+                    Zari
+                </div>
+
+            </div>
+
+
+            <!-- BLOUSE -->
+
+            <div class="detail-row"
+                 th:if="${saree.blouseIncluded != null}">
+
+                <div class="detail-label">
+                    Blouse Included
+                </div>
+
+                <div class="detail-value"
+                     th:text="${saree.blouseIncluded ? 'Yes' : 'No'}">
+                    Yes
+                </div>
+
+            </div>
+
+
+            <!-- STOCK -->
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Stock
+                </div>
+
+                <div>
+
+                    <span th:if="${saree.stock != null and saree.stock > 0}"
+                          class="stock-available"
+                          th:text="${saree.stock + ' Available'}">
+
+                        Available
+
+                    </span>
+
+                    <span th:if="${saree.stock == null or saree.stock <= 0}"
+                          class="stock-out">
+
+                        Out of Stock
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD TO CART -->
+
+        <form th:action="@{/cart/add/saree/{id}(id=${saree.id})}"
+              method="post">
+
+            <button type="submit"
+                    class="cart-button"
+                    th:disabled="${saree.stock == null or saree.stock <= 0}">
+
+                <span th:if="${saree.stock != null and saree.stock > 0}">
+                    🛒 Add to Cart
+                </span>
+
+                <span th:if="${saree.stock == null or saree.stock <= 0}">
+                    Out of Stock
+                </span>
+
+            </button>
+
+        </form>
+
+
+        <!-- BACK -->
+
+        <a th:href="@{/sarees}"
+           class="back-btn">
+
+            ← Back to Sarees
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+function changeImage(imageUrl) {
+
+    document.getElementById("mainImage").src = imageUrl;
+
+}
+
+</script>
+
+</body>
+
+</html>
