@@ -17,8 +17,34 @@
     <style>
 
         /* =========================================================
-           GLOBAL
+           GLOBAL / DESIGN TOKENS
         ========================================================= */
+
+        :root {
+
+            /* brand */
+            --maroon: #7b1e1e;
+            --maroon-dark: #4a1212;
+            --maroon-light: #a52b2b;
+            --gold: #c99a45;
+            --gold-light: #e5c27b;
+
+            /* silk accent (peacock) */
+            --teal: #0f6f6b;
+            --teal-light: #17a398;
+
+            /* saree accent (rani pink) */
+            --pink: #ad1f6d;
+            --pink-light: #e0559a;
+
+            /* neutrals */
+            --cream: #fffaf6;
+            --cream-2: #faf5ef;
+            --ink: #30221d;
+
+            --shadow-warm: rgba(73,35,25,0.14);
+
+        }
 
         * {
             margin: 0;
@@ -35,12 +61,16 @@
             background:
                 linear-gradient(
                     180deg,
-                    #fffaf6 0%,
-                    #faf5ef 45%,
-                    #fffaf6 100%
+                    var(--cream) 0%,
+                    var(--cream-2) 45%,
+                    var(--cream) 100%
                 );
-            color: #30221d;
+            color: var(--ink);
             overflow-x: hidden;
+        }
+
+        body.drawer-locked {
+            overflow: hidden;
         }
 
         body,
@@ -76,6 +106,66 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 15px rgba(73,35,25,0.07);
+            gap: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+
+        /* =========================================================
+           HAMBURGER BUTTON (MOBILE NAV TRIGGER)
+        ========================================================= */
+
+        .hamburger-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fbf1e6, #f3e2ca);
+            border: 1.5px solid #e6d2b8;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .hamburger-btn:hover {
+            background: var(--maroon);
+            border-color: var(--maroon);
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 19px;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--maroon);
+            transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+        }
+
+        .hamburger-btn:hover span {
+            background: white;
+        }
+
+        .hamburger-btn.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .hamburger-btn.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
         }
 
 
@@ -95,7 +185,7 @@
             height: 48px;
             object-fit: cover;
             border-radius: 50%;
-            border: 2px solid #c99a45;
+            border: 2px solid var(--gold);
             box-shadow: 0 3px 10px rgba(123,30,30,0.15);
             flex-shrink: 0;
         }
@@ -105,7 +195,11 @@
             font-size: 25px;
             font-weight: bold;
             letter-spacing: 2px;
-            color: #7b1e1e;
+            background: linear-gradient(120deg, var(--maroon) 45%, var(--pink) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: var(--maroon);
+            -webkit-text-fill-color: transparent;
             white-space: nowrap;
         }
 
@@ -117,14 +211,14 @@
             margin-top: 3px;
             background: linear-gradient(
                 90deg,
-                #c99a45,
-                #e5c27b
+                var(--gold),
+                var(--pink-light)
             );
         }
 
 
         /* =========================================================
-           MAIN NAVIGATION (SILK + SAREE)
+           MAIN NAVIGATION (SILK + SAREE) — DESKTOP INLINE
         ========================================================= */
 
         .main-nav {
@@ -155,14 +249,14 @@
             border-radius: 2px;
             background: linear-gradient(
                 90deg,
-                #7b1e1e,
-                #c99a45
+                var(--maroon),
+                var(--gold)
             );
             transition: width 0.3s ease;
         }
 
         .main-nav-link:hover {
-            color: #7b1e1e;
+            color: var(--maroon);
         }
 
         .main-nav-link:hover::after,
@@ -171,7 +265,7 @@
         }
 
         .main-nav-link.active {
-            color: #7b1e1e;
+            color: var(--maroon);
         }
 
 
@@ -207,7 +301,7 @@
             border-radius: 50%;
             background: #fbf1e6;
             border: 1.5px solid #e6d2b8;
-            color: #7b1e1e;
+            color: var(--maroon);
             transition: 0.25s ease;
             flex-shrink: 0;
         }
@@ -218,10 +312,10 @@
         }
 
         .cart-btn:hover {
-            background: #7b1e1e;
-            border-color: #7b1e1e;
+            background: var(--maroon);
+            border-color: var(--maroon);
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-2px) rotate(-6deg);
             box-shadow: 0 6px 14px rgba(123,30,30,0.25);
         }
 
@@ -233,7 +327,7 @@
             height: 17px;
             padding: 0 3px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #c99a45, #e5c27b);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             color: #3a2417;
             font-size: 10px;
             font-weight: 800;
@@ -249,6 +343,7 @@
         ========================================================= */
 
         .login-btn {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -257,19 +352,35 @@
             border-radius: 25px;
             background: linear-gradient(
                 135deg,
-                #7b1e1e,
-                #a52b2b
+                var(--maroon),
+                var(--maroon-light)
             );
             color: white;
             font-size: 14px;
             font-weight: 700;
             box-shadow: 0 5px 15px rgba(123,30,30,0.22);
             transition: 0.25s ease;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .login-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--pink), var(--gold));
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .login-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(123,30,30,0.30);
+        }
+
+        .login-btn:hover::before {
+            opacity: 1;
         }
 
 
@@ -359,12 +470,18 @@
             padding: 7px 13px;
             margin-bottom: 15px;
             border-radius: 20px;
-            background: rgba(201,154,69,0.95);
+            background: linear-gradient(120deg, var(--gold), var(--gold-light));
             color: #351714;
             font-size: 12px;
             font-weight: 800;
             letter-spacing: 1px;
             text-transform: uppercase;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+
+        .hero-tag--teal {
+            background: linear-gradient(120deg, var(--teal-light), var(--teal));
+            color: #eafffb;
         }
 
         .hero-content h1 {
@@ -384,6 +501,7 @@
         }
 
         .shop-btn {
+            position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -394,15 +512,32 @@
                 #ffffff,
                 #fff4dc
             );
-            color: #7b1e1e;
+            color: var(--maroon);
             font-weight: 800;
             box-shadow: 0 7px 20px rgba(0,0,0,0.20);
             transition: 0.25s ease;
+            overflow: hidden;
+        }
+
+        .shop-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.6s ease;
+        }
+
+        .shop-btn:hover::after {
+            left: 130%;
         }
 
         .shop-btn:hover {
             transform: translateY(-3px);
-            background: #c99a45;
+            background: linear-gradient(135deg, var(--gold), var(--pink-light));
             color: white;
         }
 
@@ -442,8 +577,8 @@
 
         .hero-prev:hover,
         .hero-next:hover {
-            background: #7b1e1e;
-            border-color: #c99a45;
+            background: var(--maroon);
+            border-color: var(--gold);
         }
 
 
@@ -475,7 +610,7 @@
         .hero-dot.active {
             width: 25px;
             border-radius: 10px;
-            background: #d5aa58;
+            background: var(--gold);
             opacity: 1;
         }
 
@@ -520,14 +655,14 @@
             font-size: 11px;
             font-weight: 800;
             letter-spacing: 2px;
-            color: #c28d36;
+            color: var(--gold);
             text-transform: uppercase;
             margin-bottom: 4px;
         }
 
         .section-header h2 {
             font-family: Georgia, "Times New Roman", serif;
-            color: #7b1e1e;
+            color: var(--maroon);
             font-size: 29px;
             line-height: 1.2;
         }
@@ -539,10 +674,16 @@
         }
 
         .view-text {
-            color: #7b1e1e;
+            color: var(--maroon);
             font-size: 13px;
             font-weight: 700;
             white-space: nowrap;
+            transition: transform 0.25s ease;
+            display: inline-block;
+        }
+
+        .category-wrapper:hover .view-text {
+            transform: translateX(4px);
         }
 
 
@@ -557,9 +698,36 @@
             border-radius: 5px;
             background: linear-gradient(
                 90deg,
-                #7b1e1e,
-                #c99a45
+                var(--maroon),
+                var(--gold)
             );
+            transition: width 0.3s ease;
+        }
+
+        .section-title-wrapper:hover .gold-line {
+            width: 100px;
+        }
+
+
+        /* SILK section accent (peacock teal) */
+
+        .silk-showcase .section-kicker {
+            color: var(--teal);
+        }
+
+        .silk-showcase .gold-line {
+            background: linear-gradient(90deg, var(--teal), var(--teal-light));
+        }
+
+
+        /* SAREE section accent (rani pink) */
+
+        .saree-showcase .section-kicker {
+            color: var(--pink);
+        }
+
+        .saree-showcase .gold-line {
+            background: linear-gradient(90deg, var(--maroon), var(--pink-light));
         }
 
 
@@ -610,7 +778,8 @@
             box-shadow:
                 0 5px 18px rgba(73,35,25,0.09);
             transition: transform 0.25s ease,
-                        box-shadow 0.25s ease;
+                        box-shadow 0.25s ease,
+                        border-color 0.25s ease;
             position: relative;
         }
 
@@ -618,6 +787,11 @@
             transform: translateY(-5px);
             box-shadow:
                 0 12px 25px rgba(73,35,25,0.16);
+        }
+
+        .saree-showcase .product-card:hover {
+            border-color: var(--pink-light);
+            box-shadow: 0 12px 25px rgba(173,31,109,0.18);
         }
 
 
@@ -686,8 +860,8 @@
             border-radius: 15px;
             background: linear-gradient(
                 135deg,
-                #7b1e1e,
-                #a92e2e
+                var(--maroon),
+                var(--maroon-light)
             );
             color: white;
             font-size: 9px;
@@ -695,6 +869,10 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
             box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+        }
+
+        .saree-showcase .product-badge {
+            background: linear-gradient(135deg, var(--pink), var(--pink-light));
         }
 
 
@@ -733,7 +911,12 @@
 
         .image-prev:hover,
         .image-next:hover {
-            background: #7b1e1e;
+            background: var(--maroon);
+        }
+
+        .saree-showcase .image-prev:hover,
+        .saree-showcase .image-next:hover {
+            background: var(--pink);
         }
 
 
@@ -763,8 +946,12 @@
         .image-dot.active {
             width: 14px;
             border-radius: 5px;
-            background: #c99a45;
+            background: var(--gold);
             opacity: 1;
+        }
+
+        .saree-showcase .image-dot.active {
+            background: var(--pink-light);
         }
 
 
@@ -795,18 +982,22 @@
         }
 
         .product-type span {
-            color: #7b1e1e;
+            color: var(--maroon);
             font-weight: 700;
+        }
+
+        .saree-showcase .product-type span {
+            color: var(--pink);
         }
 
         .price {
             font-size: 17px;
             font-weight: 800;
-            color: #7b1e1e;
+            color: var(--maroon);
         }
 
         .price-symbol {
-            color: #c28d36;
+            color: var(--gold);
         }
 
 
@@ -823,7 +1014,7 @@
             height: 38px;
             border: 2px solid white;
             border-radius: 50%;
-            background: #7b1e1e;
+            background: var(--maroon);
             color: white;
             font-size: 15px;
             cursor: pointer;
@@ -846,8 +1037,28 @@
 
         .category-prev:hover,
         .category-next:hover {
-            background: #531313;
+            background: var(--maroon-dark);
             transform: translateY(-50%) scale(1.08);
+        }
+
+        .silk-showcase .category-prev,
+        .silk-showcase .category-next {
+            background: var(--teal);
+        }
+
+        .silk-showcase .category-prev:hover,
+        .silk-showcase .category-next:hover {
+            background: #0a4c49;
+        }
+
+        .saree-showcase .category-prev,
+        .saree-showcase .category-next {
+            background: var(--pink);
+        }
+
+        .saree-showcase .category-prev:hover,
+        .saree-showcase .category-next:hover {
+            background: #7d1650;
         }
 
 
@@ -922,12 +1133,12 @@
                 radial-gradient(
                     circle at 30% 25%,
                     #fff6e6,
-                    #eed7ad 70%
+                    #d5ece8 70%
                 );
             padding: 6px;
             box-shadow:
-                0 10px 26px rgba(123,30,30,0.20),
-                0 0 0 2px #c99a45 inset;
+                0 10px 26px rgba(15,111,107,0.22),
+                0 0 0 2px var(--teal-light) inset;
             transition: box-shadow 0.35s ease,
                         transform 0.35s ease;
         }
@@ -935,8 +1146,8 @@
         .silk-showcase .product-card:hover .image-wrapper {
             transform: scale(1.05) rotate(1deg);
             box-shadow:
-                0 16px 34px rgba(123,30,30,0.30),
-                0 0 0 2px #7b1e1e inset;
+                0 16px 34px rgba(15,111,107,0.30),
+                0 0 0 2px var(--teal) inset;
         }
 
         .silk-showcase .product-image {
@@ -973,6 +1184,10 @@
             bottom: 10px;
         }
 
+        .silk-showcase .image-dot.active {
+            background: var(--teal);
+        }
+
         .silk-showcase .product-info {
             padding: 14px 4px 4px;
             background: transparent;
@@ -980,6 +1195,10 @@
 
         .silk-showcase .product-name {
             white-space: normal;
+        }
+
+        .silk-showcase .product-type span {
+            color: var(--teal);
         }
 
 
@@ -1001,6 +1220,195 @@
 
 
         /* =========================================================
+           MOBILE NAV DRAWER (SLIDE-IN, FULLY FLEXIBLE)
+        ========================================================= */
+
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(30,14,10,0.55);
+            backdrop-filter: blur(2px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1998;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: min(82vw, 340px);
+            max-width: 340px;
+            background: linear-gradient(160deg, #fffaf6 0%, #fdf2e6 100%);
+            box-shadow: -10px 0 35px rgba(40,15,10,0.28);
+            z-index: 1999;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .nav-drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid #eadbd1;
+        }
+
+        .drawer-brand {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 19px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: var(--maroon);
+        }
+
+        .drawer-close {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: #f3e2ca;
+            color: var(--maroon);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.25s ease;
+        }
+
+        .drawer-close:hover {
+            background: var(--maroon);
+            color: white;
+        }
+
+        .drawer-section-label {
+            padding: 18px 20px 8px;
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #a9998f;
+        }
+
+        .drawer-links {
+            display: flex;
+            flex-direction: column;
+            padding: 0 12px;
+            gap: 6px;
+        }
+
+        .drawer-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            transition: 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .drawer-link .drawer-arrow {
+            opacity: 0.5;
+            transition: transform 0.2s ease;
+        }
+
+        .drawer-link:active,
+        .drawer-link:hover {
+            background: #fff1de;
+            border-left-color: var(--gold);
+        }
+
+        .drawer-link:active .drawer-arrow,
+        .drawer-link:hover .drawer-arrow {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        .drawer-link--silk {
+            border-left-color: transparent;
+        }
+
+        .drawer-link--silk:hover {
+            border-left-color: var(--teal);
+            background: #eaf6f4;
+        }
+
+        .drawer-link--saree:hover {
+            border-left-color: var(--pink);
+            background: #fdeef5;
+        }
+
+        .drawer-footer {
+            margin-top: auto;
+            padding: 18px 16px 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px solid #eadbd1;
+        }
+
+        .drawer-footer .login-btn,
+        .drawer-footer .orders-link-mobile,
+        .drawer-footer .cart-link-mobile {
+            width: 100%;
+        }
+
+        .drawer-footer .login-btn {
+            min-width: 0;
+        }
+
+        .orders-link-mobile,
+        .cart-link-mobile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 20px;
+            background: white;
+            border: 1.5px solid #e6d2b8;
+            color: var(--maroon);
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .orders-link-mobile:hover,
+        .cart-link-mobile:hover {
+            background: #fbf1e6;
+            border-color: var(--maroon);
+        }
+
+        .cart-link-mobile svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .cart-link-mobile .cart-count {
+            position: static;
+            border: none;
+        }
+
+
+        /* =========================================================
            FOOTER
         ========================================================= */
 
@@ -1015,7 +1423,7 @@
             color: #ddd;
             text-align: center;
             padding: 40px 20px;
-            border-top: 3px solid #c99a45;
+            border-top: 3px solid var(--gold);
         }
 
         .footer-brand {
@@ -1027,7 +1435,7 @@
         }
 
         .footer-gold {
-            color: #d6aa60;
+            color: var(--gold-light);
             font-size: 12px;
             letter-spacing: 1px;
             margin-bottom: 12px;
@@ -1080,13 +1488,37 @@
 
 
         /* =========================================================
+           SWITCH TO HAMBURGER NAV — TABLET DOWN TO MOBILE
+           (This is what makes the nav "flexible": below 900px the
+           inline nav links disappear and the hamburger + slide-in
+           drawer take over, so there is no cramped, breaking nav.)
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .main-nav {
+                display: none;
+            }
+
+            .hamburger-btn {
+                display: flex;
+            }
+
+            .orders-link {
+                display: none;
+            }
+
+        }
+
+
+        /* =========================================================
            MOBILE
         ========================================================= */
 
         @media (max-width: 600px) {
 
             body {
-                background: #fffaf6;
+                background: var(--cream);
             }
 
 
@@ -1095,6 +1527,7 @@
             .header {
                 height: 62px;
                 padding: 0 13px;
+                gap: 8px;
             }
 
             .brand {
@@ -1126,22 +1559,10 @@
             }
 
 
-            /* NAV + ACTIONS */
-
-            .main-nav {
-                gap: 16px;
-            }
-
-            .main-nav-link {
-                font-size: 12px;
-            }
+            /* ACTIONS */
 
             .header-actions {
                 gap: 9px;
-            }
-
-            .orders-link {
-                font-size: 10.5px;
             }
 
             .cart-btn {
@@ -1465,18 +1886,6 @@
                 font-size: 15px;
             }
 
-            .orders-link {
-                display: none;
-            }
-
-            .main-nav {
-                gap: 11px;
-            }
-
-            .main-nav-link {
-                font-size: 11px;
-            }
-
             .hero-slider {
                 height: 370px;
             }
@@ -1508,6 +1917,10 @@
             .silk-showcase .image-wrapper {
                 width: 108px;
                 height: 108px;
+            }
+
+            .nav-drawer {
+                width: 88vw;
             }
 
         }
@@ -1575,6 +1988,22 @@
 
         }
 
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+        }
+
     </style>
 
 </head>
@@ -1589,22 +2018,42 @@
 
 <header class="header">
 
-    <a href="/" class="brand">
+    <div class="header-left">
 
-        <img
-            src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787580557/Products/b8ijrczvf7ep5xtjnmjt.jpg"
-            alt="Vastra Mane Logo"
-            class="brand-logo"
-        >
+        <!-- HAMBURGER (mobile / tablet only, opens the drawer) -->
 
-        <span class="brand-name">
-            VASTRA MANE
-        </span>
+        <button type="button"
+                class="hamburger-btn"
+                id="hamburgerBtn"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="navDrawer">
 
-    </a>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
 
 
-    <!-- SINGLE NAV FOR SILK + SAREE -->
+        <a href="/" class="brand">
+
+            <img
+                src="https://res.cloudinary.com/dkfnms01r/image/upload/v1787580557/Products/b8ijrczvf7ep5xtjnmjt.jpg"
+                alt="Vastra Mane Logo"
+                class="brand-logo"
+            >
+
+            <span class="brand-name">
+                VASTRA MANE
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- SINGLE NAV FOR SILK + SAREE (DESKTOP) -->
 
     <nav class="main-nav">
 
@@ -1673,6 +2122,103 @@
 
 
 <!-- =========================================================
+     MOBILE NAV DRAWER
+========================================================= -->
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
+<aside class="nav-drawer" id="navDrawer" aria-hidden="true">
+
+    <div class="drawer-header">
+
+        <span class="drawer-brand">
+            VASTRA MANE
+        </span>
+
+        <button type="button"
+                class="drawer-close"
+                id="drawerCloseBtn"
+                aria-label="Close menu">
+
+            ✕
+
+        </button>
+
+    </div>
+
+
+    <div class="drawer-section-label">
+        Shop by Category
+    </div>
+
+    <nav class="drawer-links">
+
+        <a href="#silks" class="drawer-link drawer-link--silk drawer-nav-item">
+            Silk Collection
+            <span class="drawer-arrow">→</span>
+        </a>
+
+        <a href="#sarees" class="drawer-link drawer-link--saree drawer-nav-item">
+            Saree Collection
+            <span class="drawer-arrow">→</span>
+        </a>
+
+    </nav>
+
+
+    <div class="drawer-footer">
+
+        <a th:href="@{/my-orders}"
+           class="orders-link-mobile">
+
+            My Orders
+
+        </a>
+
+
+        <a th:href="@{/cart}"
+           class="cart-link-mobile">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+
+            </svg>
+
+            View Cart
+
+            <span class="cart-count"
+                  th:if="${cartCount != null and cartCount > 0}"
+                  th:text="${cartCount}">
+
+                0
+
+            </span>
+
+        </a>
+
+
+        <a th:href="@{/login}"
+           class="login-btn">
+
+            Login
+
+        </a>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =========================================================
      HERO SECTION
 ========================================================= -->
 
@@ -1736,7 +2282,7 @@
 
             <div class="hero-content">
 
-                <span class="hero-tag">
+                <span class="hero-tag hero-tag--teal">
                     Premium Silk
                 </span>
 
@@ -2010,12 +2556,11 @@
 
 
     <!-- =====================================================
-    <!-- =====================================================
          SAREE SECTION
     ====================================================== -->
 
     <section id="sarees"
-             class="category-section">
+             class="category-section saree-showcase">
 
 
         <div class="section-header">
@@ -2249,6 +2794,100 @@
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* =========================================================
+       MOBILE NAV DRAWER
+    ========================================================= */
+
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const navDrawer = document.getElementById("navDrawer");
+    const drawerOverlay = document.getElementById("drawerOverlay");
+    const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+    const drawerNavItems = document.querySelectorAll(".drawer-nav-item");
+
+    function openDrawer() {
+
+        navDrawer.classList.add("open");
+        drawerOverlay.classList.add("open");
+        hamburgerBtn.classList.add("open");
+        hamburgerBtn.setAttribute("aria-expanded", "true");
+        navDrawer.setAttribute("aria-hidden", "false");
+        document.body.classList.add("drawer-locked");
+
+    }
+
+    function closeDrawer() {
+
+        navDrawer.classList.remove("open");
+        drawerOverlay.classList.remove("open");
+        hamburgerBtn.classList.remove("open");
+        hamburgerBtn.setAttribute("aria-expanded", "false");
+        navDrawer.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("drawer-locked");
+
+    }
+
+    if (hamburgerBtn) {
+
+        hamburgerBtn.addEventListener("click", function () {
+
+            if (navDrawer.classList.contains("open")) {
+
+                closeDrawer();
+
+            } else {
+
+                openDrawer();
+
+            }
+
+        });
+
+    }
+
+    if (drawerCloseBtn) {
+
+        drawerCloseBtn.addEventListener("click", closeDrawer);
+
+    }
+
+    if (drawerOverlay) {
+
+        drawerOverlay.addEventListener("click", closeDrawer);
+
+    }
+
+    drawerNavItems.forEach(function (item) {
+
+        item.addEventListener("click", closeDrawer);
+
+    });
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape" && navDrawer.classList.contains("open")) {
+
+            closeDrawer();
+
+        }
+
+    });
+
+    /* Close the drawer automatically if the viewport is resized
+       past the mobile/tablet breakpoint (e.g. rotating a tablet
+       or resizing a browser window). */
+
+    window.addEventListener("resize", function () {
+
+        if (window.innerWidth > 900 && navDrawer.classList.contains("open")) {
+
+            closeDrawer();
+
+        }
+
+    });
+
 
 
     /* =========================================================
@@ -2817,11 +3456,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     /* =========================================================
-       NAV SCROLL-SPY (SILK / SAREE)
+       NAV SCROLL-SPY (SILK / SAREE) — DESKTOP NAV + DRAWER LINKS
     ========================================================= */
 
     const navLinks =
-        document.querySelectorAll(".main-nav-link");
+        document.querySelectorAll(".main-nav-link, .drawer-link--silk, .drawer-link--saree");
 
     const navSections = [
         document.getElementById("silks"),
