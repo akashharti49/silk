@@ -124,6 +124,127 @@
 
 
         /* =========================================================
+           MAIN NAVIGATION (SILK + SAREE)
+        ========================================================= */
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 34px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .main-nav-link {
+            position: relative;
+            font-size: 14.5px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            color: #4a352d;
+            padding: 6px 2px;
+            transition: color 0.25s ease;
+        }
+
+        .main-nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(
+                90deg,
+                #7b1e1e,
+                #c99a45
+            );
+            transition: width 0.3s ease;
+        }
+
+        .main-nav-link:hover {
+            color: #7b1e1e;
+        }
+
+        .main-nav-link:hover::after,
+        .main-nav-link.active::after {
+            width: 100%;
+        }
+
+        .main-nav-link.active {
+            color: #7b1e1e;
+        }
+
+
+        /* =========================================================
+           HEADER ACTIONS
+        ========================================================= */
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .orders-link {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #5c1725;
+            white-space: nowrap;
+        }
+
+
+        /* =========================================================
+           CART BUTTON
+        ========================================================= */
+
+        .cart-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fbf1e6;
+            border: 1.5px solid #e6d2b8;
+            color: #7b1e1e;
+            transition: 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .cart-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .cart-btn:hover {
+            background: #7b1e1e;
+            border-color: #7b1e1e;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(123,30,30,0.25);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 17px;
+            height: 17px;
+            padding: 0 3px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #c99a45, #e5c27b);
+            color: #3a2417;
+            font-size: 10px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid white;
+        }
+
+
+        /* =========================================================
            LOGIN BUTTON
         ========================================================= */
 
@@ -751,6 +872,135 @@
 
 
         /* =========================================================
+           SCROLL SNAP + DRAG (INTERACTIVE CAROUSELS)
+        ========================================================= */
+
+        .product-track {
+            scroll-snap-type: x proximity;
+            cursor: grab;
+        }
+
+        .product-track.dragging {
+            cursor: grabbing;
+            scroll-behavior: auto;
+            scroll-snap-type: none;
+        }
+
+        .product-card {
+            scroll-snap-align: start;
+        }
+
+
+        /* =========================================================
+           SILK CIRCLE SHOWCASE
+        ========================================================= */
+
+        .silk-showcase .product-track {
+            padding: 14px 4px 26px;
+        }
+
+        .silk-showcase .product-card {
+            flex: 0 0 180px;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            text-align: center;
+        }
+
+        .silk-showcase .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: none;
+        }
+
+        .silk-showcase .image-wrapper {
+            width: 172px;
+            height: 172px;
+            margin: 0 auto;
+            border-radius: 50%;
+            background:
+                radial-gradient(
+                    circle at 30% 25%,
+                    #fff6e6,
+                    #eed7ad 70%
+                );
+            padding: 6px;
+            box-shadow:
+                0 10px 26px rgba(123,30,30,0.20),
+                0 0 0 2px #c99a45 inset;
+            transition: box-shadow 0.35s ease,
+                        transform 0.35s ease;
+        }
+
+        .silk-showcase .product-card:hover .image-wrapper {
+            transform: scale(1.05) rotate(1deg);
+            box-shadow:
+                0 16px 34px rgba(123,30,30,0.30),
+                0 0 0 2px #7b1e1e inset;
+        }
+
+        .silk-showcase .product-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .silk-showcase .product-image img {
+            border-radius: 50%;
+        }
+
+        .silk-showcase .product-badge {
+            display: none;
+        }
+
+        .silk-showcase .image-prev,
+        .silk-showcase .image-next {
+            width: 25px;
+            height: 25px;
+            font-size: 10px;
+            top: 50%;
+        }
+
+        .silk-showcase .image-prev {
+            left: -4px;
+        }
+
+        .silk-showcase .image-next {
+            right: -4px;
+        }
+
+        .silk-showcase .image-dots {
+            bottom: 10px;
+        }
+
+        .silk-showcase .product-info {
+            padding: 14px 4px 4px;
+            background: transparent;
+        }
+
+        .silk-showcase .product-name {
+            white-space: normal;
+        }
+
+
+        /* =========================================================
+           PRODUCT IMAGE ZOOM ON HOVER
+        ========================================================= */
+
+        .product-image img {
+            transition: transform 0.45s ease;
+        }
+
+        .product-card:hover .product-image img.active {
+            transform: scale(1.08);
+        }
+
+        .silk-showcase .product-card:hover .product-image img.active {
+            transform: scale(1.12);
+        }
+
+
+        /* =========================================================
            FOOTER
         ========================================================= */
 
@@ -817,6 +1067,15 @@
                 height: 250px;
             }
 
+            .silk-showcase .product-card {
+                flex: 0 0 160px;
+            }
+
+            .silk-showcase .image-wrapper {
+                width: 156px;
+                height: 156px;
+            }
+
         }
 
 
@@ -864,6 +1123,41 @@
                 padding: 8px 12px;
                 border-radius: 20px;
                 font-size: 11px;
+            }
+
+
+            /* NAV + ACTIONS */
+
+            .main-nav {
+                gap: 16px;
+            }
+
+            .main-nav-link {
+                font-size: 12px;
+            }
+
+            .header-actions {
+                gap: 9px;
+            }
+
+            .orders-link {
+                font-size: 10.5px;
+            }
+
+            .cart-btn {
+                width: 34px;
+                height: 34px;
+            }
+
+            .cart-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .cart-count {
+                min-width: 14px;
+                height: 14px;
+                font-size: 8.5px;
             }
 
 
@@ -1084,6 +1378,42 @@
             }
 
 
+            /* SILK CIRCLES ON MOBILE */
+
+            .silk-showcase .product-card {
+                flex: 0 0 132px;
+            }
+
+            .silk-showcase .image-wrapper {
+                width: 128px;
+                height: 128px;
+                padding: 4px;
+            }
+
+            .silk-showcase .product-info {
+                padding: 10px 2px 2px;
+            }
+
+            .silk-showcase .product-name {
+                font-size: 12px;
+            }
+
+            .silk-showcase .product-type {
+                font-size: 8.5px;
+            }
+
+            .silk-showcase .price {
+                font-size: 12.5px;
+            }
+
+            .silk-showcase .image-prev,
+            .silk-showcase .image-next {
+                width: 20px;
+                height: 20px;
+                font-size: 8px;
+            }
+
+
             /* CATEGORY ARROWS */
 
             .category-prev,
@@ -1135,6 +1465,18 @@
                 font-size: 15px;
             }
 
+            .orders-link {
+                display: none;
+            }
+
+            .main-nav {
+                gap: 11px;
+            }
+
+            .main-nav-link {
+                font-size: 11px;
+            }
+
             .hero-slider {
                 height: 370px;
             }
@@ -1159,6 +1501,15 @@
                 font-size: 20px;
             }
 
+            .silk-showcase .product-card {
+                flex: 0 0 112px;
+            }
+
+            .silk-showcase .image-wrapper {
+                width: 108px;
+                height: 108px;
+            }
+
         }
 
 
@@ -1175,6 +1526,15 @@
 
             .product-image {
                 height: 220px;
+            }
+
+            .silk-showcase .product-card {
+                flex: 0 0 150px;
+            }
+
+            .silk-showcase .image-wrapper {
+                width: 146px;
+                height: 146px;
             }
 
         }
@@ -1199,6 +1559,18 @@
 
             .product-card:active {
                 transform: scale(0.985);
+            }
+
+            .silk-showcase .product-card:hover .image-wrapper {
+                transform: none;
+            }
+
+            .silk-showcase .product-card:active .image-wrapper {
+                transform: scale(0.96);
+            }
+
+            .product-track {
+                cursor: default;
             }
 
         }
@@ -1232,14 +1604,60 @@
     </a>
 
 
-    <div style="display:flex;align-items:center;gap:16px;">
+    <!-- SINGLE NAV FOR SILK + SAREE -->
+
+    <nav class="main-nav">
+
+        <a href="#silks" class="main-nav-link">
+            Silk
+        </a>
+
+        <a href="#sarees" class="main-nav-link">
+            Saree
+        </a>
+
+    </nav>
+
+
+    <div class="header-actions">
 
         <a th:href="@{/my-orders}"
-           style="font-size:13.5px;font-weight:700;color:#5c1725;">
+           class="orders-link">
 
             My Orders
 
         </a>
+
+
+        <!-- CART BUTTON -->
+
+        <a th:href="@{/cart}"
+           class="cart-btn"
+           aria-label="View cart">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+
+            </svg>
+
+            <span class="cart-count"
+                  th:if="${cartCount != null and cartCount > 0}"
+                  th:text="${cartCount}">
+
+                0
+
+            </span>
+
+        </a>
+
 
         <a th:href="@{/login}"
            class="login-btn">
@@ -1391,6 +1809,207 @@
 <main class="main">
 
 
+    <section id="silks"
+             class="category-section silk-showcase">
+
+
+        <div class="section-header">
+
+            <div class="section-title-wrapper">
+
+                <div class="section-kicker">
+                    Premium Collection
+                </div>
+
+                <h2>
+                    Silk Collection
+                </h2>
+
+                <div class="gold-line"></div>
+
+                <p>
+                    Explore our premium silk collection
+                </p>
+
+            </div>
+
+            <span class="view-text">
+                Swipe →
+            </span>
+
+        </div>
+
+
+
+        <div class="category-wrapper">
+
+
+            <!-- LEFT -->
+
+            <button type="button"
+                    class="category-prev silk-prev"
+                    aria-label="Previous silks">
+
+                ❮
+
+            </button>
+
+
+
+            <!-- SILK TRACK -->
+
+            <div class="product-track"
+                 id="silkTrack">
+
+
+                <!-- SILK PRODUCT -->
+
+                <div class="product-card"
+                     th:each="silkProduct, silkIndex : ${silk}"
+                     th:if="${silkProduct.published}">
+
+
+                    <div class="image-wrapper">
+
+
+                        <!-- PRODUCT LINK -->
+
+                        <a th:href="@{/silks/type/{type}(type=${silkProduct.silkType})}">
+
+
+                            <div class="product-image">
+
+                                <img
+                                    th:each="image, imageIndex : ${silkProduct.imageLinks}"
+                                    th:src="${image}"
+                                    th:class="${imageIndex.index == 0 ? 'active' : ''}"
+                                    alt="Silk Image"
+                                >
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- BADGE -->
+
+                        <span class="product-badge">
+                            Premium Silk
+                        </span>
+
+
+                        <!-- IMAGE PREVIOUS -->
+
+                        <button type="button"
+                                class="image-prev"
+                                aria-label="Previous image">
+
+                            ❮
+
+                        </button>
+
+
+                        <!-- IMAGE NEXT -->
+
+                        <button type="button"
+                                class="image-next"
+                                aria-label="Next image">
+
+                            ❯
+
+                        </button>
+
+
+                        <!-- IMAGE DOTS -->
+
+                        <div class="image-dots">
+
+                            <span
+                                class="image-dot"
+                                th:each="image, imageIndex : ${silkProduct.imageLinks}"
+                                th:classappend="${imageIndex.index == 0 ? ' active' : ''}">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRODUCT INFO -->
+
+                    <a th:href="@{/silks/type/{type}(type=${silkProduct.silkType})}">
+
+                        <div class="product-info">
+
+                            <h3 class="product-name"
+                                th:text="${silkProduct.name}">
+
+                                Silk Name
+
+                            </h3>
+
+
+                            <p class="product-type">
+
+                                Silk Type:
+
+                                <span th:text="${silkProduct.silkType}">
+                                    Silk
+                                </span>
+
+                            </p>
+
+
+                            <p class="price">
+
+                                <span class="price-symbol">
+                                    ₹
+                                </span>
+
+                                <span th:text="${silkProduct.price}">
+                                    0
+                                </span>
+
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+
+                <!-- NO SILKS -->
+
+                <div class="no-products"
+                     th:if="${silk == null or #lists.isEmpty(silk)}">
+
+                    No silks available at the moment.
+
+                </div>
+
+            </div>
+
+
+
+            <!-- RIGHT -->
+
+            <button type="button"
+                    class="category-next silk-next"
+                    aria-label="Next silks">
+
+                ❯
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
     <!-- =====================================================
          SAREE SECTION
     ====================================================== -->
@@ -1584,210 +2203,6 @@
             <button type="button"
                     class="category-next saree-next"
                     aria-label="Next sarees">
-
-                ❯
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         SILK SECTION
-    ====================================================== -->
-
-    <section id="silks"
-             class="category-section">
-
-
-        <div class="section-header">
-
-            <div class="section-title-wrapper">
-
-                <div class="section-kicker">
-                    Premium Collection
-                </div>
-
-                <h2>
-                    Silk Collection
-                </h2>
-
-                <div class="gold-line"></div>
-
-                <p>
-                    Explore our premium silk collection
-                </p>
-
-            </div>
-
-            <span class="view-text">
-                Swipe →
-            </span>
-
-        </div>
-
-
-
-        <div class="category-wrapper">
-
-
-            <!-- LEFT -->
-
-            <button type="button"
-                    class="category-prev silk-prev"
-                    aria-label="Previous silks">
-
-                ❮
-
-            </button>
-
-
-
-            <!-- SILK TRACK -->
-
-            <div class="product-track"
-                 id="silkTrack">
-
-
-                <!-- SILK PRODUCT -->
-
-                <div class="product-card"
-                     th:each="silkProduct, silkIndex : ${silk}"
-                     th:if="${silkProduct.published}">
-
-
-                    <div class="image-wrapper">
-
-
-                        <!-- PRODUCT LINK -->
-
-                        <a th:href="@{/silks/type/{type}(type=${silkProduct.silkType})}">
-
-
-                            <div class="product-image">
-
-                                <img
-                                    th:each="image, imageIndex : ${silkProduct.imageLinks}"
-                                    th:src="${image}"
-                                    th:class="${imageIndex.index == 0 ? 'active' : ''}"
-                                    alt="Silk Image"
-                                >
-
-                            </div>
-
-                        </a>
-
-
-                        <!-- BADGE -->
-
-                        <span class="product-badge">
-                            Premium Silk
-                        </span>
-
-
-                        <!-- IMAGE PREVIOUS -->
-
-                        <button type="button"
-                                class="image-prev"
-                                aria-label="Previous image">
-
-                            ❮
-
-                        </button>
-
-
-                        <!-- IMAGE NEXT -->
-
-                        <button type="button"
-                                class="image-next"
-                                aria-label="Next image">
-
-                            ❯
-
-                        </button>
-
-
-                        <!-- IMAGE DOTS -->
-
-                        <div class="image-dots">
-
-                            <span
-                                class="image-dot"
-                                th:each="image, imageIndex : ${silkProduct.imageLinks}"
-                                th:classappend="${imageIndex.index == 0 ? ' active' : ''}">
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- PRODUCT INFO -->
-
-                    <a th:href="@{/silks/type/{type}(type=${silkProduct.silkType})}">
-
-                        <div class="product-info">
-
-                            <h3 class="product-name"
-                                th:text="${silkProduct.name}">
-
-                                Silk Name
-
-                            </h3>
-
-
-                            <p class="product-type">
-
-                                Silk Type:
-
-                                <span th:text="${silkProduct.silkType}">
-                                    Silk
-                                </span>
-
-                            </p>
-
-
-                            <p class="price">
-
-                                <span class="price-symbol">
-                                    ₹
-                                </span>
-
-                                <span th:text="${silkProduct.price}">
-                                    0
-                                </span>
-
-                            </p>
-
-                        </div>
-
-                    </a>
-
-                </div>
-
-
-
-                <!-- NO SILKS -->
-
-                <div class="no-products"
-                     th:if="${silk == null or #lists.isEmpty(silk)}">
-
-                    No silks available at the moment.
-
-                </div>
-
-            </div>
-
-
-
-            <!-- RIGHT -->
-
-            <button type="button"
-                    class="category-next silk-next"
-                    aria-label="Next silks">
 
                 ❯
 
@@ -2321,6 +2736,138 @@ document.addEventListener("DOMContentLoaded", function () {
         silkPrev,
         silkNext
     );
+
+
+
+    /* =========================================================
+       DRAG TO SCROLL (MOUSE / TRACKPAD)
+    ========================================================= */
+
+    function enableDragScroll(track) {
+
+        if (!track) {
+            return;
+        }
+
+        let isDown = false;
+        let startX = 0;
+        let startScroll = 0;
+        let moved = 0;
+
+        track.addEventListener("mousedown", function (event) {
+
+            isDown = true;
+            moved = 0;
+            track.classList.add("dragging");
+            startX = event.pageX;
+            startScroll = track.scrollLeft;
+
+        });
+
+        function stopDrag() {
+
+            if (!isDown) {
+                return;
+            }
+
+            isDown = false;
+            track.classList.remove("dragging");
+
+        }
+
+        track.addEventListener("mouseleave", stopDrag);
+        track.addEventListener("mouseup", stopDrag);
+
+        track.addEventListener("mousemove", function (event) {
+
+            if (!isDown) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const delta = event.pageX - startX;
+
+            moved = Math.abs(delta);
+
+            track.scrollLeft = startScroll - delta;
+
+        });
+
+        /* Prevent an accidental product-link click right
+           after a drag gesture. */
+
+        track.addEventListener("click", function (event) {
+
+            if (moved > 8) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+            }
+
+        }, true);
+
+    }
+
+
+    enableDragScroll(sareeTrack);
+    enableDragScroll(silkTrack);
+
+
+
+    /* =========================================================
+       NAV SCROLL-SPY (SILK / SAREE)
+    ========================================================= */
+
+    const navLinks =
+        document.querySelectorAll(".main-nav-link");
+
+    const navSections = [
+        document.getElementById("silks"),
+        document.getElementById("sarees")
+    ].filter(Boolean);
+
+    function setActiveNav() {
+
+        let activeId = null;
+
+        const headerHeight =
+            document.querySelector(".header")
+                ? document.querySelector(".header").offsetHeight
+                : 0;
+
+        navSections.forEach(function (section) {
+
+            const rect = section.getBoundingClientRect();
+
+            if (rect.top <= headerHeight + 40) {
+                activeId = section.id;
+            }
+
+        });
+
+        navLinks.forEach(function (link) {
+
+            const targetId =
+                link.getAttribute("href").replace("#", "");
+
+            link.classList.toggle(
+                "active",
+                targetId === activeId
+            );
+
+        });
+
+    }
+
+    if (navSections.length) {
+
+        window.addEventListener("scroll", setActiveNav, { passive: true });
+
+        setActiveNav();
+
+    }
 
 
 });
